@@ -1,0 +1,279 @@
+/* ------- GENERAL STYLES ------- */
+
+* {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+
+body {
+	font-family: Helvetica, Arial, sans-serif;
+	height: 100%;
+	overflow: hidden;
+	width: 100%;
+}
+
+/* ------- ALERTS ----------- */
+
+#alert {
+	background: #fff;
+	border: 3px solid #f22;
+	padding: 5px;
+	margin: 65px 30% 0;
+	position: absolute;
+	top: 0;
+	width: 40%;
+	z-index: 9999;
+}
+
+/* ------- MAIN PAGE -------- */
+
+.home {
+	background: #79d;
+}
+
+.home #map {
+	background: #79d;
+	margin: 20px 0 0 20px;
+}
+
+.home .tile {
+	background: #da7;
+	float: left;
+	height: 10%;
+	position: relative;
+	width: 10%;
+}
+
+.home .tile.water {
+	background: #79d;
+}
+
+.home .city {
+	left: 10%;
+	position: absolute;
+	top: 10%;
+	z-index: 999;
+}
+
+.home .city .marker {
+	border: 1px dotted #333;
+	display: block;
+}
+
+.home .info {
+	display: none;
+}
+
+.home .city:hover ~ .info {
+	background: #fff;
+	display: block;
+	left: 50%;
+	min-width: 150px;
+	padding: 4px;
+	position: absolute;
+	top: 10%;
+	z-index: 9999;
+}
+
+.home .info .city-name {
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.home .info .city-builder {
+	display: block;
+	font-size: 12px;
+	font-style: italic;
+	margin: 0 0 8px 8px;
+}
+
+.home #build h2 {
+	cursor: pointer;
+}
+
+.home #build h2:hover {
+	color: #999;
+}
+
+.home #build form {
+	display: none;
+}
+
+.tile:hover {
+	background: #aaa;
+}
+
+/* ------ CITY ------------ */
+
+.single {
+	background: #da7;
+}
+
+.single #map {
+	margin: 20px 0 0 20px;
+}
+
+.infobox {
+	background: #fff;
+	display: none;
+	padding: 4px;
+	min-width: 150px;
+	position: absolute;
+	z-index: 999999;
+}
+
+#build:before {
+	background: #fff;
+	content: '';
+	display: block;
+	height: 10px;
+	position: relative;
+	transform: rotate(45deg);
+		-moz-transform: rotate(45deg);
+		-ms-transform: rotate(45deg);
+		-o-transform: rotate(45deg);
+		-webkit-transform: rotate(45deg);
+	top: -9px;
+	width: 10px;
+}
+
+#build input {
+	clear: left;
+	display: block;
+	float: left;
+}
+
+#build label {
+	float: left;
+}
+
+#build input[type="submit"] {
+	float: right;
+	margin-top: 5px;
+}
+
+/* -------- TO DO ------------ */
+
+#todo {
+	background: #eee;
+	height: 350px;
+	margin: 60px 0 0 60px;
+	overflow-y: scroll;
+	padding: 10px;
+	width: 500px;
+}
+
+#todo h2 {
+	border-bottom: 1px solid #999;
+	color: #999;
+	display: block;
+	font-size: 24px;
+	margin-bottom: 10px;
+}
+
+#todo ul {
+	margin-bottom: 25px;
+}
+
+#todo ul li {
+	list-style: disc;
+	margin: 0 0 5px 20px;
+}
+
+#todo ul li.completed {
+	color: #999;
+	font-style: italic;
+	text-decoration: line-through;
+}
+
+/* ------ SCOREBOARD --------- */
+
+#scoreboard {
+	margin: 20px 0 0 20px;
+	width: 800px;
+}
+
+#scoreboard .header {
+	background: #eee;
+}
+
+#scoreboard div {
+	padding: 5px;
+}
+
+#scoreboard .row {
+	margin-bottom: 5px;
+}
+
+#scoreboard .row div {
+	float: left;
+}
+
+#scoreboard .current {
+	background: #fdd;
+}
+
+#scoreboard .nutzername {
+	width: 300px;
+}
+
+#scoreboard .cities,
+#scoreboard .cash,
+#scoreboard .total-population {
+	width: 125px;
+}
+
+/* ------ TOOLBAR ------------ */
+
+#toolbar {
+	background: #fff;
+	bottom: 0;
+	height: 100px;
+	padding: 15px;
+	position: absolute;
+	width: 100%;
+	z-index: 9999;
+}
+
+#toolbar .return {
+	float: left;
+	min-height: 1px;
+	width: 120px;
+}
+
+#toolbar form {
+	clear: left;
+	float: left;
+	margin-right: 15px;
+}
+
+#toolbar .user,
+#toolbar .city {
+	float: left;
+	margin-right: 15px;
+}
+
+#toolbar .nav {
+	float: right;
+	text-align: right;
+}
+
+#zoom {
+	background: #eee;
+	bottom: 10px;
+	padding: 5px;
+	position: absolute;
+	right: 10px;
+}
+
+#zoom div {
+	border: 1px solid #999;
+	cursor: pointer;
+	margin: 5px;
+	text-align: center;
+}
+
+#zoom div:hover {
+	background: #ddd;
+}
