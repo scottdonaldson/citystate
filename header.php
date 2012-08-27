@@ -18,3 +18,7 @@ if (isset($_POST['update'])) {
 </head>
 
 <body <?php body_class('zoom-5'); ?>>
+
+	<?php if ($alert) { ?>
+		<div id="alert"><?php echo $alert; 
+	} ?>

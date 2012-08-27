@@ -16,10 +16,8 @@ $cash_current = get_field('cash','user_'.$current_user->ID);
 
 // Make sure we're not bankrupting, then proceed
 if (($cash_current - $cost) < 0) {
-	echo '<div id="alert">
-		  	<p>You can&#39;t do that &mdash; you&#39;d go bankrupt!</p>
-		  	<p>Back to <a href="'.bloginfo('home_url').'">main map</a>.</p>
-		  </div>';
+	$alert = '<p>You can&#39;t do that &mdash; you&#39;d go bankrupt!</p>
+		  	<p>Back to <a href="'.get_bloginfo('home_url').'">main map</a>.</p>';
 } else {
 
 	// Take cash from user
@@ -27,12 +25,8 @@ if (($cash_current - $cost) < 0) {
 	
 	// Set structure as built
 	// Set location
-	$specs = get_field($structure, $ID);
-	$specs[0] = array(
-		'location-x' => $x,
-		'location-y' => $y
-	);
-	update_field($structure, $specs, $ID);
+	update_post_meta($ID, $structure.'-x', $x);
+	update_post_meta($ID, $structure.'-y', $y);
 
 }
 

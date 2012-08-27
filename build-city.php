@@ -39,12 +39,8 @@ if (isset($_POST['buildCity'])) {
 		// Set locations of all structures to (0,0) (unbuilt)
 		include 'structures.php';
 		foreach ($structures as $structure=>$cost) {
-			$specs = get_field($structure, $ID);
-			$specs[0] = array(
-				'location-x' => '0',
-				'location-y' => '0'
-			);
-			update_field($structure, $specs, $ID);
+			add_post_meta($ID, $structure.'-x', 0);
+			add_post_meta($ID, $structure.'-y', 0);
 		}
 
 		// Takes moneyz to build a city

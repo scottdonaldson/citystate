@@ -4,16 +4,20 @@ if (isset($_GET['visit']) && ($_GET['visit'] == 'first')) {
 	echo '<div id="alert">Welcome to your new city!</div>';
 }
 
+if ($_GET['meta'] == 'true') {
+	$meta = get_post_custom();
+	echo '<div id="alert"><pre>';
+	the_meta(); 
+	echo '</pre></div>';
+}
+
 // Get all structures
 include 'structures.php';
 
 // Get user info
 global $current_user;
 get_currentuserinfo();
-
 ?>
-
-
 
 <div id="map" class="draggable">
 
@@ -44,21 +48,18 @@ get_currentuserinfo();
 
 	<div id="build" class="infobox">
 		<h2>Build:</h2>
-		<form method="post">
+		<form method="post" action="<?php echo get_permalink().'?build=structure'; ?>">
 			<?php 
 			foreach ($structures as $structure=>$cost) { 
-				if (get_field($structure)) {
-					while (has_sub_field($structure)) {
-						$x = get_sub_field('location-x');
-						$y = get_sub_field('location-y');
+				
+				$x = get_post_meta($post->ID, $structure.'-x', true);
+				$y = get_post_meta($post->ID, $structure.'-y', true);
 						
-						// Only show build option if structure is not yet built
-						if ($x == '0' && $y == '0') { ?>
-							<input data-cost="<?php echo $cost; ?>" id="<?php echo $structure; ?>" name="structure" type="radio" value="<?php echo $structure; ?>" />
-							<label><?php echo $structure.' ('.$cost.')'; ?></label>
-						<?php }
-					}
-				}
+				// Only show build option if structure is not yet built
+				if ($x == '0' && $y == '0') { ?>
+					<input data-cost="<?php echo $cost; ?>" id="<?php echo $structure; ?>" name="structure" type="radio" value="<?php echo $structure; ?>" />
+					<label><?php echo $structure.' ('.$cost.')'; ?></label>
+				<?php }
 			} ?>
 			<input id="x" name="x" type="hidden" />
 			<input id="y" name="y" type="hidden" />	
