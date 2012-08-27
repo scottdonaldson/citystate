@@ -51,7 +51,8 @@ if (isset($_POST['buildCity'])) {
 		update_field('cash',$cash_current-300,'user_'.$current_user->ID);
 
 		// Redirect
-		header('Location: http://www.scottdonaldson.net/citystate/'.$slug.'?visit=first');
+		$url = get_permalink($ID);
+		header('Location: '.$url.'?visit=first');
 	}
 }
 get_header();
