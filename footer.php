@@ -17,7 +17,11 @@
 			get_currentuserinfo();
 
 			echo '<p>'.$current_user->display_name.'</p>'; 
-			echo '<p>Cash: '.get_field('cash', 'user_'.$current_user->ID).'</p>';
+			echo '<p>Cash: '.get_field('cash', 'user_'.$current_user->ID);
+				if (current_user_can('import')) {
+					include ('cheats/more-cash.php');
+				}
+			echo '</p>';
 			echo '<p><a href="'.wp_logout_url( home_url() ).'">Log out</a></p>'; ?>
 		</div>
 
