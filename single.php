@@ -28,14 +28,10 @@ get_currentuserinfo();
 		data-y="<?php $y = ceil($tile/10); echo $y; ?>" 
 		class="tile <?php
 		foreach($structures as $structure=>$cost) {
-			if (get_field($structure)) {
-				while (has_sub_field($structure)) {
-					$location_x_[$structure] = get_sub_field('location-x');
-					$location_y_[$structure] = get_sub_field('location-y');
-					if ($location_x_[$structure] == $x && $location_y_[$structure] == $y) {
-						echo $structure.' structure no-build';
-					}
-				}
+			$loc_x_[$structure] = get_post_meta($post->ID, $structure.'-x', true);
+			$loc_y_[$structure] = get_post_meta($post->ID, $structure.'-y', true);
+			if ($loc_x_[$structure] == $x && $loc_y_[$structure] == $y) {
+				echo $structure.' structure no-build';
 			}
 		} ?>">
 	</div>

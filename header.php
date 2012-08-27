@@ -2,7 +2,7 @@
 <?php 
 if (isset($_POST['update'])) { 
 	if (is_single()) {
-		get_template_part('build');
+		include('build.php');
 	}
 } ?>
 <html <?php language_attributes(); ?>>
@@ -20,5 +20,5 @@ if (isset($_POST['update'])) {
 <body <?php body_class('zoom-5'); ?>>
 
 	<?php if ($alert) { ?>
-		<div id="alert"><?php echo $alert; 
-	} ?>
+		<div id="alert"><?php echo $alert; ?></div>
+	<?php } ?>
