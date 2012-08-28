@@ -1,119 +1,139 @@
 /* --------- ZOOM LEVEL FOUR ------- */
-
+/* line 3, ../sass/zoom-med.scss */
 .zoom-4.home #map {
-	height: 480px;
-	width: 480px;
+  height: 480px;
+  width: 480px;
 }
 
+/* line 8, ../sass/zoom-med.scss */
 .zoom-4 #landmass {
-	height: 80px;
-	width: 80px;
+  height: 80px;
+  width: 80px;
 }
 
+/* line 13, ../sass/zoom-med.scss */
 .zoom-4 .city.tiny .marker {
-	height: 3px;
-	width: 3px;
+  height: 3px;
+  width: 3px;
 }
 
+/* line 18, ../sass/zoom-med.scss */
 .zoom-4 .city.small .marker {
-	height: 6px;
-	width: 6px;
+  height: 6px;
+  width: 6px;
 }
 
+/* line 23, ../sass/zoom-med.scss */
 .zoom-4 .city.med .marker {
-	height: 9px;
-	width: 9px;
+  height: 9px;
+  width: 9px;
 }
 
+/* line 28, ../sass/zoom-med.scss */
 .zoom-4 .city.large .marker {
-	height: 12px;
-	width: 12px;
+  height: 12px;
+  width: 12px;
 }
 
 /* --------- ZOOM LEVEL FIVE ----- */
-
+/* line 35, ../sass/zoom-med.scss */
 .zoom-5.home #map {
-	height: 600px;
-	width: 600px;
+  height: 600px;
+  width: 600px;
 }
 
+/* line 40, ../sass/zoom-med.scss */
 .zoom-5 #landmass {
-	height: 100px;
-	width: 100px;
+  height: 100px;
+  width: 100px;
 }
 
+/* line 45, ../sass/zoom-med.scss */
 .zoom-5 .city.tiny .marker {
-	height: 4px;
-	width: 4px;
+  height: 4px;
+  width: 4px;
 }
 
+/* line 50, ../sass/zoom-med.scss */
 .zoom-5 .city.small .marker {
-	height: 8px;
-	width: 8px;
+  height: 8px;
+  width: 8px;
 }
 
+/* line 55, ../sass/zoom-med.scss */
 .zoom-5 .city.med .marker {
-	height: 12px;
-	width: 12px;
+  height: 12px;
+  width: 12px;
 }
 
+/* line 60, ../sass/zoom-med.scss */
 .zoom-5 .city.large .marker {
-	height: 16px;
-	width: 16px;
+  height: 16px;
+  width: 16px;
 }
 
+/* line 65, ../sass/zoom-med.scss */
 .zoom-5.single #map {
-	border: 1px dashed #333;
-	height: 600px;
-	width: 600px;
+  border: 1px dashed #333;
+  height: 600px;
+  width: 600px;
 }
 
+/* line 71, ../sass/zoom-med.scss */
 .zoom-5.single .tile {
-	float: left;
-	height: 10%;
-	width: 10%;
+  float: left;
+  height: 10%;
+  width: 10%;
 }
 
+/* line 77, ../sass/zoom-med.scss */
 .zoom-5.single #map .library {
-	background-image: url('../images/library.png');
+  background-image: url("../images/library.png");
 }
 
+/* line 81, ../sass/zoom-med.scss */
 .zoom-5.single #map .university {
-	background-image: url('../images/university.png');
+  background-image: url("../images/university.png");
 }
 
+/* line 85, ../sass/zoom-med.scss */
 .single #map .stadium {
-	background-image: url('../images/stadium.png');
+  background-image: url("../images/stadium.png");
 }
 
 /* -------- ZOOM LEVEL SIX -------------- */
-
+/* line 91, ../sass/zoom-med.scss */
 .zoom-6.home #map {
-	height: 900px;
-	width: 900px;
+  height: 900px;
+  width: 900px;
 }
 
+/* line 96, ../sass/zoom-med.scss */
 .zoom-6 #landmass {
-	height: 150px;
-	width: 150px;
+  height: 150px;
+  width: 150px;
 }
 
+/* line 101, ../sass/zoom-med.scss */
 .zoom-6 .city.tiny .marker {
-	height: 5px;
-	width: 5px;
+  height: 5px;
+  width: 5px;
 }
 
+/* line 106, ../sass/zoom-med.scss */
 .zoom-6 .city.small .marker {
-	height: 10px;
-	width: 10px;
+  height: 10px;
+  width: 10px;
 }
 
+/* line 111, ../sass/zoom-med.scss */
 .zoom-6 .city.med .marker {
-	height: 15px;
-	width: 15px;
+  height: 15px;
+  width: 15px;
 }
 
+/* line 116, ../sass/zoom-med.scss */
 .zoom-6 .city.large .marker {
-	height: 20px;
-	width: 20px;
+  height: 20px;
+  width: 20px;
 }

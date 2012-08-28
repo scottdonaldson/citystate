@@ -1,279 +1,304 @@
-/* ------- GENERAL STYLES ------- */
-
+/* line 6, ../sass/city.scss */
 * {
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
+/* line 10, ../sass/city.scss */
 body {
-	font-family: Helvetica, Arial, sans-serif;
-	height: 100%;
-	overflow: hidden;
-	width: 100%;
+  font-family: Helvetica, Arial, sans-serif;
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
 }
 
-/* ------- ALERTS ----------- */
-
+/* line 19, ../sass/city.scss */
 #alert {
-	background: #fff;
-	border: 3px solid #f22;
-	padding: 5px;
-	margin: 65px 30% 0;
-	position: absolute;
-	top: 0;
-	width: 40%;
-	z-index: 9999;
+  background: #fff;
+  border: 3px solid #f22;
+  padding: 5px;
+  margin: 65px 30% 0;
+  position: absolute;
+  top: 0;
+  width: 40%;
+  z-index: 9999;
 }
 
 /* ------- MAIN PAGE -------- */
-
+/* line 32, ../sass/city.scss */
 .home {
-	background: #79d;
+  background: #79d;
 }
-
+/* line 35, ../sass/city.scss */
 .home #map {
-	background: #79d;
-	margin: 20px 0 0 20px;
+  background: #79d;
+  margin: 20px 0 0 20px;
 }
-
+/* line 40, ../sass/city.scss */
 .home .tile {
-	background: #da7;
-	float: left;
-	height: 10%;
-	position: relative;
-	width: 10%;
+  background: #da7;
+  float: left;
+  height: 10%;
+  position: relative;
+  width: 10%;
 }
-
+/* line 47, ../sass/city.scss */
 .home .tile.water {
-	background: #79d;
+  background: #79d;
 }
-
-.home .city {
-	left: 10%;
-	position: absolute;
-	top: 10%;
-	z-index: 999;
+/* line 51, ../sass/city.scss */
+.home .tile .city {
+  left: 10%;
+  position: absolute;
+  top: 10%;
+  z-index: 999;
 }
-
-.home .city .marker {
-	border: 1px dotted #333;
-	display: block;
+/* line 57, ../sass/city.scss */
+.home .tile .city .marker {
+  border: 1px dotted #333;
+  display: block;
 }
-
-.home .info {
-	display: none;
+/* line 62, ../sass/city.scss */
+.home .tile .city:hover ~ .info {
+  background: #fff;
+  display: block;
+  left: 50%;
+  min-width: 150px;
+  padding: 4px;
+  position: absolute;
+  top: 10%;
+  z-index: 9999;
 }
-
-.home .city:hover ~ .info {
-	background: #fff;
-	display: block;
-	left: 50%;
-	min-width: 150px;
-	padding: 4px;
-	position: absolute;
-	top: 10%;
-	z-index: 9999;
+/* line 74, ../sass/city.scss */
+.home .tile .info {
+  display: none;
 }
-
-.home .info .city-name {
-	font-size: 20px;
-	font-weight: bold;
+/* line 77, ../sass/city.scss */
+.home .tile .info .city-name {
+  font-size: 20px;
+  font-weight: bold;
 }
-
-.home .info .city-builder {
-	display: block;
-	font-size: 12px;
-	font-style: italic;
-	margin: 0 0 8px 8px;
+/* line 82, ../sass/city.scss */
+.home .tile .info .city-builder {
+  display: block;
+  font-size: 12px;
+  font-style: italic;
+  margin: 0 0 8px 8px;
 }
-
+/* line 92, ../sass/city.scss */
 .home #build h2 {
-	cursor: pointer;
+  cursor: pointer;
 }
-
+/* line 94, ../sass/city.scss */
 .home #build h2:hover {
-	color: #999;
+  color: #999;
 }
-
+/* line 99, ../sass/city.scss */
 .home #build form {
-	display: none;
+  display: none;
 }
 
+/* line 105, ../sass/city.scss */
 .tile:hover {
-	background: #aaa;
+  background: #aaa;
 }
 
 /* ------ CITY ------------ */
-
+/* line 111, ../sass/city.scss */
 .single {
-	background: #da7;
+  background: #da7;
 }
 
+/* line 115, ../sass/city.scss */
 .single #map {
-	margin: 20px 0 0 20px;
+  margin: 20px 0 0 20px;
 }
 
+/* line 119, ../sass/city.scss */
 .infobox {
-	background: #fff;
-	display: none;
-	padding: 4px;
-	min-width: 150px;
-	position: absolute;
-	z-index: 999999;
+  background: #fff;
+  display: none;
+  padding: 4px;
+  min-width: 150px;
+  position: absolute;
+  z-index: 999999;
 }
 
+/* line 128, ../sass/city.scss */
 #build:before {
-	background: #fff;
-	content: '';
-	display: block;
-	height: 10px;
-	position: relative;
-	transform: rotate(45deg);
-		-moz-transform: rotate(45deg);
-		-ms-transform: rotate(45deg);
-		-o-transform: rotate(45deg);
-		-webkit-transform: rotate(45deg);
-	top: -9px;
-	width: 10px;
+  background: #fff;
+  content: '';
+  display: block;
+  height: 10px;
+  position: relative;
+  transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  top: -9px;
+  width: 10px;
 }
 
+/* line 143, ../sass/city.scss */
 #build input {
-	clear: left;
-	display: block;
-	float: left;
+  clear: left;
+  display: block;
+  float: left;
 }
 
+/* line 149, ../sass/city.scss */
 #build label {
-	float: left;
+  float: left;
 }
 
+/* line 153, ../sass/city.scss */
 #build input[type="submit"] {
-	float: right;
-	margin-top: 5px;
+  float: right;
+  margin-top: 5px;
 }
 
 /* -------- TO DO ------------ */
-
+/* line 160, ../sass/city.scss */
 #todo {
-	background: #eee;
-	height: 350px;
-	margin: 60px 0 0 60px;
-	overflow-y: scroll;
-	padding: 10px;
-	width: 500px;
+  background: #eee;
+  height: 350px;
+  margin: 60px 0 0 60px;
+  overflow-y: scroll;
+  padding: 10px;
+  width: 500px;
 }
 
+/* line 169, ../sass/city.scss */
 #todo h2 {
-	border-bottom: 1px solid #999;
-	color: #999;
-	display: block;
-	font-size: 24px;
-	margin-bottom: 10px;
+  border-bottom: 1px solid #999;
+  color: #999;
+  display: block;
+  font-size: 24px;
+  margin-bottom: 10px;
 }
 
+/* line 177, ../sass/city.scss */
 #todo ul {
-	margin-bottom: 25px;
+  margin-bottom: 25px;
 }
 
+/* line 181, ../sass/city.scss */
 #todo ul li {
-	list-style: disc;
-	margin: 0 0 5px 20px;
+  list-style: disc;
+  margin: 0 0 5px 20px;
 }
 
+/* line 186, ../sass/city.scss */
 #todo ul li.completed {
-	color: #999;
-	font-style: italic;
-	text-decoration: line-through;
+  color: #999;
+  font-style: italic;
+  text-decoration: line-through;
 }
 
 /* ------ SCOREBOARD --------- */
-
+/* line 194, ../sass/city.scss */
 #scoreboard {
-	margin: 20px 0 0 20px;
-	width: 800px;
+  margin: 20px 0 0 20px;
+  width: 800px;
 }
 
+/* line 199, ../sass/city.scss */
 #scoreboard .header {
-	background: #eee;
+  background: #eee;
 }
 
+/* line 203, ../sass/city.scss */
 #scoreboard div {
-	padding: 5px;
+  padding: 5px;
 }
 
+/* line 207, ../sass/city.scss */
 #scoreboard .row {
-	margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
+/* line 211, ../sass/city.scss */
 #scoreboard .row div {
-	float: left;
+  float: left;
 }
 
+/* line 215, ../sass/city.scss */
 #scoreboard .current {
-	background: #fdd;
+  background: #fdd;
 }
 
+/* line 219, ../sass/city.scss */
 #scoreboard .nutzername {
-	width: 300px;
+  width: 300px;
 }
 
+/* line 225, ../sass/city.scss */
 #scoreboard .cities,
 #scoreboard .cash,
 #scoreboard .total-population {
-	width: 125px;
+  width: 125px;
 }
 
 /* ------ TOOLBAR ------------ */
-
+/* line 231, ../sass/city.scss */
 #toolbar {
-	background: #fff;
-	bottom: 0;
-	height: 100px;
-	padding: 15px;
-	position: absolute;
-	width: 100%;
-	z-index: 9999;
+  background: #fff;
+  bottom: 0;
+  height: 100px;
+  padding: 15px;
+  position: absolute;
+  width: 100%;
+  z-index: 9999;
 }
 
+/* line 241, ../sass/city.scss */
 #toolbar .return {
-	float: left;
-	min-height: 1px;
-	width: 120px;
+  float: left;
+  min-height: 1px;
+  width: 120px;
 }
 
+/* line 247, ../sass/city.scss */
 #toolbar form {
-	clear: left;
-	float: left;
-	margin-right: 15px;
+  clear: left;
+  float: left;
+  margin-right: 15px;
 }
 
+/* line 254, ../sass/city.scss */
 #toolbar .user,
 #toolbar .city {
-	float: left;
-	margin-right: 15px;
+  float: left;
+  margin-right: 15px;
 }
 
+/* line 259, ../sass/city.scss */
 #toolbar .nav {
-	float: right;
-	text-align: right;
+  float: right;
+  text-align: right;
 }
 
+/* line 264, ../sass/city.scss */
 #zoom {
-	background: #eee;
-	bottom: 10px;
-	padding: 5px;
-	position: absolute;
-	right: 10px;
+  background: #eee;
+  bottom: 10px;
+  padding: 5px;
+  position: absolute;
+  right: 10px;
 }
 
+/* line 272, ../sass/city.scss */
 #zoom div {
-	border: 1px solid #999;
-	cursor: pointer;
-	margin: 5px;
-	text-align: center;
+  border: 1px solid #999;
+  cursor: pointer;
+  margin: 5px;
+  text-align: center;
 }
 
+/* line 279, ../sass/city.scss */
 #zoom div:hover {
-	background: #ddd;
+  background: #ddd;
 }
