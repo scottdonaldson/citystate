@@ -58,7 +58,7 @@ function signup_user($user_name = '', $user_email = '', $errors = '') {
 
 	?>
 
-	<h2><?php printf( __( 'Get your own %s account in seconds' ), $current_site->site_name ) ?></h2>
+	<h2><?php printf( __( 'Get an account at City/State' ), $current_site->site_name ) ?></h2>
 	<form id="setupform" method="post" action="<?php echo site_url(); ?>/create-account">
 		<input type="hidden" name="stage" value="validate-user-signup" />
 		<?php do_action( 'signup_hidden_fields' ); ?>

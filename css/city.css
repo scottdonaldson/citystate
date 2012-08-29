@@ -338,23 +338,29 @@
 /* line 338, ../sass/city.scss */
 #toolbar .create {
   background: #fff;
+  -moz-border-radius: 0 10px 10px 0;
+  -webkit-border-radius: 0 10px 10px 0;
+  -o-border-radius: 0 10px 10px 0;
+  -ms-border-radius: 0 10px 10px 0;
+  -khtml-border-radius: 0 10px 10px 0;
+  border-radius: 0 10px 10px 0;
   display: block;
   left: 0;
   padding: 10px;
   position: absolute;
   top: -80px;
 }
-/* line 347, ../sass/city.scss */
+/* line 348, ../sass/city.scss */
 #toolbar .nav {
   float: right;
   text-align: right;
 }
-/* line 351, ../sass/city.scss */
+/* line 352, ../sass/city.scss */
 #toolbar .nav ul {
   margin: 0;
   padding: 0;
 }
-/* line 353, ../sass/city.scss */
+/* line 354, ../sass/city.scss */
 #toolbar .nav ul li {
   list-style-type: none;
 }

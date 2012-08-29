@@ -337,6 +337,7 @@
 
 	.create {
 		background: #fff;
+		@include border-radius(0 10px 10px 0);
 		display: block;
 		left: 0;
 		padding: 10px;
