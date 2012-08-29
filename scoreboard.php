@@ -24,7 +24,7 @@ foreach($users as $user) {
 		get_currentuserinfo(); ?>
 
 		<div class="row clearfix <?php if ($current_user->ID == $user->ID) { echo 'current'; } ?>"><?php
-			echo '<div class="nutzername">'.$user->display_name.'</div>';
+			echo '<div class="nutzername"><a href="'.site_url().'/user/'.$user->user_login.'">'.$user->display_name.'</a></div>';
 			echo '<div class="cities">'.$cities.'</div>';
 			echo '<div class="cash">'.get_field('cash','user_'.$user->ID).'</div>';
 			

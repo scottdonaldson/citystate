@@ -1,5 +1,5 @@
 // ----- Imports
-@import 'compass/css3';
+@import 'compass';
 
 // ----- General styles
 
@@ -12,6 +12,11 @@ body {
 	height: 100%;
 	overflow: hidden;
 	width: 100%;
+}
+
+// ----- Mixins
+@mixin gradient {
+	@include background(linear-gradient(#ccc, #fff));
 }
 
 // ----- Alerts
@@ -110,10 +115,10 @@ body {
 
 .single {
 	background: #da7;
-}
 
-.single #map {
-	margin: 20px 0 0 20px;
+	#map {
+		margin: 20px 0 0 20px;
+	}
 }
 
 .infobox {
@@ -194,22 +199,22 @@ body {
 #scoreboard {
 	margin: 20px 0 0 20px;
 	width: 800px;
-}
 
-#scoreboard .header {
-	background: #eee;
-}
+	.header {
+		background: #eee;
+	}
 
-#scoreboard div {
-	padding: 5px;
-}
+	div {
+		padding: 5px;
+	}
 
-#scoreboard .row {
-	margin-bottom: 5px;
-}
+	.row {
+		margin-bottom: 5px;
 
-#scoreboard .row div {
-	float: left;
+		div {
+			float: left;
+		}
+	}
 }
 
 #scoreboard .current {
@@ -229,7 +234,7 @@ body {
 /* ------ TOOLBAR ------------ */
 
 #toolbar {
-	background: #fff;
+	@include gradient;
 	bottom: 0;
 	height: 100px;
 	padding: 15px;
@@ -244,16 +249,15 @@ body {
 	width: 120px;
 }
 
-#toolbar form {
-	clear: left;
-	float: left;
-	margin-right: 15px;
-}
-
 #toolbar .user,
 #toolbar .city {
 	float: left;
 	margin-right: 15px;
+	width: 200px;
+
+	p {
+		margin: 3px 0;
+	}
 }
 
 #toolbar .nav {

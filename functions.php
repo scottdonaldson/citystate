@@ -35,6 +35,13 @@ if (!current_user_can('manage_options')) {
 	add_filter('show_admin_bar', '__return_false');
 }
 
+// Change /author/ permalink to /user/
+function custom_author_base() {
+	global $wp_rewrite;
+	$wp_rewrite->author_base = 'user';
+}
+add_action('init', 'custom_author_base', 0 );
+
 // Custom login screen
 function my_login_head() {
 	$template_url = get_bloginfo('template_url');
