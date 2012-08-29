@@ -4,17 +4,10 @@
   -webkit-box-sizing: border-box;
   -ms-box-sizing: border-box;
   box-sizing: border-box;
+  font-family: 'Ubuntu', sans-serif;
 }
 
-/* line 10, ../sass/city.scss */
-body {
-  font-family: Helvetica, Arial, sans-serif;
-  height: 100%;
-  overflow: hidden;
-  width: 100%;
-}
-
-/* line 24, ../sass/city.scss */
+/* line 25, ../sass/city.scss */
 #alert {
   background: #fff;
   border: 3px solid #f22;
@@ -27,43 +20,70 @@ body {
 }
 
 /* ------- MAIN PAGE -------- */
-/* line 37, ../sass/city.scss */
+/* line 38, ../sass/city.scss */
+#map {
+  margin: 20px auto;
+  width: 600px;
+}
+
+/* line 43, ../sass/city.scss */
 .home {
   background: #79d;
 }
-/* line 40, ../sass/city.scss */
+/* line 46, ../sass/city.scss */
 .home #map {
   background: #79d;
   margin: 20px 0 0 20px;
 }
-/* line 45, ../sass/city.scss */
-.home .tile {
-  background: #da7;
-  float: left;
-  height: 10%;
-  position: relative;
-  width: 10%;
-}
-/* line 52, ../sass/city.scss */
+/* line 53, ../sass/city.scss */
 .home .tile.water {
   background: #79d;
 }
-/* line 56, ../sass/city.scss */
+/* line 57, ../sass/city.scss */
 .home .tile .city {
   left: 10%;
   position: absolute;
   top: 10%;
   z-index: 999;
 }
-/* line 62, ../sass/city.scss */
+/* line 63, ../sass/city.scss */
 .home .tile .city .marker {
-  border: 1px dotted #333;
+  -moz-border-radius: 500px;
+  -webkit-border-radius: 500px;
+  -o-border-radius: 500px;
+  -ms-border-radius: 500px;
+  -khtml-border-radius: 500px;
+  border-radius: 500px;
   display: block;
 }
-/* line 67, ../sass/city.scss */
+/* line 68, ../sass/city.scss */
+.home .tile .city.tiny .marker {
+  height: 4px;
+  width: 4px;
+}
+/* line 73, ../sass/city.scss */
+.home .tile .city.small .marker {
+  height: 8px;
+  width: 8px;
+}
+/* line 78, ../sass/city.scss */
+.home .tile .city.med .marker {
+  height: 12px;
+  width: 12px;
+}
+/* line 83, ../sass/city.scss */
+.home .tile .city.large .marker {
+  height: 16px;
+  width: 16px;
+}
+/* line 88, ../sass/city.scss */
 .home .tile .city:hover ~ .info {
-  background: #fff;
   display: block;
+}
+/* line 93, ../sass/city.scss */
+.home .tile .info {
+  background: #fff;
+  display: none;
   left: 50%;
   min-width: 150px;
   padding: 4px;
@@ -71,51 +91,67 @@ body {
   top: 10%;
   z-index: 9999;
 }
-/* line 79, ../sass/city.scss */
-.home .tile .info {
-  display: none;
-}
-/* line 82, ../sass/city.scss */
+/* line 103, ../sass/city.scss */
 .home .tile .info .city-name {
   font-size: 20px;
   font-weight: bold;
 }
-/* line 87, ../sass/city.scss */
+/* line 108, ../sass/city.scss */
 .home .tile .info .city-builder {
   display: block;
   font-size: 12px;
   font-style: italic;
   margin: 0 0 8px 8px;
 }
-/* line 97, ../sass/city.scss */
+/* line 118, ../sass/city.scss */
 .home #build h2 {
   cursor: pointer;
 }
-/* line 99, ../sass/city.scss */
+/* line 120, ../sass/city.scss */
 .home #build h2:hover {
   color: #999;
 }
-/* line 104, ../sass/city.scss */
+/* line 125, ../sass/city.scss */
 .home #build form {
   display: none;
 }
 
-/* line 110, ../sass/city.scss */
+/* line 131, ../sass/city.scss */
+.tile {
+  background: #da7;
+  height: 60px;
+  float: left;
+  position: relative;
+  width: 60px;
+}
+/* line 138, ../sass/city.scss */
 .tile:hover {
   background: #aaa;
 }
 
 /* ------ CITY ------------ */
-/* line 116, ../sass/city.scss */
+/* line 145, ../sass/city.scss */
 .single {
   background: #da7;
 }
-/* line 119, ../sass/city.scss */
+/* line 148, ../sass/city.scss */
 .single #map {
-  margin: 20px 0 0 20px;
+  border: 1px dashed #333;
+}
+/* line 154, ../sass/city.scss */
+.single .tile .library {
+  background-image: url("../images/library.png");
+}
+/* line 158, ../sass/city.scss */
+.single .tile .university {
+  background-image: url("../images/university.png");
+}
+/* line 162, ../sass/city.scss */
+.single .tile .stadium {
+  background-image: url("../images/stadium.png");
 }
 
-/* line 124, ../sass/city.scss */
+/* line 168, ../sass/city.scss */
 .infobox {
   background: #fff;
   display: none;
@@ -125,42 +161,41 @@ body {
   z-index: 999999;
 }
 
-/* line 133, ../sass/city.scss */
+/* line 178, ../sass/city.scss */
 #build:before {
   background: #fff;
   content: '';
   display: block;
   height: 10px;
   position: relative;
-  transform: rotate(45deg);
   -moz-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  -o-transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
   top: -9px;
   width: 10px;
 }
-
-/* line 148, ../sass/city.scss */
+/* line 189, ../sass/city.scss */
 #build input {
   clear: left;
   display: block;
   float: left;
+  font-family: 'Ubuntu', sans-serif;
 }
-
-/* line 154, ../sass/city.scss */
+/* line 196, ../sass/city.scss */
 #build label {
   float: left;
 }
-
-/* line 158, ../sass/city.scss */
+/* line 200, ../sass/city.scss */
 #build input[type="submit"] {
   float: right;
+  font-family: 'Ubuntu', sans-serif;
   margin-top: 5px;
 }
 
 /* -------- TO DO ------------ */
-/* line 165, ../sass/city.scss */
+/* line 209, ../sass/city.scss */
 #todo {
   background: #eee;
   height: 350px;
@@ -169,8 +204,7 @@ body {
   padding: 10px;
   width: 500px;
 }
-
-/* line 174, ../sass/city.scss */
+/* line 217, ../sass/city.scss */
 #todo h2 {
   border-bottom: 1px solid #999;
   color: #999;
@@ -178,19 +212,16 @@ body {
   font-size: 24px;
   margin-bottom: 10px;
 }
-
-/* line 182, ../sass/city.scss */
+/* line 225, ../sass/city.scss */
 #todo ul {
   margin-bottom: 25px;
 }
-
-/* line 186, ../sass/city.scss */
+/* line 229, ../sass/city.scss */
 #todo ul li {
   list-style: disc;
   margin: 0 0 5px 20px;
 }
-
-/* line 191, ../sass/city.scss */
+/* line 233, ../sass/city.scss */
 #todo ul li.completed {
   color: #999;
   font-style: italic;
@@ -198,39 +229,39 @@ body {
 }
 
 /* ------ SCOREBOARD --------- */
-/* line 199, ../sass/city.scss */
+/* line 243, ../sass/city.scss */
 #scoreboard {
   margin: 20px 0 0 20px;
   width: 800px;
 }
-/* line 203, ../sass/city.scss */
+/* line 247, ../sass/city.scss */
 #scoreboard .header {
   background: #eee;
 }
-/* line 207, ../sass/city.scss */
+/* line 251, ../sass/city.scss */
 #scoreboard div {
   padding: 5px;
 }
-/* line 211, ../sass/city.scss */
+/* line 255, ../sass/city.scss */
 #scoreboard .row {
   margin-bottom: 5px;
 }
-/* line 214, ../sass/city.scss */
+/* line 258, ../sass/city.scss */
 #scoreboard .row div {
   float: left;
 }
 
-/* line 220, ../sass/city.scss */
+/* line 264, ../sass/city.scss */
 #scoreboard .current {
   background: #fdd;
 }
 
-/* line 224, ../sass/city.scss */
+/* line 268, ../sass/city.scss */
 #scoreboard .nutzername {
   width: 300px;
 }
 
-/* line 230, ../sass/city.scss */
+/* line 274, ../sass/city.scss */
 #scoreboard .cities,
 #scoreboard .cash,
 #scoreboard .total-population {
@@ -238,7 +269,7 @@ body {
 }
 
 /* ------ TOOLBAR ------------ */
-/* line 236, ../sass/city.scss */
+/* line 280, ../sass/city.scss */
 #toolbar {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #cccccc), color-stop(100%, #ffffff));
   background: -webkit-linear-gradient(#cccccc, #ffffff);
@@ -253,51 +284,39 @@ body {
   width: 100%;
   z-index: 9999;
 }
-
-/* line 246, ../sass/city.scss */
+/* line 289, ../sass/city.scss */
+#toolbar input {
+  font-family: 'Ubuntu', sans-serif;
+}
+/* line 293, ../sass/city.scss */
 #toolbar .return {
   float: left;
   min-height: 1px;
   width: 120px;
 }
-
-/* line 253, ../sass/city.scss */
+/* line 300, ../sass/city.scss */
 #toolbar .user,
 #toolbar .city {
   float: left;
   margin-right: 15px;
   width: 200px;
 }
-/* line 258, ../sass/city.scss */
+/* line 305, ../sass/city.scss */
 #toolbar .user p,
 #toolbar .city p {
-  margin: 3px 0;
+  margin: 2px 0;
 }
-
-/* line 263, ../sass/city.scss */
+/* line 310, ../sass/city.scss */
 #toolbar .nav {
   float: right;
   text-align: right;
 }
-
-/* line 268, ../sass/city.scss */
-#zoom {
-  background: #eee;
-  bottom: 10px;
-  padding: 5px;
-  position: absolute;
-  right: 10px;
+/* line 314, ../sass/city.scss */
+#toolbar .nav ul {
+  margin: 0;
+  padding: 0;
 }
-
-/* line 276, ../sass/city.scss */
-#zoom div {
-  border: 1px solid #999;
-  cursor: pointer;
-  margin: 5px;
-  text-align: center;
-}
-
-/* line 283, ../sass/city.scss */
-#zoom div:hover {
-  background: #ddd;
+/* line 316, ../sass/city.scss */
+#toolbar .nav ul li {
+  list-style-type: none;
 }

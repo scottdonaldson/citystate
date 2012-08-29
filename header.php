@@ -9,15 +9,17 @@ if (isset($_POST['update'])) {
 <head>
 
 	<title>City/State</title>
+	<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
 	<link rel="stylesheet" href="<?php echo bloginfo('template_url'); ?>/style.css" />
 	<link rel="stylesheet" href="<?php echo bloginfo('template_url'); ?>/css/city.css" />
-	<link rel="stylesheet" href="<?php echo bloginfo('template_url'); ?>/css/zoom-med.css" />
-	<?php get_template_part('colors'); ?>
+	
+	<?php include('colors.php'); ?>
 
 <?php wp_head(); ?>
 </head>
 
-<body <?php body_class('zoom-5'); ?>>
+<body <?php body_class(); ?>>
 
 	<?php if ($alert) { ?>
 		<div id="alert"><?php echo $alert; ?></div>
