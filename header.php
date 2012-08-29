@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <?php 
 if (isset($_POST['update'])) { 
+	if ($_POST['daily'] == 'yes') {
+		include('update.php');
+	}
+
 	if (is_single()) {
 		include('build.php');
 	}
@@ -24,3 +28,5 @@ if (isset($_POST['update'])) {
 	<?php if ($alert) { ?>
 		<div id="alert"><?php echo $alert; ?></div>
 	<?php } ?>
+
+	<div id="main" class="clearfix">

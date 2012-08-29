@@ -19,7 +19,7 @@ global $current_user;
 get_currentuserinfo();
 ?>
 
-<div id="map" class="draggable">
+<div id="map" class="clearfix">
 
 	<?php foreach ( range(1,100) as $tile ) { ?>
 

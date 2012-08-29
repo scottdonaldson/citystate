@@ -1,3 +1,4 @@
+</div><!-- #main -->
 <div id="toolbar">
 
 	<?php if (!is_home()) { ?>
@@ -16,7 +17,7 @@
 			global $current_user;
 			get_currentuserinfo();
 
-			echo '<p>'.$current_user->display_name.'</p>'; 
+			echo '<p><a href="'.site_url().'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a></p>'; 
 			if (current_user_can('import')) {
 				include ('cheats/more-cash.php');
 			}
@@ -34,7 +35,7 @@
 		<?php }
 	} else { ?>
 		<div class="user">
-			<form name="loginform" id="loginform" action="http://scottdonaldson.net/wp-login.php" method="post">
+			<form name="loginform" id="loginform" action="<?php echo site_url(); ?>/wp-login.php" method="post">
 				<p>Username:&nbsp;
 					<input type="text" name="log" id="user_login" class="input" value="" size="20" tabindex="10" /></label>
 				</p>
@@ -44,7 +45,7 @@
 				<p class="forgetmenot"><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever" tabindex="90" /> Remember Me</label></p>
 				<p class="submit">
 					<input type="submit" name="wp-submit" id="wp-submit" class="button-primary" value="Log In" tabindex="100" />
-					<input type="hidden" name="redirect_to" value="http://scottdonaldson.net/citystate/" />
+					<input type="hidden" name="redirect_to" value="<?php echo site_url(); ?>" />
 					<input type="hidden" name="testcookie" value="1" />
 				</p>
 			</form>
@@ -52,7 +53,19 @@
 
 	<?php } ?>
 	<div class="nav">
-		<?php wp_nav_menu('primary'); ?>
+		<?php if (!is_user_logged_in()) { ?>
+			<p class="create">You don't have an account. Want to <a href="<?php echo site_url(); ?>/create-account">create one</a>?</p>
+		<?php }
+		
+		wp_nav_menu('primary'); 
+		if (is_user_logged_in()) { 
+			if (current_user_can('import')) {
+				echo '<form method="post" action="'.site_url().'/">';
+				echo '<input type="hidden" value="yes" name="daily" />';
+				echo '<input type="submit" name="update" value="run daily update" />';
+				echo '</form>';
+			}
+		} ?>
 	</div>
 
 </div>

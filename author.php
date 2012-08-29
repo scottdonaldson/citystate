@@ -15,4 +15,11 @@ $id = $user->ID; ?>
 	<?php endwhile; endif; ?>
 	</ul>
 
+<?php 
+global $current_user;
+get_currentuserinfo();	
+
+// Is the logged in user looking at their own profile?
+if ($current_user->ID == $user->ID) { echo 'hi there'; } ?>
+
 <?php get_footer(); ?>

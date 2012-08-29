@@ -12,7 +12,7 @@ query_posts('posts_per_page=-1'); while (have_posts()) : the_post();
 
 <?php endwhile; rewind_posts(); ?>
 
-<div id="map" class="draggable">
+<div id="map" class="clearfix">
 
 	<?php foreach (range(1,100) as $tile) { ?>
 

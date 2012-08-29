@@ -1,11 +1,15 @@
 // ----- Imports
 @import 'compass';
 
-// ----- General styles
+// ----- General styles and structure
 
 * {
 	@include box-sizing(border-box);
 	font-family: 'Ubuntu', sans-serif;	
+}
+
+#main {
+	padding: 20px 20px 120px;
 }
 
 // ----- Mixins
@@ -36,7 +40,8 @@
 /* ------- MAIN PAGE -------- */
 
 #map {
-	margin: 20px auto;
+	height: 600px;
+	margin: 0 auto;
 	width: 600px;
 }
 
@@ -45,7 +50,6 @@
 
 	#map {
 		background: #79d;
-		margin: 20px 0 0 20px;
 	}
 
 	.tile {
@@ -130,10 +134,10 @@
 
 .tile {
 	background: #da7;
-	height: 60px;
+	height: 10%;
 	float: left;
 	position: relative;
-	width: 60px;
+	width: 10%;
 
 	&:hover {
 		background: #aaa;
@@ -209,7 +213,6 @@
 #todo {
 	background: #eee;
 	height: 350px;
-	margin: 60px 0 0 60px;
 	overflow-y: scroll;
 	padding: 10px;
 	width: 500px;
@@ -241,7 +244,6 @@
 /* ------ SCOREBOARD --------- */
 
 #scoreboard {
-	margin: 20px 0 0 20px;
 	width: 800px;
 
 	.header {
@@ -255,34 +257,35 @@
 	.row {
 		margin-bottom: 5px;
 
+		&.current {
+			background: #fdd;
+		}
+
 		div {
 			float: left;
 		}
+
+		.nutzername {
+			width: 300px;
+		}
+
+		.cities,
+		.cash,
+		.total-population {
+			width: 125px;
+		}
 	}
-}
-
-#scoreboard .current {
-	background: #fdd;
-}
-
-#scoreboard .nutzername {
-	width: 300px;
-}
-
-#scoreboard .cities,
-#scoreboard .cash,
-#scoreboard .total-population {
-	width: 125px;
 }
 
 /* ------ TOOLBAR ------------ */
 
 #toolbar {
 	@include gradient;
+	border-top: 1px solid #999;
 	bottom: 0;
 	height: 100px;
 	padding: 15px;
-	position: absolute;
+	position: fixed;
 	width: 100%;
 	z-index: 9999;
 
@@ -305,6 +308,40 @@
 		p {
 			margin: 2px 0;
 		}
+	}
+
+	#loginform {
+		width: 330px;
+		input {
+			font-size: 13px;
+			float: right;
+		}
+
+		.forgetmenot {
+			clear: left;
+			float: left;
+			width: 130px;
+			label {
+				float: left;
+			}
+			input {
+				float: none;
+			}
+		}
+
+		.submit {
+			float: right;
+			width: 200px;
+		}
+	}
+
+	.create {
+		background: #fff;
+		display: block;
+		left: 0;
+		padding: 10px;
+		position: absolute;
+		top: -80px;
 	}
 
 	.nav {
