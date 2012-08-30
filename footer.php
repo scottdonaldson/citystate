@@ -61,8 +61,8 @@
 		if (is_user_logged_in()) { 
 			if (current_user_can('import')) {
 				echo '<form method="post" action="'.site_url().'/">';
-				echo '<input type="hidden" value="yes" name="daily" />';
-				echo '<input type="submit" name="update" value="run daily update" />';
+					echo '<input type="hidden" value="yes" name="daily" />';
+					echo '<input type="submit" name="update" value="run daily update" />';
 				echo '</form>';
 			}
 		} ?>

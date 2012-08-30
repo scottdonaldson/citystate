@@ -144,15 +144,15 @@
   border: 1px dashed #333;
 }
 /* line 158, ../sass/city.scss */
-.single .tile .library {
+.single .tile.library {
   background-image: url("../images/library.png");
 }
 /* line 162, ../sass/city.scss */
-.single .tile .university {
+.single .tile.university {
   background-image: url("../images/university.png");
 }
 /* line 166, ../sass/city.scss */
-.single .tile .stadium {
+.single .tile.stadium {
   background-image: url("../images/stadium.png");
 }
 

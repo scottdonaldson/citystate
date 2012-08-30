@@ -155,15 +155,15 @@
 
 	.tile {
 
-		.library {
+		&.library {
 			background-image: url('../images/library.png');
 		}
 
-		.university {
+		&.university {
 			background-image: url('../images/university.png');
 		}
 
-		.stadium {
+		&.stadium {
 			background-image: url('../images/stadium.png');
 		}
 	}

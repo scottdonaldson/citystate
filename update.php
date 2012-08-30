@@ -1,11 +1,9 @@
 <?php
-
 	// Update all cities
-	global $post;
-	$posts = get_posts('numberposts=-1');
-	foreach ($posts as $post) {
+	query_posts('posts_per_page=-1');
+	while (have_posts()) : the_post();
+		
 		// Get info
-		setup_postdata($post);
 		$ID = get_the_ID();
 		$user_ID = get_the_author_meta('ID');
 			
@@ -19,32 +17,28 @@
 		update_field('cash', $cash+$taxes, 'user_'.$user_ID);
 
 		// Structure-related
+		
 		include 'structures.php';
 		foreach ($structures as $structure=>$cost) {
 
 			// Make sure structure has been built, then continue
-			if (get_field($structure)) {
-				while (has_sub_field($structure)) {
-					$location_x_[$structure] = get_sub_field('location-x');
-					$location_y_[$structure] = get_sub_field('location-y');
-					if ($location_x_[$structure] != '' && $location_y_[$structure] != '') {
+			$loc_x_[$structure] = get_post_meta($ID, $structure.'-x');
+			$loc_y_[$structure] = get_post_meta($ID, $structure.'-y');
+
+			if ( !($loc_x_[$structure][0] == 0 && $loc_y_[$structure][0] == 0) ) {
 							
-						// Upkeep costs (.02*cost)	
-						$cash = get_field('cash','user_'.$user_ID);
-						update_field('cash', $cash-(0.02*$cost), 'user_'.$user_ID);
+				// Upkeep costs (.02*cost)	
+				$cash = get_field('cash','user_'.$user_ID);
+				update_field('cash', $cash-(0.02*$cost), 'user_'.$user_ID);
 
-						// Each adds to population (.01*cost)
-						$pop = get_field('population',$ID);
-						update_field('population', $pop+.01*$cost, $ID);
-
-					}
-				}
+				// Each adds to population (.01*cost)
+				$pop = get_field('population',$ID);
+				update_field('population', $pop+.01*$cost, $ID);
 			}
 		}
-	}
-	wp_reset_postdata();
+	endwhile;
+	wp_reset_query();
 
 	$alert = '<p>Daily update complete!</p>';	
-}
 
 ?>

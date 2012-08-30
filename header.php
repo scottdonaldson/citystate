@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <?php 
 if (isset($_POST['update'])) { 
-	if ($_POST['daily'] == 'yes') {
+	$daily = $_POST['daily'];
+	if ($daily == 'yes') {
 		include('update.php');
 	}
 
