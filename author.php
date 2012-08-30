@@ -20,6 +20,9 @@ global $current_user;
 get_currentuserinfo();	
 
 // Is the logged in user looking at their own profile?
-if ($current_user->ID == $user->ID) { echo 'hi there'; } ?>
+if ($current_user->ID == $user->ID) { ?>
+<p>Hey there!</p>
+<p>This is your profile page. Soon there will be ways for you to change your password, color, etc.</p>
+<?php } ?>
 
 <?php get_footer(); ?>
