@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <?php 
 if (isset($_POST['update'])) { 
-	$daily = $_POST['daily'];
-	if ($daily == 'yes') {
-		include('update.php');
-	}
-
 	if (is_single()) {
 		include('build.php');
 	}

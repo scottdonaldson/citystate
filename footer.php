@@ -8,10 +8,6 @@
 	<?php }
 	
 	if (is_user_logged_in()) { ?>
-		<?php if (is_single()) { ?>
-			
-		<?php } ?>
-
 		<div class="user">
 			<?php 
 			global $current_user;
@@ -57,15 +53,7 @@
 			<p class="create">You don't have an account. Want to <a href="<?php echo site_url(); ?>/create-account">create one</a>?</p>
 		<?php }
 		
-		wp_nav_menu('primary'); 
-		if (is_user_logged_in()) { 
-			if (current_user_can('import')) {
-				echo '<form method="post" action="'.site_url().'/">';
-					echo '<input type="hidden" value="yes" name="daily" />';
-					echo '<input type="submit" name="update" value="run daily update" />';
-				echo '</form>';
-			}
-		} ?>
+		wp_nav_menu('primary'); ?>
 	</div>
 
 </div>
