@@ -51,7 +51,7 @@ function my_login_head() {
 add_action('login_head', 'my_login_head');
 
 function loginpage_custom_link() {
-	return 'http://www.scottdonaldson.net/city/';
+	return home_url();
 }
 add_filter('login_headerurl','loginpage_custom_link');
 

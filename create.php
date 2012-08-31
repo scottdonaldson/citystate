@@ -3,10 +3,12 @@
 Template Name: Create Account
 */
 
+/*
 if ( is_array( get_site_option( 'illegal_names' )) && isset( $_GET[ 'new' ] ) && in_array( $_GET[ 'new' ], get_site_option( 'illegal_names' ) ) == true ) {
 	wp_redirect( network_home_url() );
 	die();
 }
+*/
 function create_acct_stylesheet() {
 	?>
 	<style type="text/css">
@@ -19,7 +21,7 @@ function create_acct_stylesheet() {
 
 add_action( 'wp_head', 'create_acct_stylesheet' );
 get_header(); 
-
+/*
 function show_user_form($user_name = '', $user_email = '', $errors = '') {
 	// User name
 	echo '<label for="user_name">' . __('Username:') . '</label>';
@@ -171,6 +173,11 @@ if ( $active_signup == 'none' ) {
 			break;
 	}
 }
-do_action( 'after_signup_form' ); ?>
+do_action( 'after_signup_form' );
+*/
+?>
+<h1>Hey!</h1>
+<p>So, this is awkward, but you can't actually register a new account yet. Sorry.</p>
+<p>Back to <a href="<?php echo home_url(); ?>">main map</a>.</p>
 
 <?php get_footer(); ?>
