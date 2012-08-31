@@ -59,6 +59,33 @@ jQuery(document).ready(function($){
 			build.hide();
 		}
 	});
-	
 
+
+	// ----- BUDGET
+	var budget = $('#budget'),
+		taxes = [],
+		upkeep = [];
+	
+	// Total taxes
+	budget.find('.taxes').each(function(){
+		taxes.push($(this).text());
+	});
+	totalTaxes = 0;
+	for (var i = 0; i < taxes.length; i++) {
+	    totalTaxes += parseInt(taxes[i]);
+	}
+	budget.find('.total-taxes strong').text(totalTaxes);	
+	
+	// Total upkeep
+	budget.find('.upkeep').each(function(){
+		upkeep.push($(this).text());
+	});
+	totalUpkeep = 0;
+	for (var i = 0; i < upkeep.length; i++) {
+	    totalUpkeep += parseInt(upkeep[i]);
+	}
+	budget.find('.total-upkeep strong').text(totalUpkeep);	
+
+	// Grand total
+	budget.find('.grand strong').text(totalTaxes+totalUpkeep);
 });

@@ -268,8 +268,40 @@
   width: 125px;
 }
 
-/* ------ TOOLBAR ------------ */
 /* line 282, ../sass/city.scss */
+#budget {
+  width: 600px;
+}
+/* line 285, ../sass/city.scss */
+#budget div {
+  background: #e0e0e0;
+  float: left;
+  margin: 0 2% 2% 0;
+  padding: 5px;
+}
+/* line 291, ../sass/city.scss */
+#budget div:nth-child(3n+3) {
+  margin-right: 0;
+}
+/* line 295, ../sass/city.scss */
+#budget div.first {
+  width: 48%;
+}
+/* line 300, ../sass/city.scss */
+#budget div.second, #budget div.third {
+  text-align: right;
+  width: 24%;
+}
+/* line 305, ../sass/city.scss */
+#budget div.grand {
+  float: right;
+  margin-right: 0;
+  text-align: right;
+  width: 50%;
+}
+
+/* ------ TOOLBAR ------------ */
+/* line 316, ../sass/city.scss */
 #toolbar {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #cccccc), color-stop(100%, #ffffff));
   background: -webkit-linear-gradient(#cccccc, #ffffff);
@@ -285,57 +317,57 @@
   width: 100%;
   z-index: 9999;
 }
-/* line 292, ../sass/city.scss */
+/* line 326, ../sass/city.scss */
 #toolbar input {
   font-family: 'Ubuntu', sans-serif;
 }
-/* line 296, ../sass/city.scss */
+/* line 330, ../sass/city.scss */
 #toolbar .return {
   float: left;
   min-height: 1px;
   width: 120px;
 }
-/* line 303, ../sass/city.scss */
+/* line 337, ../sass/city.scss */
 #toolbar .user,
 #toolbar .city {
   float: left;
   margin-right: 15px;
   width: 200px;
 }
-/* line 308, ../sass/city.scss */
+/* line 342, ../sass/city.scss */
 #toolbar .user p,
 #toolbar .city p {
   margin: 2px 0;
 }
-/* line 313, ../sass/city.scss */
+/* line 347, ../sass/city.scss */
 #toolbar #loginform {
   width: 330px;
 }
-/* line 315, ../sass/city.scss */
+/* line 349, ../sass/city.scss */
 #toolbar #loginform input {
   font-size: 13px;
   float: right;
 }
-/* line 320, ../sass/city.scss */
+/* line 354, ../sass/city.scss */
 #toolbar #loginform .forgetmenot {
   clear: left;
   float: left;
   width: 130px;
 }
-/* line 324, ../sass/city.scss */
+/* line 358, ../sass/city.scss */
 #toolbar #loginform .forgetmenot label {
   float: left;
 }
-/* line 327, ../sass/city.scss */
+/* line 361, ../sass/city.scss */
 #toolbar #loginform .forgetmenot input {
   float: none;
 }
-/* line 332, ../sass/city.scss */
+/* line 366, ../sass/city.scss */
 #toolbar #loginform .submit {
   float: right;
   width: 200px;
 }
-/* line 338, ../sass/city.scss */
+/* line 372, ../sass/city.scss */
 #toolbar .create {
   background: #fff;
   -moz-border-radius: 0 10px 10px 0;
@@ -350,17 +382,17 @@
   position: absolute;
   top: -80px;
 }
-/* line 348, ../sass/city.scss */
+/* line 382, ../sass/city.scss */
 #toolbar .nav {
   float: right;
   text-align: right;
 }
-/* line 352, ../sass/city.scss */
+/* line 386, ../sass/city.scss */
 #toolbar .nav ul {
   margin: 0;
   padding: 0;
 }
-/* line 354, ../sass/city.scss */
+/* line 388, ../sass/city.scss */
 #toolbar .nav ul li {
   list-style-type: none;
 }
