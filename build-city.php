@@ -42,6 +42,10 @@ if (isset($_POST['buildCity'])) {
 			add_post_meta($ID, $structure.'-x', 0);
 			add_post_meta($ID, $structure.'-y', 0);
 		}
+		include 'structures-repeat.php';
+		foreach ($repeatables as $repeat=>$cost) {
+			add_post_meta($ID, $repeat.'s', 0);
+		}
 
 		// Takes moneyz to build a city
 		update_field('cash',$cash_current-300,'user_'.$current_user->ID);

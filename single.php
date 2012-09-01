@@ -13,6 +13,7 @@ if ($_GET['meta'] == 'true') {
 
 // Get all structures
 include 'structures.php';
+include 'structures-repeat.php';
 
 // Get user info
 global $current_user;
@@ -32,6 +33,16 @@ get_currentuserinfo();
 			$loc_y_[$structure] = get_post_meta($post->ID, $structure.'-y', true);
 			if ($loc_x_[$structure] == $x && $loc_y_[$structure] == $y) {
 				echo $structure.' structure no-build';
+			}
+		} 
+		foreach ($repeatables as $repeat=>$cost) {
+			$total = get_post_meta($post->ID, $repeat.'s', true);
+			for ($i = 1; $i <= $total; $i++) {
+				$x_[$repeat] = get_post_meta($post->ID, $repeat.'-'.$i.'-x', true);
+				$y_[$repeat] = get_post_meta($post->ID, $repeat.'-'.$i.'-y', true);
+				if ($x_[$repeat] == $x && $y_[$repeat] == $y) {
+					echo $repeat.' structure no-build';
+				}
 			}
 		} ?>">
 	</div>
@@ -56,9 +67,15 @@ get_currentuserinfo();
 					<input data-cost="<?php echo $cost; ?>" id="<?php echo $structure; ?>" name="structure" type="radio" value="<?php echo $structure; ?>" />
 					<label><?php echo $structure.' ('.$cost.')'; ?></label>
 				<?php }
-			} ?>
+			} 
+			foreach ($repeatables as $repeat=>$cost) { ?>
+				<input data-cost="<?php echo $cost; ?>" data-repeat="true" id="<?php echo $repeat; ?>" name="structure" type="radio" value="<?php echo $repeat; ?>" />
+				<label><?php echo $repeat.' ('.$cost.')'; ?></label>
+			<?php }
+			?>
 			<input id="x" name="x" type="hidden" />
-			<input id="y" name="y" type="hidden" />	
+			<input id="y" name="y" type="hidden" />
+			<input id="repeat" name="repeat" type="hidden" />	
 			<input id="structure-cost" name="structure-cost" type="hidden" />
 			<input type="submit" value="build" name="update" />
 		</form>

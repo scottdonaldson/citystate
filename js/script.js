@@ -51,12 +51,15 @@ jQuery(document).ready(function($){
 	// Structure-specific
 	buildStructure.find('input[type="radio"]').click(function(){
 		$this = $(this);
-		$('#structure').val($this.attr('id'));
+		if ($this.data('repeat') == true) {
+			$('#repeat').val($this.attr('id'));
+		}
 		$('#structure-cost').val($this.data('cost'));
 	});
 	$(document).keydown(function(e){
 		if (e.keyCode == 27) {
 			build.hide();
+			$('#alert').hide();
 		}
 	});
 

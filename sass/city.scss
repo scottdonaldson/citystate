@@ -29,12 +29,16 @@
 #alert {
 	background: #fff;
 	border: 3px solid #f22;
-	padding: 5px;
+	padding: 5px 5px 150px;
 	margin: 65px 30% 0;
 	position: absolute;
 	top: 0;
 	width: 40%;
 	z-index: 9999;
+
+	li {
+		line-height: 0.8;
+	}
 }
 
 /* ------- MAIN PAGE -------- */
@@ -105,15 +109,23 @@
 			z-index: 9999;
 
 			.city-name {
-				font-size: 20px;
+				display: block;
+				font-size: 18px;
 				font-weight: bold;
+				margin: 0;
 			}
 
 			.city-builder {
 				display: block;
 				font-size: 12px;
 				font-style: italic;
-				margin: 0 0 8px 8px;
+			}
+
+			ul {
+				@include tight;
+				li {
+					list-style-type: none;
+				}
 			}
 		}
 	}
@@ -142,6 +154,9 @@
 	&:hover {
 		background: #aaa;
 	}
+	&.no-build:hover {
+		background: #da7;
+	}
 }
 
 /* ------ CITY ------------ */
@@ -165,6 +180,10 @@
 
 		&.stadium {
 			background-image: url('../images/stadium.png');
+		}
+
+		&.neighborhood {
+			background-image: url(../images/neighborhood.png);
 		}
 	}
 }
