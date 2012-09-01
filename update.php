@@ -21,21 +21,24 @@ while (have_posts()) : the_post();
 
 	// Structure-related
 	include 'structures.php';
-	foreach ($structures as $structure=>$cost) {
+	foreach ($structures as $structure=>$values) {
+		$values[] = $values;
+		// At this point, only run for non-repeating structures
+		if ($values[0] == false) {
+			// Make sure structure has been built, then continue
+			$loc_x_[$structure] = get_post_meta($ID, $structure.'-x');
+			$loc_y_[$structure] = get_post_meta($ID, $structure.'-y');
 
-		// Make sure structure has been built, then continue
-		$loc_x_[$structure] = get_post_meta($ID, $structure.'-x');
-		$loc_y_[$structure] = get_post_meta($ID, $structure.'-y');
+			if ( !($loc_x_[$structure][0] == 0 && $loc_y_[$structure][0] == 0) ) {
+								
+				// Upkeep costs (.02*cost)	
+				$cash = get_field('cash','user_'.$user_ID);
+				update_field('cash', $cash-(0.02*$values[1]), 'user_'.$user_ID);
 
-		if ( !($loc_x_[$structure][0] == 0 && $loc_y_[$structure][0] == 0) ) {
-							
-			// Upkeep costs (.02*cost)	
-			$cash = get_field('cash','user_'.$user_ID);
-			update_field('cash', $cash-(0.02*$cost), 'user_'.$user_ID);
-
-			// Each adds to population (.01*cost)
-			$pop = get_field('population',$ID);
-			update_field('population', $pop+.01*$cost, $ID);
+				// Each adds to population (.01*cost)
+				$pop = get_field('population', $ID);
+				update_field('population', $pop+.01*$cost, $ID);
+			}
 		}
 	}
 endwhile;

@@ -48,14 +48,19 @@ if ($current_user->ID == $user->ID) { ?>
 
 			// Upkeep costs
 			$upkeep = array();
-			foreach ($structures as $structure=>$cost) {
-				$loc_x_[$structure] = get_post_meta($post_id, $structure.'-x');
-				$loc_y_[$structure] = get_post_meta($post_id, $structure.'-y');
+			foreach ($structures as $structure=>$values) {
+				$values[] = $values;
 
-				if ( !($loc_x_[$structure][0] == 0 && $loc_y_[$structure][0] == 0) ) {
-					
-					// Upkeep costs (.02*cost)	
-					array_push($upkeep,-(0.02*$cost));
+				// Only non-repeating for now
+				if ($values[0] == false) {
+					$loc_x_[$structure] = get_post_meta($post_id, $structure.'-x');
+					$loc_y_[$structure] = get_post_meta($post_id, $structure.'-y');
+
+					if ( !($loc_x_[$structure][0] == 0 && $loc_y_[$structure][0] == 0) ) {
+						
+						// Upkeep costs (.02*cost)	
+						array_push($upkeep,-(0.02*$values[1]));
+					}
 				}
 			}
 			echo '<div class="third upkeep">'.array_sum($upkeep).'</div>';

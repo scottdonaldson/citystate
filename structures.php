@@ -1,9 +1,11 @@
 <?php
 
 $structures = array(
-	'university' => 600,
-	'library' => 300,
-	'stadium' => 1000,
+	// 'name' => array(repeater T/F, cost)
+	'university' => array(false, 600),
+	'library' => array(false, 300),
+	'stadium' => array(false, 1000),
+	'neighborhood' => array(true, 45),
 )
 
 ?>

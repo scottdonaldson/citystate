@@ -3,12 +3,14 @@
 // Get ID
 $ID = get_the_ID();
 
+// Get structures
+include('structures.php');
+
 // Get structure info
 $structure = $_POST['structure'];
-$repeat = $_POST['repeat'];
 $x = $_POST['x'];
 $y = $_POST['y'];
-$cost = $_POST['structure-cost'];
+$cost = $structures[$structure][1];
 
 // Get user info
 global $current_user;
@@ -24,27 +26,31 @@ if (($cash_current - $cost) < 0) {
 	// Take cash from user
 	update_field('cash', $cash_current - $cost, 'user_'.$current_user->ID);
 	
-	// Set structure as built
-	// Set location
-	update_post_meta($ID, $structure.'-x', $x);
-	update_post_meta($ID, $structure.'-y', $y);
+	// Set location for non-repeating
+	if ($structures[$structure][0] == false) {
+		update_post_meta($ID, $structure.'-x', $x);
+		update_post_meta($ID, $structure.'-y', $y);
 
-	// Repeats
-	$num = get_post_meta($ID, $repeat.'s', true);
-	$new = $num+1;
-	
-	// Add location of new repeatable
-	add_post_meta($ID, $repeat.'-'.$new.'-x', $x);
-	add_post_meta($ID, $repeat.'-'.$new.'-y', $y);
+	// Set location for repeating
+	} elseif ($structures[$structure][0] == true) {
+		$num = get_post_meta($ID, $structure.'s', true);
+		$new = $num+1;
+		
+		// Add location of new structure
+		add_post_meta($ID, $structure.'-'.$new.'-x', $x);
+		add_post_meta($ID, $structure.'-'.$new.'-y', $y);
 
-	// Change total number of repeatables
-	update_post_meta($ID, $repeat.'s', $new);
+		// Update total number
+		update_post_meta($ID, $structure.'s', $new);
 
-	// Update population
-	if ($repeat = 'neighborhood') {
-		$pop = get_post_meta($ID, 'population', true);
-		update_post_meta($ID, 'population', $pop+20);
+		// Update population
+		if ($structure = 'neighborhood') {
+			$pop = get_post_meta($ID, 'population', true);
+			update_post_meta($ID, 'population', $pop+20);
+		}
 	}
+
+
 }
 
 ?>
