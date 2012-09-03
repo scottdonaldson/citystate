@@ -58,6 +58,12 @@
 
 </div>
 
+<div id="version">
+	<?php $theme = wp_get_theme();
+	echo $theme->Version;
+	?>
+</div>
+
 <script src="<?php echo bloginfo('template_url'); ?>/js/plugins.js"></script>
 <script src="<?php echo bloginfo('template_url'); ?>/js/script.js"></script>
 

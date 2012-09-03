@@ -418,3 +418,14 @@
 #toolbar .nav ul li {
   list-style-type: none;
 }
+
+/* line 413, ../sass/city.scss */
+#version {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+/* line 417, ../sass/city.scss */
+.admin-bar #version {
+  top: 33px;
+}
