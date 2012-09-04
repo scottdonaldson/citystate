@@ -4,7 +4,11 @@ if (isset($_POST['update'])) {
 	if (is_single()) {
 		include('build.php');
 	}
-} ?>
+} 
+if ($_GET['login'] == 'failed') {
+	$alert = '<p>Bad login. Check your username or password and try again.</p>';
+}
+?>
 <html <?php language_attributes(); ?>>
 <head>
 

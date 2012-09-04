@@ -42,6 +42,16 @@ function custom_author_base() {
 }
 add_action('init', 'custom_author_base', 0 );
 
+// No redirect to back-end on bad password
+add_action( 'wp_login_failed', 'front_end_login_fail' );
+function front_end_login_fail( $username ) {
+	$referrer = $_SERVER['HTTP_REFERER'];  
+	if ( !empty($referrer) && !strstr($referrer,'wp-login') && !strstr($referrer,'wp-admin') ) {
+    	wp_redirect( site_url(). '?login=failed' );
+    	exit;
+	}
+}
+
 // Custom login screen
 function my_login_head() {
 	$template_url = get_bloginfo('template_url');

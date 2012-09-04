@@ -375,31 +375,40 @@ body {
 #toolbar #loginform {
   width: 330px;
 }
-/* line 376, ../sass/city.scss */
+/* line 377, ../sass/city.scss */
+#toolbar #loginform .login-remember {
+  float: left;
+  width: 130px;
+}
+/* line 380, ../sass/city.scss */
+#toolbar #loginform .login-remember input {
+  margin-top: 4px;
+}
+/* line 385, ../sass/city.scss */
 #toolbar #loginform input {
   font-size: 13px;
   float: right;
 }
-/* line 381, ../sass/city.scss */
+/* line 390, ../sass/city.scss */
 #toolbar #loginform .forgetmenot {
   clear: left;
   float: left;
   width: 130px;
 }
-/* line 385, ../sass/city.scss */
+/* line 394, ../sass/city.scss */
 #toolbar #loginform .forgetmenot label {
   float: left;
 }
-/* line 388, ../sass/city.scss */
+/* line 397, ../sass/city.scss */
 #toolbar #loginform .forgetmenot input {
   float: none;
 }
-/* line 393, ../sass/city.scss */
+/* line 402, ../sass/city.scss */
 #toolbar #loginform .submit {
   float: right;
   width: 200px;
 }
-/* line 399, ../sass/city.scss */
+/* line 408, ../sass/city.scss */
 #toolbar .create {
   background: #fff;
   -moz-border-radius: 0 10px 10px 0;
@@ -414,28 +423,28 @@ body {
   position: absolute;
   top: -80px;
 }
-/* line 409, ../sass/city.scss */
+/* line 418, ../sass/city.scss */
 #toolbar .nav {
   float: right;
   text-align: right;
 }
-/* line 413, ../sass/city.scss */
+/* line 422, ../sass/city.scss */
 #toolbar .nav ul {
   margin: 0;
   padding: 0;
 }
-/* line 415, ../sass/city.scss */
+/* line 424, ../sass/city.scss */
 #toolbar .nav ul li {
   list-style-type: none;
 }
 
-/* line 421, ../sass/city.scss */
+/* line 430, ../sass/city.scss */
 #version {
   position: absolute;
   right: 5px;
   top: 5px;
 }
-/* line 425, ../sass/city.scss */
+/* line 434, ../sass/city.scss */
 .admin-bar #version {
   top: 33px;
 }
