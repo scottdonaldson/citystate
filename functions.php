@@ -75,4 +75,10 @@ function create_slug($string){
    return $slug;
 }
 
+// Add commas after thousands in numbers
+function th($string) {
+	$sep = number_format($string, 0, '', ',');
+	return $sep;
+}
+
 ?>

@@ -14,10 +14,7 @@
 			get_currentuserinfo();
 
 			echo '<p><a href="'.site_url().'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a></p>'; 
-			if (current_user_can('import')) {
-				include ('cheats/more-cash.php');
-			}
-			echo '<p>Cash: '.get_field('cash', 'user_'.$current_user->ID).'</p>';
+			echo '<p>Cash: '.th(get_field('cash', 'user_'.$current_user->ID)).'</p>';
 			echo '<p><a href="'.wp_logout_url( home_url() ).'">Log out</a></p>'; ?>
 		</div>
 
@@ -25,7 +22,9 @@
 
 		<div class="city">
 			<p>City: <?php the_title(); ?></p>
-			<p>Pop: <?php the_field('population'); ?></p>
+			<p>Pop: <?php 
+			$pop = th(get_field('population'));
+			echo $pop; ?></p>
 		</div>
 
 		<?php }

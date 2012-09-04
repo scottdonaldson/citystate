@@ -57,7 +57,7 @@ query_posts('posts_per_page=-1'); while (have_posts()) : the_post();
 					<h2 class="city-name"><?php the_title(); ?></h2>
 					<small class="city-builder"><?php the_author(); ?></small>
 					<ul>
-						<li>Pop: <?php echo $pop; ?></li>
+						<li>Pop: <?php echo th($pop); ?></li>
 					</ul>
 				</div><!-- .info -->
 			

@@ -18,7 +18,7 @@ $cash = get_field('cash','user_'.$id);
 	<?php 
 	$u_query = new WP_Query('posts_per_page=-1&author='.$id);
 	while ($u_query->have_posts()) : $u_query->the_post(); ?>
-		<li><?php the_title(); ?> (Pop: <?php the_field('population'); ?>)</li>
+		<li><?php the_title(); ?> (Pop: <?php $pop = get_field('population'); echo th($pop); ?>)</li>
 	<?php endwhile; rewind_posts(); ?>
 	</ul>
 
@@ -44,7 +44,7 @@ if ($current_user->ID == $user->ID) { ?>
 
 			// Taxes
 			$taxes = floor(0.05*$pop);
-			echo '<div class="second taxes">'.$taxes.'</div>';
+			echo '<div class="second taxes">'.th($taxes).'</div>';
 
 			// Upkeep costs
 			$upkeep = array();

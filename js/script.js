@@ -61,24 +61,24 @@ jQuery(document).ready(function($){
 	
 	// Total taxes
 	budget.find('.taxes').each(function(){
-		taxes.push($(this).text());
+		taxes.push($(this).text().replace(/,/g, ''));
 	});
 	totalTaxes = 0;
 	for (var i = 0; i < taxes.length; i++) {
 	    totalTaxes += parseInt(taxes[i]);
 	}
-	budget.find('.total-taxes strong').text(totalTaxes);	
+	budget.find('.total-taxes strong').text(addCommas(totalTaxes));	
 	
 	// Total upkeep
 	budget.find('.upkeep').each(function(){
-		upkeep.push($(this).text());
+		upkeep.push($(this).text().replace(/,/g, ''));
 	});
 	totalUpkeep = 0;
 	for (var i = 0; i < upkeep.length; i++) {
 	    totalUpkeep += parseInt(upkeep[i]);
 	}
-	budget.find('.total-upkeep strong').text(totalUpkeep);	
+	budget.find('.total-upkeep strong').text(addCommas(totalUpkeep));	
 
 	// Grand total
-	budget.find('.grand strong').text(totalTaxes+totalUpkeep);
+	budget.find('.grand strong').text(addCommas(totalTaxes+totalUpkeep));
 });

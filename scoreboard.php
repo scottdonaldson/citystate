@@ -26,7 +26,7 @@ foreach($users as $user) {
 		<div class="row clearfix <?php if ($current_user->ID == $user->ID) { echo 'current'; } ?>"><?php
 			echo '<div class="nutzername"><a href="'.site_url().'/user/'.$user->user_login.'">'.$user->display_name.'</a></div>';
 			echo '<div class="cities">'.$cities.'</div>';
-			echo '<div class="cash">'.get_field('cash','user_'.$user->ID).'</div>';
+			echo '<div class="cash">'.th(get_field('cash','user_'.$user->ID)).'</div>';
 			
 			// Get this user's cities
 			$posts = get_posts('numberposts=-1&author='.$user->ID);
@@ -34,7 +34,7 @@ foreach($users as $user) {
 				$totalpop;
 				$totalpop = $totalpop + get_field('population');
 			}
-			echo '<div class="total-population">'.$totalpop.'</div>';
+			echo '<div class="total-population">'.th($totalpop).'</div>';
 			unset($totalpop);
 		echo '</div>';
 	}
