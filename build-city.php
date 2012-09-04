@@ -38,13 +38,14 @@ if (isset($_POST['buildCity'])) {
 
 		// Set locations of all structures to (0,0) (unbuilt)
 		include 'structures.php';
-		foreach ($structures as $structure=>$cost) {
-			add_post_meta($ID, $structure.'-x', 0);
-			add_post_meta($ID, $structure.'-y', 0);
-		}
-		include 'structures-repeat.php';
-		foreach ($repeatables as $repeat=>$cost) {
-			add_post_meta($ID, $repeat.'s', 0);
+		foreach ($structures as $structure=>$values) {
+			$values[] = $values;
+			if ($values[0] == false) {
+				add_post_meta($ID, $structure.'-x', 0);
+				add_post_meta($ID, $structure.'-y', 0);
+			} elseif ($values[0] == true) {
+				add_post_meta($ID, $structure.'-s', 0);
+			}
 		}
 
 		// Takes moneyz to build a city
