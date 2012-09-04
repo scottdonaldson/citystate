@@ -12,6 +12,8 @@ $x = $_POST['x'];
 $y = $_POST['y'];
 $cost = $structures[$structure][1];
 
+if ($x == 10) { $x = 0; }
+
 // Get user info
 global $current_user;
 get_currentuserinfo();

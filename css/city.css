@@ -21,7 +21,7 @@ body {
 #alert {
   background: #fff;
   border: 3px solid #f22;
-  padding: 5px 5px 150px;
+  padding: 5px;
   margin: 65px 30% 0;
   position: absolute;
   top: 0;

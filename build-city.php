@@ -22,6 +22,8 @@ if (isset($_POST['buildCity'])) {
 		$x = $_POST['x'];
 		$y = $_POST['y'];
 
+		if ($x == 10) { $x = 0; }
+
 		// Insert new city
 		$ID = wp_insert_post(array(
 				'post_author' => $current_user->ID,
