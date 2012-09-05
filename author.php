@@ -30,6 +30,8 @@ get_currentuserinfo();
 if ($current_user->ID == $user->ID) { ?>
 	<p>Hey there!</p>
 	<p>This is your profile page. Soon there will be ways for you to change your password, color, etc.</p>
+	<h2>Account Admin</h2>
+
 	<h2>Budget projections:</h2>
 	<div id="budget">
 		<div class="first"><strong>City name</strong></div>
