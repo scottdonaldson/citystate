@@ -34,6 +34,7 @@
 			wp_login_form(array(
   				'label_remember' => __( 'Remember me' ),
   				'label_log_in' => __( 'Sign In' ),
+  				'redirect' => site_url().'?login=success',
 				)
 			);
 			?>
@@ -42,7 +43,7 @@
 	<?php } ?>
 	<div class="nav">
 		<?php if (!is_user_logged_in()) { ?>
-			<p class="create">You don't have an account. Want to <a href="<?php echo site_url(); ?>/create-account">create one</a>?</p>
+			<p class="create">You don't have an account. Want to <?php wp_register(); ?>?</p>
 		<?php }
 		
 		wp_nav_menu('primary'); ?>

@@ -42,6 +42,19 @@ function custom_author_base() {
 }
 add_action('init', 'custom_author_base', 0 );
 
+// Register text
+add_action('register', 'register_replacement');
+function register_replacement( $link ){
+	$link = '<a href="' . site_url('wp-login.php?action=register', 'login') . '">' . __('create one') . '</a>';
+	return $link;
+}
+
+// Registration email send from
+add_filter( 'wp_mail_from', 'my_mail_from' );
+function my_mail_from( $email ) { return 'admin@scottdonaldson.net'; }
+add_filter( 'wp_mail_from_name', 'my_mail_from_name' );
+function my_mail_from_name( $name ) { return 'City/State'; }
+
 // No redirect to back-end on bad password
 add_action( 'wp_login_failed', 'front_end_login_fail' );
 function front_end_login_fail( $username ) {
@@ -55,6 +68,8 @@ function front_end_login_fail( $username ) {
 // Custom login screen
 function my_login_head() {
 	$template_url = get_bloginfo('template_url');
+	echo "<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+";
 	echo "<link rel='stylesheet' href='".$template_url."/css/login-style.css'>";
 	echo "<script src='".$template_url."/js/login.js'></script>";
 }
