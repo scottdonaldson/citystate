@@ -8,6 +8,21 @@ if (isset($_POST['update'])) {
 if ($_GET['login'] == 'failed') {
 	$alert = '<p>Bad login. Check your username or password and try again.</p>';
 }
+if ($_GET['password'] == 'updated') { 
+	if (isset($_POST['pass1']) && isset($_POST['pass2']) && !empty($_POST['pass1']) && $_POST['pass1'] == $_POST['pass2']) {
+		$user = (isset($_GET['author_name'])) ? get_user_by('slug', $author_name) : get_userdata(intval($author));
+	    $update = $wpdb->query($wpdb->prepare("UPDATE {$wpdb->users} SET `user_pass` = %s WHERE `ID` = %d", array(wp_hash_password($_POST['pass1']), $user_ID)));
+	    if (!is_wp_error($update)) {
+	        wp_cache_delete($user_ID, 'users');
+	        wp_cache_delete($user->user_login, 'userlogins');
+	        wp_logout();
+            wp_signon(array('user_login' => $user->user_login,
+                           'user_password' => $_POST['pass1']));
+            ob_start();	        
+	        $alert = '<p>Password changed successfully. Keep on keepin&apos; on.</p>';
+	    }
+	} 
+}
 ?>
 <html <?php language_attributes(); ?>>
 <head>

@@ -1,4 +1,5 @@
 <?php get_header(); 
+
 include ('structures.php');
 
 // Get user info
@@ -28,8 +29,22 @@ get_currentuserinfo();
 
 // Is the logged in user looking at their own profile?
 if ($current_user->ID == $user->ID) { ?>
-	<p>Hey there!</p>
-	<p>This is your profile page. Soon there will be ways for you to change your password, color, etc.</p>
+	<h2>Your Profile</h2>
+	<form id="your-profile" action="?password=updated" method="post">
+		<div class="pass1">
+			<label for="pass1"><?php _e('New Password'); ?></label>
+	        <input type="password" name="pass1" id="pass1" size="16" value="" autocomplete="off" />
+	        <span class="description"><?php _e("If you would like to change the password type a new one. Otherwise leave this blank."); ?></span>
+	    </div>
+	    <div class="pass2">
+            <input type="password" name="pass2" id="pass2" size="16" value="" autocomplete="off" />
+            <span class="description"><?php _e("Type your new password again."); ?></span>
+        </div>
+        <p class="submit">
+            <input type="hidden" name="user_login" id="user_login" value="<?php echo $user->user_login; ?>" />
+            <input type="submit" class="button-primary" value="<?php esc_attr_e('Update Password') ?>" name="submit" />
+        </p>
+    </form>
 	<h2>Account Admin</h2>
 
 	<h2>Budget projections:</h2>
