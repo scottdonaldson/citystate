@@ -22,8 +22,6 @@ if (isset($_POST['pass'])) {
 				
 			// Taxes
 			$cash = get_field('cash','user_'.$user_ID);
-			$education = get_post_meta($ID, 'education', true);
-			$culture = get_post_meta($ID, 'culture', true);
 			$taxes = floor(0.05*$pop);
 			update_field('cash', $cash+$taxes, 'user_'.$user_ID);
 
