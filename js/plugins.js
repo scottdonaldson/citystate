@@ -9,8 +9,7 @@ window.log = function f(){ log.history = log.history || []; log.history.push(arg
 
 // place any jQuery/helper plugins in here, instead of separate, slower script files.
 
-function addCommas(nStr)
-{
+function addCommas(nStr) {
 	nStr += '';
 	x = nStr.split('.');
 	x1 = x[0];
@@ -19,5 +18,4 @@ function addCommas(nStr)
 	while (rgx.test(x1)) {
 		x1 = x1.replace(rgx, '$1' + ',' + '$2');
 	}
-	return x1 + x2;
-}
+	return x1 + x2; }

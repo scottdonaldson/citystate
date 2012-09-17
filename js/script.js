@@ -1,7 +1,5 @@
 jQuery(document).ready(function($){
 
-	$('.draggable').draggable();
-
 	var body = $('body');
 
 	/* ---------------- BUILD -------------- */
@@ -81,4 +79,25 @@ jQuery(document).ready(function($){
 
 	// Grand total
 	budget.find('.grand strong').text(addCommas(totalTaxes+totalUpkeep));
+
+
+	// ----- User page
+	var container = $('.container'),
+		header = container.find('.header');
+
+	header.each(function(){
+		$(this).on('click',function(){
+			$this = $(this);
+			$this.toggleClass('active').next().slideToggle();
+		});
+	})
+
+	var colorInput = $('#color'),
+		color = colorInput.val();
+	colorInput.css({
+		'background': color,
+		'color': 'transparent',
+	});
+	$('#colorpicker').farbtastic(colorInput);
+
 });

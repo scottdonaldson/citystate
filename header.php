@@ -8,7 +8,7 @@ if (isset($_POST['update'])) {
 if ($_GET['login'] == 'failed') {
 	$alert = '<p>Bad login. Check your username or password and try again.</p>';
 }
-if ($_GET['password'] == 'updated') { 
+if ($_GET['profile'] == 'updated') { 
 	if (isset($_POST['pass1']) && isset($_POST['pass2']) && !empty($_POST['pass1']) && $_POST['pass1'] == $_POST['pass2']) {
 		$user = (isset($_GET['author_name'])) ? get_user_by('slug', $author_name) : get_userdata(intval($author));
 	    $update = $wpdb->query($wpdb->prepare("UPDATE {$wpdb->users} SET `user_pass` = %s WHERE `ID` = %d", array(wp_hash_password($_POST['pass1']), $user_ID)));
@@ -18,10 +18,14 @@ if ($_GET['password'] == 'updated') {
 	        wp_logout();
             wp_signon(array('user_login' => $user->user_login,
                            'user_password' => $_POST['pass1']));
-            ob_start();	        
-	        $alert = '<p>Password changed successfully. Keep on keepin&apos; on.</p>';
+            ob_start();
 	    }
 	} 
+	if (isset($_POST['color'])) {
+		$user = (isset($_GET['author_name'])) ? get_user_by('slug', $author_name) : get_userdata(intval($author));
+		update_field('color', $_POST['color'], 'user_'.$user->ID);
+	}
+	$alert = '<p>Profile updated. Keep on keepin&apos; on.</p>';
 }
 ?>
 <html <?php language_attributes(); ?>>

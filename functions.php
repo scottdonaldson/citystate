@@ -1,9 +1,8 @@
 <?php
 
-// Load scripts
+// Load scripts and styles
 wp_enqueue_script('jquery');
-wp_enqueue_script('jquery-ui-core');
-wp_enqueue_script('jquery-ui-draggable');
+// wp_enqueue_style(array('farbtastic'));
 
 // Register nav menu
 register_nav_menu('primary','Primary Menu');
