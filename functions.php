@@ -1,8 +1,10 @@
 <?php
 
+// Load functions
+include('functions/register.php');
+
 // Load scripts and styles
 wp_enqueue_script('jquery');
-// wp_enqueue_style(array('farbtastic'));
 
 // Register nav menu
 register_nav_menu('primary','Primary Menu');
@@ -41,28 +43,7 @@ function custom_author_base() {
 }
 add_action('init', 'custom_author_base', 0 );
 
-// Register text
-add_action('register', 'register_replacement');
-function register_replacement( $link ){
-	$link = '<a href="' . site_url('wp-login.php?action=register', 'login') . '">' . __('create one') . '</a>';
-	return $link;
-}
 
-// Registration email send from
-add_filter( 'wp_mail_from', 'my_mail_from' );
-function my_mail_from( $email ) { return 'admin@scottdonaldson.net'; }
-add_filter( 'wp_mail_from_name', 'my_mail_from_name' );
-function my_mail_from_name( $name ) { return 'City/State'; }
-
-// No redirect to back-end on bad password
-add_action( 'wp_login_failed', 'front_end_login_fail' );
-function front_end_login_fail( $username ) {
-	$referrer = $_SERVER['HTTP_REFERER'];  
-	if ( !empty($referrer) && !strstr($referrer,'wp-login') && !strstr($referrer,'wp-admin') ) {
-    	wp_redirect( site_url(). '?login=failed' );
-    	exit;
-	}
-}
 
 // Custom login screen
 function my_login_head() {

@@ -214,8 +214,8 @@ body {
   background-image: url("../images/university.png");
 }
 /* line 227, ../sass/city.scss */
-.single .tile.stadium {
-  background-image: url("../images/stadium.png");
+.single .tile.cinema {
+  background-image: url("../images/cinema.png");
 }
 /* line 231, ../sass/city.scss */
 .single .tile.neighborhood {
