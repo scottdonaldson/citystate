@@ -27,7 +27,7 @@ $cash = get_field('cash','user_'.$id);
 	<div class="module">
 		<h1 class="header active"><?php echo $user->nickname; ?></h1>
 		<div class="content visible">
-			<p>Cash: <?php echo $cash; ?></p>
+			<p>Cash: <?php echo th($cash); ?></p>
 			<p>Cities: <?php echo count_user_posts($id); ?></p>
 				<ul>
 				<?php 

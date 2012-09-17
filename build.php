@@ -11,6 +11,7 @@ $structure = $_POST['structure'];
 $x = $_POST['x'];
 $y = $_POST['y'];
 $cost = $structures[$structure][1];
+$target_increase = $structures[$structure][2];
 
 if ($x == 10) { $x = 0; }
 
@@ -45,7 +46,11 @@ if (($cash_current - $cost) < 0) {
 		// Update total number
 		update_post_meta($ID, $structure.'s', $new);
 
-		// Update population
+		// Update target population
+		$target_current = get_post_meta($ID, 'target-pop', true);
+		update_post_meta($ID, 'target-pop', $target_current + $target_increase);
+
+		// Update population for residential types
 		if ($structure = 'neighborhood') {
 			$pop = get_post_meta($ID, 'population', true);
 			update_post_meta($ID, 'population', $pop+20);

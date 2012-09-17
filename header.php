@@ -2,6 +2,7 @@
 <?php 
 // Check to see if any forms have been submitted
 include('header-checks.php'); ?>
+
 <html <?php language_attributes(); ?>>
 <head>
 
