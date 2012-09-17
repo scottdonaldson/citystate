@@ -9,8 +9,8 @@ function farb_js() {
 	$url = get_bloginfo('template_url');
     echo '<script src="'.$url.'/plugins/farb/farbtastic.js"></script>';
 }
-get_header(); 
 
+get_header(); 
 include ('structures.php');
 
 // Get user info
