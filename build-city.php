@@ -33,10 +33,10 @@ if (isset($_POST['buildCity'])) {
 			)	
 		);
 		// Set location of city based on what user
-		// selected on main map, set pop. to 100
+		// selected on main map, set pop. to 0
 		update_field('location-x', $x, $ID);
 		update_field('location-y', $y, $ID);
-		update_field('population', 100, $ID);
+		update_field('population', 0, $ID);
 
 		// Set locations of all structures to (0,0) (unbuilt)
 		include 'structures.php';
