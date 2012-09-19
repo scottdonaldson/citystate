@@ -46,7 +46,7 @@ if (isset($_POST['buildCity'])) {
 				add_post_meta($ID, $structure.'-x', 0);
 				add_post_meta($ID, $structure.'-y', 0);
 			} elseif ($values[0] == true) {
-				add_post_meta($ID, $structure.'-s', 0);
+				add_post_meta($ID, $structure.'s', 0);
 			}
 		}
 

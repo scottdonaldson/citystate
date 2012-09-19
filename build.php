@@ -34,6 +34,10 @@ if (($cash_current - $cost) < 0) {
 		update_post_meta($ID, $structure.'-x', $x);
 		update_post_meta($ID, $structure.'-y', $y);
 
+		// Update target population
+		$target_current = get_post_meta($ID, 'target-pop', true);
+		update_post_meta($ID, 'target-pop', $target_current + $target_increase);
+
 	// Set location for repeating
 	} elseif ($structures[$structure][0] == true) {
 		$num = get_post_meta($ID, $structure.'s', true);
