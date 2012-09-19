@@ -44,7 +44,8 @@ $cash = get_field('cash','user_'.$id);
 	get_currentuserinfo();	
 
 	// Is the logged in user looking at their own profile?
-	if ($current_user->ID == $user->ID) { ?>
+	// (also admins)
+	if ($current_user->ID == $user->ID || current_user_can('switch_themes')) { ?>
 	
 		<div class="module">	
 			<h2 class="header">Profile</h2>
