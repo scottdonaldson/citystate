@@ -10,6 +10,7 @@ $structures = array(
 	 *						culture modifier,
 	 *						)
 	 */
+	'park'			=> array( true,   50,  50,	  0,    0),
 	'neighborhood' 	=> array( true,  100, 100,    0,    0),
 	'library' 		=> array(false,  300, 100, 1.05, 1.02),
 	'cinema' 		=> array(false,  450, 200,    0,  1.2),
