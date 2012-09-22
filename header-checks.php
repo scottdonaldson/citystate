@@ -53,11 +53,16 @@ if (isset($_POST['pass'])) {
 }
 
 /*
- *	BUILDING STRUCTURES
+ *	BUILDING and DEMOLISHING STRUCTURES
  */
 if (isset($_POST['update'])) { 
 	if (is_single()) {
-		include('build.php');
+		$type = $_GET['structure'];
+		if ( $type == 'build') {
+			include('build.php');
+		} elseif ($type == 'demolish') {
+			include('demolish.php');
+		}
 	}
 } 
 

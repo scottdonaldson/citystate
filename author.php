@@ -7,8 +7,29 @@ function farb_css() {
 }
 function farb_js() {
 	$url = get_bloginfo('template_url');
-    echo '<script src="'.$url.'/plugins/farb/farbtastic.js"></script>';
-}
+    echo '<script src="'.$url.'/plugins/farb/farbtastic.js"></script>'; ?>
+    <script>
+    jQuery(document).ready(function($){
+		var container = $('.container'),
+			header = container.find('.header');
+
+		header.each(function(){
+			$(this).on('click',function(){
+				$this = $(this);
+				$this.toggleClass('active').next().slideToggle();
+			});
+		})
+
+		var colorInput = $('#color'),
+			color = colorInput.val();
+		colorInput.css({
+			'background': color,
+			'color': 'transparent',
+		});
+		$('#colorpicker').farbtastic(colorInput);
+    });
+    </script>
+<?php }
 
 get_header(); 
 include ('structures.php');

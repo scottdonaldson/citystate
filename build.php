@@ -60,8 +60,6 @@ if (($cash_current - $cost) < 0) {
 			update_post_meta($ID, 'population', $pop+20);
 		}
 	}
-
-
 }
 
 ?>
