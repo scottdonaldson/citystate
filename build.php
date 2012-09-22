@@ -55,7 +55,7 @@ if (($cash_current - $cost) < 0) {
 		update_post_meta($ID, 'target-pop', $target_current + $target_increase);
 
 		// Update population for residential types
-		if ($structure = 'neighborhood') {
+		if ($structure == 'neighborhood') {
 			$pop = get_post_meta($ID, 'population', true);
 			update_post_meta($ID, 'population', $pop+20);
 		}
