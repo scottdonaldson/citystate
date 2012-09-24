@@ -37,6 +37,7 @@ if (isset($_POST['buildCity'])) {
 		update_field('location-x', $x, $ID);
 		update_field('location-y', $y, $ID);
 		update_field('population', 0, $ID);
+		add_post_meta($ID, 'target-pop', 1000);
 
 		// Set locations of all structures to (0,0) (unbuilt)
 		include 'structures.php';
