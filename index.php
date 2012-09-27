@@ -41,23 +41,46 @@ query_posts('posts_per_page=-1'); while (have_posts()) : the_post();
 			if (get_field('location-x') == $x && get_field('location-y') == $y) { 
 
 				// Get city info
-				$pop = get_field('population'); ?>
+				include ('structures.php');
+				$non = 0;
+				$repeaters = 0;
+				foreach($structures as $structure=>$values) {
+					$values[] = $values;
+
+					// Count non-repeaters
+					if ($values[0] == false) {
+						$count = get_post_meta(get_the_ID(), $structure.'-x', true);
+						if ($count != 0) { $non++; }
+
+					// Count repeaters
+					} elseif ($values[0] == true) {
+						$count = get_post_meta(get_the_ID(), $structure.'s', true);
+						$repeaters = $repeaters + $count;
+					}
+				} ?>
 
 				<div id="city-<?php the_ID(); ?>" class="city
 					<?php 
-					if ($pop < 100) { echo 'tiny'; 
-					} elseif ($pop >= 100 && $pop < 500) { echo 'small';
-					} elseif ($pop >= 500 && $pop < 1000) { echo 'med';
-					} elseif ($pop >= 1000) { echo 'large'; }
-					?>">
-					<a class="marker <?php $login = get_the_author_meta('user_login'); echo 'user-'.$login; ?>" href="<?php the_permalink(); ?>"></a>
+					echo ' repeaters:'.$repeaters.' ';
+					if ($repeaters <= 5) { echo 'r00'; 
+					} elseif ($repeaters > 5 && $repeaters <= 10) { echo 'r01';
+					} elseif ($repeaters > 10 && $repeaters <= 15) { echo 'r02';
+					} elseif ($repeaters > 15 && $repeaters <= 20) { echo 'r03';
+					} elseif ($repeaters > 20) { echo 'r04'; 
+					}
+					if ($non == 1 ) { echo ' n01'; 
+					} elseif ($non ==2 ) { echo ' n02'; 
+					} elseif ($non == 3 ) { echo ' n03'; }
+					
+					$login = get_the_author_meta('user_login'); echo ' user-'.$login; ?>">
+					<a class="marker" href="<?php the_permalink(); ?>"></a>
 				</div><!-- .city -->	
 				
 				<div class="info">
 					<h2 class="city-name"><?php the_title(); ?></h2>
 					<small class="city-builder"><?php the_author(); ?></small>
 					<ul>
-						<li>Pop: <?php echo th($pop); ?></li>
+						<li>Pop: <?php echo th(get_field('population')); ?></li>
 					</ul>
 				</div><!-- .info -->
 			
