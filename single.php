@@ -11,6 +11,9 @@ if ($_GET['meta'] == 'true') {
 	echo '</pre></div>';
 }
 
+// Get main map
+include 'maps/originalia.php';
+
 // Get all structures
 include 'structures.php';
 

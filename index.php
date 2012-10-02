@@ -14,25 +14,20 @@ query_posts('posts_per_page=-1'); while (have_posts()) : the_post();
 
 <div id="map" class="clearfix">
 
-	<?php foreach (range(1,100) as $tile) { ?>
+	<?php include 'maps/originalia.php'; ?>
+	<?php 
+	foreach ($map as $row => $tiles) {
+		$x = 0; 
+		foreach ($tiles as $tile) { 
+			$x++;
+			$y = $row; ?>
 
 		<div 
-			data-x="<?php $x = fmod($tile, 10); if ($x != 0) { echo $x; } else { echo 10; } ?>" 
-			data-y="<?php $y = ceil($tile/10); echo $y; ?>"
+			data-x="<?php echo $x; ?>" 
+			data-y="<?php echo $row; ?>"
 			class="tile <?php 
 
-				if (
-					( ($x==1||$x==7||$x==8||$x==9||$x==0) && $y==1) || 
-					( ($x==1||$x==2||$x==9||$x==0) && $y==2) ||
-					( ($x==9||$x==0) && $y==3) ||
-					( ($x==0) && $y==4) ||
-					( ($x==1||$x==2||$x==3) && $y==5) ||
-					( ($x==1||$x==2||$x==3||$x==4) && $y==6) ||
-					( ($x==1||$x==2) && $y==7) ||
-					( ($x==3||$x==8||$x==9||$x==0) && $y==8) ||
-					( ($x==3||$x==4||$x==9||$x==0) && $y==9) ||
-					( ($x==1||$x==0) && $y==10)
-				) { echo 'water'; }
+				if ($tile == 0) { echo 'water'; }
 
 			?>">
 			<?php while (have_posts()) : the_post(); 
@@ -88,19 +83,20 @@ query_posts('posts_per_page=-1'); while (have_posts()) : the_post();
 			endwhile; ?>
 		</div><!-- .tile -->
 	
-	<?php } unset($quadrant); ?>
-
-	<?php if (is_user_logged_in()) { ?>
-	<div id="build" class="infobox">
-		<h2>Build city</h2>
-		<form action="<?php echo site_url(); ?>/build" method="post">
-			<input id="cityName" name="cityName" type="text" />
-			<input id="x" name="x" type="hidden" />
-			<input id="y" name="y" type="hidden" />			
-			<input type="submit" id="buildCity" name="buildCity" value="build city" />
-		</form>
-	</div>
 	<?php } ?>
+
+		<?php if (is_user_logged_in()) { ?>
+		<div id="build" class="infobox">
+			<h2>Build city</h2>
+			<form action="<?php echo site_url(); ?>/build" method="post">
+				<input id="cityName" name="cityName" type="text" />
+				<input id="x" name="x" type="hidden" />
+				<input id="y" name="y" type="hidden" />			
+				<input type="submit" id="buildCity" name="buildCity" value="build city" />
+			</form>
+		</div>
+		<?php }
+	} ?>
 
 </div><!-- #map -->
 

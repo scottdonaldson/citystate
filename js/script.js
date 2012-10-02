@@ -120,4 +120,16 @@ jQuery(document).ready(function($){
 	// Grand total
 	budget.find('.grand strong').text(addCommas(totalTaxes+totalUpkeep));
 
+
+	// ------ Containers and modules
+	var container = $('.container'),
+	header = container.find('.header');
+
+	header.each(function(){
+		$(this).on('click',function(){
+			$this = $(this);
+			$this.toggleClass('active').next().slideToggle();
+		});
+	});
+
 });
