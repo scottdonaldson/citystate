@@ -7,7 +7,7 @@ jQuery(document).ready(function($){
 	var build = $('#build'),
 		buildCity = $('.home #build'),
 		structure = $('.structure'),
-		demolish = $('#demolish');
+		extra = $('#extra');
 
 	$('.tile').click(function(){
 		$this = $(this);
@@ -21,27 +21,23 @@ jQuery(document).ready(function($){
 			// If not, then let's go	
 			) { } else {
 
-			demolish.hide();
+			extra.hide();
 
 			// If build already is active, clear its values and rehide form
 			if (build.hasClass('active')) {
 				build.find('input[type!="submit"]').val('');
-				buildCity.find('form').hide();
 			}
 
-			// Add a class of active to the build box
-			build.addClass('active');
+			// Add a class of active to the build box and show it
+			build.addClass('active').show();
 
-			// Determine position and show box
-			var position = $this.position();
-			build.show().css({
-				'left': position.left + 20,
-				'top' : position.top + 30
-			});
+			// Show location for user reference
+			build.find('.x').text($this.data('x'));
+			build.find('.y').text($this.data('y'));
 
 			// Set location values
-			$('#x').val($this.data('x'));
-			$('#y').val($this.data('y'));
+			$('#x, #build-x').val($this.data('x'));
+			$('#y, #build-y').val($this.data('y'));
 		}
 	});
 
@@ -50,43 +46,48 @@ jQuery(document).ready(function($){
 		$(this).next('form').slideToggle();
 	});
 	
-	// ----- Demolish	
+	// ----- Extra: Demolish/Upgrade	
+	var demolish = $('.demolish'),
+		upgrade = $('.upgrade');
 	structure.on('click',function(){
 		var structure = $(this);
 
 		build.hide();
 
-		// If demolish already is active, clear its values and rehide form
-		if (demolish.hasClass('active')) {
-			demolish.find('input[type!="submit"]').val('').attr('checked', false);
+		// If it was being shown elsewhere, clear form values and hide upgrade box
+		if (extra.hasClass('active')) {
+			extra.find('input[type!="submit"]').val('').attr('checked', false);
+			extra.find('.upgrade').hide();
 		}
 
-		// Add a class of active to the build box
-		demolish.addClass('active');		
+		// Add a class of active to the build box and show it
+		extra.addClass('active');		
 
-		// Determine position and show box
-		var position = $this.position();
-		demolish.show().css({
-			'left': position.left + 20,
-			'top' : position.top + 50
-		});
+		// If structure can be upgraded, show upgrade box
+		if (structure.data('upgrade') == 1) {
+			upgrade.show();
+			upgrade.find('input[type="submit"]').val('Upgrade (' + $this.data('cost') + ')');
+		}
 
-		// Set location values
-		$('#x, #demo-x').val($this.data('x'));
-		$('#y, #demo-y').val($this.data('y'));
+		// Fill in structure name and location for user reference
+		extra.find('.name-structure').text(structure.data('structure'));
+		extra.find('.x').text(structure.data('x'));
+		extra.find('.y').text(structure.data('y'));
+
+		// Set form location values
+		$('#build-x, #demo-x, #upgrade-x').val(structure.data('x'));
+		$('#build-y, #demo-y, #upgrade-y').val(structure.data('y'));
 
 		// Set structure
-		demolish.on('click',function(){
-			$(this).find('input:checked').each(function(){
-				$('#demo-structure').val(structure.data('structure'));
-				$('#id').val($this.data('id'));
-			});
+		extra.on('click',function(){
+			$('#demo-structure, #upgrade-structure').val(structure.data('structure'));
+			$('#demo-id, #upgrade-id').val($this.data('id'));
 		});
 	});
 
 	$(document).keydown(function(e){
 		if (e.keyCode == 27) {
-			$('.infobox').hide();
+			$('.infobox').removeClass('active');
 			$('#alert').hide();
 		}
 	});

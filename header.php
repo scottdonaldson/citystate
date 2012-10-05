@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <?php 
+
+// Define paths
+define('MAIN', dirname(__FILE__) . '/');
+
 // Check to see if any forms have been submitted
 include('header-checks.php'); ?>
 

@@ -4,12 +4,12 @@
 $ID = get_the_ID();
 
 // Get structures
-include('structures.php');
+include( MAIN .'structures.php');
 
 // Get structure info
-$structure = $_POST['structure'];
-$x = $_POST['x'];
-$y = $_POST['y'];
+$structure = $_POST['build-structure'];
+$x = $_POST['build-x'];
+$y = $_POST['build-y'];
 $cost = $structures[$structure][1];
 $target_increase = $structures[$structure][2];
 
@@ -18,7 +18,7 @@ if ($x == 10) { $x = 0; }
 // Get user info
 global $current_user;
 get_currentuserinfo();
-$cash_current = get_field('cash','user_'.$current_user->ID);
+$cash_current = get_field('cash', 'user_'.$current_user->ID);
 
 // Make sure we're not bankrupting, then proceed
 if (($cash_current - $cost) < 0) {

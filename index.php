@@ -87,12 +87,13 @@ query_posts('posts_per_page=-1'); while (have_posts()) : the_post();
 
 		<?php if (is_user_logged_in()) { ?>
 		<div id="build" class="infobox">
-			<h2>Build city</h2>
+			<p>Build city at (<span class="x"></span>,&nbsp;<span class="y"></span>)</p>
 			<form action="<?php echo site_url(); ?>/build" method="post">
+				<p>Name:</p>
 				<input id="cityName" name="cityName" type="text" />
 				<input id="x" name="x" type="hidden" />
 				<input id="y" name="y" type="hidden" />			
-				<input type="submit" id="buildCity" name="buildCity" value="build city" />
+				<input type="submit" id="buildCity" name="buildCity" value="Build City" />
 			</form>
 		</div>
 		<?php }

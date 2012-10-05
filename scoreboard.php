@@ -49,7 +49,7 @@ get_header(); ?>
 		</div><!-- .content -->
 	</div><!-- #scoreboard .module-->
 
-	<div class="module">
+	<!-- <div class="module">
 		<h2 class="header active">Cities</h2>
 		<div class="content visible">
 			<?php 
@@ -68,7 +68,7 @@ get_header(); ?>
 
 			endwhile; wp_reset_query(); ?>
 		</div>
-	</div>
+	</div> -->
 
 </div>
 
