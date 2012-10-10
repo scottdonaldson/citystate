@@ -46,7 +46,7 @@ get_header(); ?>
 
 	?>
 
-	<a href="<?php the_permalink(); ?>/page/<?php echo $paged + 1; ?>">Older</a>
+	<!-- <a href="<?php the_permalink(); ?>/page/<?php echo $paged + 1; ?>">Older</a> -->
 
 </div>
 
