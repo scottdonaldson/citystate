@@ -44,7 +44,7 @@ query_posts('posts_per_page=-1'); while (have_posts()) : the_post();
 
 					// Count non-repeaters
 					if ($values[0] == false) {
-						$count = get_post_meta(get_the_ID(), $structure.'-x', true);
+						$count = get_post_meta(get_the_ID(), $structure.'-y', true);
 						if ($count != 0) { $non++; }
 
 					// Count repeaters
@@ -56,7 +56,6 @@ query_posts('posts_per_page=-1'); while (have_posts()) : the_post();
 
 				<div id="city-<?php the_ID(); ?>" class="city
 					<?php 
-					echo ' repeaters:'.$repeaters.' ';
 					if ($repeaters <= 5) { echo 'r00'; 
 					} elseif ($repeaters > 5 && $repeaters <= 10) { echo 'r01';
 					} elseif ($repeaters > 10 && $repeaters <= 15) { echo 'r02';
@@ -64,7 +63,7 @@ query_posts('posts_per_page=-1'); while (have_posts()) : the_post();
 					} elseif ($repeaters > 20) { echo 'r04'; 
 					}
 					if ($non == 1 ) { echo ' n01'; 
-					} elseif ($non ==2 ) { echo ' n02'; 
+					} elseif ($non == 2 ) { echo ' n02'; 
 					} elseif ($non == 3 ) { echo ' n03'; }
 					
 					$login = get_the_author_meta('user_login'); echo ' user-'.$login; ?>">
