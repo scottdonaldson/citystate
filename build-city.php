@@ -22,8 +22,6 @@ if (isset($_POST['buildCity'])) {
 		$x = $_POST['x'];
 		$y = $_POST['y'];
 
-		if ($x == 10) { $x = 0; }
-
 		// Insert new city
 		$ID = wp_insert_post(array(
 				'post_author' => $current_user->ID,
@@ -32,6 +30,9 @@ if (isset($_POST['buildCity'])) {
 				'post_status' => 'publish'
 			)	
 		);
+		// Get URL (will redirect to this later)
+		$url = get_permalink($ID);
+
 		// Set location of city based on what user
 		// selected on main map, set pop. to 0
 		update_field('location-x', $x, $ID);
@@ -52,10 +53,41 @@ if (isset($_POST['buildCity'])) {
 		}
 
 		// Takes moneyz to build a city
-		update_field('cash',$cash_current-300,'user_'.$current_user->ID);
+		update_field('cash', $cash_current - 300, 'user_'.$current_user->ID);
+
+		// Update the activity log. The output:
+		$site_url = home_url();
+		$output = '<strong>The city of <a href="'.$url.'">'.$title.'</a> was built by <a href="'.$site_url.'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a>.</strong>';
+
+		// Check to see if it's the same day as most recent activity
+		$args = array(
+					'post_type' => 'activity',
+					'posts_per_page' => 1
+				);
+		$a_query = new WP_Query($args); 
+		while ($a_query->have_posts()) : 
+		$a_query->the_post(); 
+		
+		// Central time!
+		date_default_timezone_set('America/Chicago');
+
+		if (date('Ymd') == get_the_date('Ymd')) {
+			add_post_meta(get_the_ID(), 'activity', $output);
+		// If not, add a new activity entry
+		} else {
+			$activity_ID = wp_insert_post(array(
+				'post_type' => 'activity',
+				'post_title' => date('M j, Y'),
+				'post_content' => $output,
+				'post_status' => 'publish',
+				)
+			);
+			add_post_meta($activity_ID, 'activity', $output);
+		}
+		endwhile;
+		wp_reset_postdata();
 
 		// Redirect
-		$url = get_permalink($ID);
 		header('Location: '.$url.'?visit=first');
 	}
 }

@@ -66,6 +66,27 @@ function change_title_on_logo() {
 add_filter('login_headertitle', 'change_title_on_logo');
 
 
+/* ------------ CUSTOM POST TYPE: ACTIVITY ------- */
+
+add_action( 'init', 'create_post_type' );
+function create_post_type() {
+	register_post_type( 'activity',
+		array(
+			'labels' => array(
+				'name' => __( 'Activity' ),
+				'singular_name' => __( 'Activity' )
+			),
+			'public' => true,
+			'has_archive' => true,
+			'menu_position=' => 5,
+			'rewrite' => array('slug' => 'activity'),
+			'supports' => array(
+				'title', 'custom-fields'
+			),
+		)
+	);
+}
+
 /* ------------ BEGIN CUSTOM FUNCTIONS ----------- */
 
 // Strip 'city-' from 'city-XXX' where XXX is the ID

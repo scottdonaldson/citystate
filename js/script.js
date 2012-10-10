@@ -74,15 +74,12 @@ jQuery(document).ready(function($){
 		extra.find('.x').text(structure.data('x'));
 		extra.find('.y').text(structure.data('y'));
 
-		// Set form location values
+		// Set form location values and structure/id values
 		$('#build-x, #demo-x, #upgrade-x').val(structure.data('x'));
 		$('#build-y, #demo-y, #upgrade-y').val(structure.data('y'));
+		$('#demo-structure, #upgrade-structure').val(structure.data('structure'));
+		$('#demo-id, #upgrade-id').val($this.data('id'));
 
-		// Set structure
-		extra.on('click',function(){
-			$('#demo-structure, #upgrade-structure').val(structure.data('structure'));
-			$('#demo-id, #upgrade-id').val($this.data('id'));
-		});
 	});
 
 	$(document).keydown(function(e){
