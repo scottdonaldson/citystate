@@ -1,13 +1,13 @@
 </div><!-- #main -->
 <div id="toolbar">
 
+	<div class="return">
 	<?php if (!is_home()) { ?>
-		<a class="return" href="<?php echo home_url(); ?>">Main Map</a>
-	<?php } else { ?>
-		<a class="return"></a>
-	<?php }
-	
-	if (is_user_logged_in()) { ?>
+		<a href="<?php echo home_url(); ?>">Main Map</a>
+	<?php } ?>
+	</div>
+
+	<?php if (is_user_logged_in()) { ?>
 		<div class="user">
 			<?php 
 			global $current_user;
