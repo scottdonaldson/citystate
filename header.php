@@ -20,6 +20,8 @@ include('header-checks.php'); ?>
 	<title>City/State</title>
 	<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
 
+	<link rel="shortcut icon" href="<?php bloginfo('template_url'); ?>/images/favicon.ico" />
+
 	<link rel="stylesheet" href="<?php echo bloginfo('template_url'); ?>/style.css" />
 	<link rel="stylesheet" href="<?php echo bloginfo('template_url'); ?>/css/city.css" />
 	
