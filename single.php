@@ -82,7 +82,7 @@ get_currentuserinfo();
 						if ($upgrade > 0 && get_post_meta($post->ID, $structure.'-'.$i.'-level', true) < $upgrade) {
 							echo 'data-cost="'.$cost.'" data-upgrade="true"';
 							echo 'data-level="'.get_post_meta($post->ID, $structure.'-'.$i.'-level', true).'"';
-						} elseif (get_post_meta($post->ID, $structure.'-'.$i.'-level', true) == $values[4]) {
+						} elseif (get_post_meta($post->ID, $structure.'-'.$i.'-level', true) == $upgrade) {
 							echo 'data-level="'.get_post_meta($post->ID, $structure.'-'.$i.'-level', true).'"';
 						}
 					}

@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+
+<!--
+
+	Designed and developed by Scott Donaldson
+
+-->
+
 <?php 
 
 // Define paths
