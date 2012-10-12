@@ -377,7 +377,7 @@ a:visited:hover {
 }
 /* line 285, ../sass/city.scss */
 .single .terrain#sw {
-  left: -1001px;
+  left: -1000px;
   top: 601px;
   width: 1000px;
 }
