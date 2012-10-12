@@ -31,7 +31,7 @@ if (($cash_current - $cost) < 0) {
 	update_field('cash', $cash_current - $cost, 'user_'.$current_user->ID);
 	
 	// For non-repeating structures, just remove (set location back to (0,0))
-	if ($structures[$structure][0] == false) {
+	if ($structures[$structure][2] != 0) {
 		update_post_meta($ID, $structure.'-x', 0);
 		update_post_meta($ID, $structure.'-y', 0);
 		$level = get_post_meta($ID, $structure.'-level', true) + 1;

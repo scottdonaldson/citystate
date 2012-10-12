@@ -31,7 +31,7 @@ if (($cash_current - $cost) < 0) {
 	update_field('cash', $cash_current - $cost, 'user_'.$current_user->ID);
 	
 	// For non-repeating structures, just remove (set location back to (0,0))
-	if ($structures[$structure][0] == false) {
+	if ($structures[$structure][2] != 0) {
 		
 		// Get current level
 		$level = get_post_meta($ID, $structure.'-level', true);
@@ -44,7 +44,7 @@ if (($cash_current - $cost) < 0) {
 		update_post_meta($ID, 'target-pop', $target_current + $target_increase);
 
 	// For repeating structures...
-	} elseif ($structures[$structure][0] == true) {
+	} else {
 		$num = get_post_meta($ID, $structure.'s', true);
 
 		// Get current level
