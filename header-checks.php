@@ -72,7 +72,7 @@ if (isset($_POST['update'])) {
  *	BAD LOGIN
  */
 if ($_GET['login'] == 'failed') {
-	$alert = '<p>Bad login. Check your username or password and try again.</p>';
+	$alert = '<p>Bad login. Check your username or password and try again.</p><p><a href="'.home_url().'/wp-login.php?action=lostpassword">Did you forget your password?</a></p>';
 }
 
 /*
