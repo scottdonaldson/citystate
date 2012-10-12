@@ -15,9 +15,8 @@ if (isset($_POST['buildCity'])) {
 
 	// Make sure we're not bankrupting, then proceed
 	if (($cash_current - 1000) < 0) {
-		$url = get_permalink($ID);
 		// Redirect
-		header('Location: '.$url.'?err=bankrupt');
+		header('Location: '.home_url().'?err=bankrupt');
 	} else {
 		// Get info
 		$title = $_POST['cityName'];
