@@ -28,9 +28,10 @@ if (isset($_POST['pass'])) {
 			// Structure-related
 			include 'structures.php';
 			foreach ($structures as $structure=>$values) {
-				$values[] = $values;
+				include( MAIN .'structures/values.php');
+
 				// At this point, only run for non-repeating structures
-				if ($values[0] == false) {
+				if ($max != 0) {
 					// Make sure structure has been built, then continue
 					$loc_x_[$structure] = get_post_meta($ID, $structure.'-x');
 					$loc_y_[$structure] = get_post_meta($ID, $structure.'-y');
@@ -39,7 +40,7 @@ if (isset($_POST['pass'])) {
 										
 						// Upkeep costs (.02*cost)	
 						$cash = get_field('cash','user_'.$user_ID);
-						update_field('cash', $cash-(0.02*$values[1]), 'user_'.$user_ID);
+						update_field('cash', $cash-(0.02 * $cost), 'user_'.$user_ID);
 
 					}
 				}
@@ -59,11 +60,11 @@ if (isset($_POST['update'])) {
 	if (is_single()) {
 		$type = $_GET['structure'];
 		if ( $type == 'build') {
-			include('structures/build.php');
+			include( MAIN . 'structures/build.php');
 		} elseif ($type == 'demolish') {
-			include('structures/demolish.php');
+			include( MAIN . 'structures/demolish.php');
 		} elseif ($type == 'upgrade') {
-			include('structures/upgrade.php');
+			include( MAIN . 'structures/upgrade.php');
 		}
 	}
 } 
@@ -73,6 +74,14 @@ if (isset($_POST['update'])) {
  */
 if ($_GET['login'] == 'failed') {
 	$alert = '<p>Bad login. Check your username or password and try again.</p><p><a href="'.home_url().'/wp-login.php?action=lostpassword">Did you forget your password?</a></p>';
+}
+
+/*
+ *	ERRORS
+ */
+// Bankrupt
+if ($_GET['err'] == 'bankrupt') {
+	$alert = '<p>You can&#39;t do that &mdash; you&#39;d go bankrupt!</p><p>Back to <a href="'.home_url().'">main map</a>.</p>';
 }
 
 /*
