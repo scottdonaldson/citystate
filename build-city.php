@@ -14,11 +14,9 @@ if (isset($_POST['buildCity'])) {
 	$cash_current = get_field('cash','user_'.$current_user->ID);
 
 	// Make sure we're not bankrupting, then proceed
-	if (($cash_current - 300) < 0) {
-		echo '<div id="alert">
-		  		<p>You can&#39;t do that &mdash; you&#39;d go bankrupt!</p>
-		  		<p>Back to <a href="'.bloginfo('home_url').'">main map</a>.</p>
-		  	  </div>';
+	if (($cash_current - 1000) < 0) {
+		$alert = '<p>You can&#39;t do that &mdash; you&#39;d go bankrupt!</p>
+		  		<p>Back to <a href="'.home_url().'">main map</a>.</p>';
 	} else {
 		// Get info
 		$title = $_POST['cityName'];
