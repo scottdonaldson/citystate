@@ -14,8 +14,8 @@ query_posts('posts_per_page=-1'); while (have_posts()) : the_post();
 
 <div id="map" class="clearfix">
 
-	<?php include 'maps/originalia.php'; ?>
 	<?php 
+	include( MAIN .'maps/originalia.php'); 
 	foreach ($map as $row => $tiles) {
 		$x = 0; 
 		foreach ($tiles as $tile) { 
@@ -40,15 +40,15 @@ query_posts('posts_per_page=-1'); while (have_posts()) : the_post();
 				$non = 0;
 				$repeaters = 0;
 				foreach($structures as $structure=>$values) {
-					$values[] = $values;
+					include( MAIN .'structures/values.php');
 
 					// Count non-repeaters
-					if ($values[0] == false) {
+					if ($max != 0) {
 						$count = get_post_meta(get_the_ID(), $structure.'-y', true);
 						if ($count != 0) { $non++; }
 
 					// Count repeaters
-					} elseif ($values[0] == true) {
+					} else {
 						$count = get_post_meta(get_the_ID(), $structure.'s', true);
 						$repeaters = $repeaters + $count;
 					}

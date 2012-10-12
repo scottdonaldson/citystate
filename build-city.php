@@ -2,6 +2,10 @@
 /*
 Template Name: Build
 */
+
+// Define paths
+define('MAIN', dirname(__FILE__) . '/');
+
 if (isset($_POST['buildCity'])) {
 	
 	// Get user info
@@ -35,25 +39,60 @@ if (isset($_POST['buildCity'])) {
 
 		// Set location of city based on what user
 		// selected on main map, set pop. to 0
-		update_field('location-x', $x, $ID);
-		update_field('location-y', $y, $ID);
-		update_field('population', 0, $ID);
+		add_post_meta($ID, 'location-x', $x);
+		add_post_meta($ID, 'location-y', $y);
+		add_post_meta($ID, 'population', 0);
 		add_post_meta($ID, 'target-pop', 1000);
+
+		// Set geographic characteristics
+		$geo = array('nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se');
+
+		foreach ($geo as $cardinal) {
+			// Find $map_x and $map_y on the map and set value (land or water)
+			if ($cardinal == 'nw') {
+				$map_x = $x - 1; $map_y = $y - 1;
+			} elseif ($cardinal == 'n') {
+				$map_x = $x; $map_y = $y - 1;
+			} elseif ($cardinal == 'ne') {
+				$map_x = $x + 1; $map_y = $y - 1;
+			} elseif ($cardinal == 'w') {
+				$map_x = $x - 1; $map_y = $y;
+			} elseif ($cardinal == 'e') {
+				$map_x = $x + 1; $map_y = $y;	
+			} elseif ($cardinal == 'sw') {
+				$map_x = $x - 1; $map_y = $y + 1;
+			} elseif ($cardinal == 's') {
+				$map_x = $x; $map_y = $y + 1;	
+			} elseif ($cardinal == 'se') {
+				$map_x = $x + 1; $map_y = $y + 1;	
+			}		
+
+			include( MAIN .'maps/originalia.php');
+			$val = $map[$map_y][$map_x - 1];
+			if ($val == 0) {
+				$val = 'water';
+			} elseif ($val == 1) {
+				$val = 'land';
+			} else { $val = $val; }
+
+			add_post_meta($ID, 'map-'.$cardinal, $val);
+		}
 
 		// Set locations of all structures to (0,0) (unbuilt)
 		include 'structures.php';
 		foreach ($structures as $structure=>$values) {
-			$values[] = $values;
-			if ($values[0] == false) {
+			include( MAIN .'structures/values.php');
+
+			if ($values[2] != 0) {
 				add_post_meta($ID, $structure.'-x', 0);
 				add_post_meta($ID, $structure.'-y', 0);
-			} elseif ($values[0] == true) {
+			} else {
 				add_post_meta($ID, $structure.'s', 0);
 			}
 		}
 
 		// Takes moneyz to build a city
-		update_field('cash', $cash_current - 300, 'user_'.$current_user->ID);
+		update_field('cash', $cash_current - 1000, 'user_'.$current_user->ID);
 
 		// Update the activity log. The output:
 		$site_url = home_url();

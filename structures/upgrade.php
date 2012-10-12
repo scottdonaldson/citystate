@@ -12,7 +12,7 @@ $x = $_POST['upgrade-x'];
 $y = $_POST['upgrade-y'];
 $id = $_POST['upgrade-id']; // Lowercase $id is for repeating structures
 $cost = 100; // Flat cost of 100
-$target_increase = $structures[$structure][2];
+$target_increase = $structures[$structure][4];
 
 if ($x == 10) { $x = 0; }
 
@@ -68,7 +68,7 @@ if (($cash_current - $cost) < 0) {
 	$site_url = home_url();
 	$link = get_permalink();
 	$city = get_the_title();
-	$output = 'A '.$structure.' was upgraded in <a href="'.$link.'">'.$city.'</a> by <a href="'.$site_url.'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a>.';
+	$output = 'A '.$structures[$structure][0].' was upgraded in <a href="'.$link.'">'.$city.'</a> by <a href="'.$site_url.'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a>.';
 
 	// Query the latest activity date
 	$args = array(
@@ -87,9 +87,9 @@ if (($cash_current - $cost) < 0) {
 		$already = get_post_meta(get_the_ID(), $current_user->user_login.'-'.$city.'-upgrade-'.$structure, true);
 		if ($already > 0) {
 			$new = $already + 1;
-			$output = $new.' upgrades were made to '.$structure.'s in <a href="'.$link.'">'.$city.'</a> by <a href="'.$site_url.'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a>.';
-			delete_post_meta(get_the_ID(), 'activity', 'A '.$structure.' was upgraded in <a href="'.$link.'">'.$city.'</a> by <a href="'.$site_url.'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a>.');
-			delete_post_meta(get_the_ID(), 'activity', $already.' upgrades were made to '.$structure.'s in <a href="'.$link.'">'.$city.'</a> by <a href="'.$site_url.'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a>.');
+			$output = $new.' upgrades were made to '.$structures[$structure][1].' in <a href="'.$link.'">'.$city.'</a> by <a href="'.$site_url.'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a>.';
+			delete_post_meta(get_the_ID(), 'activity', 'A '.$structures[$structure][0].' was upgraded in <a href="'.$link.'">'.$city.'</a> by <a href="'.$site_url.'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a>.');
+			delete_post_meta(get_the_ID(), 'activity', $already.' upgrades were made to '.$structures[$structure][1].' in <a href="'.$link.'">'.$city.'</a> by <a href="'.$site_url.'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a>.');
 			update_post_meta(get_the_ID(), $current_user->user_login.'-'.$city.'-upgrade-'.$structure, $new);
 		} else {
 			add_post_meta(get_the_ID(), $current_user->user_login.'-'.$city.'-upgrade-'.$structure, 1);

@@ -12,7 +12,7 @@ $x = $_POST['demo-x'];
 $y = $_POST['demo-y'];
 $id = $_POST['demo-id']; // Lowercase $id is for repeating structures
 $cost = 50; // Flat cost of 50
-$target_decrease = -$structures[$structure][2]; // Note that it's negative! the opposite of the increase
+$target_decrease = -$structures[$structure][4]; // Note that it's negative! the opposite of the increase
 
 if ($x == 10) { $x = 0; }
 
@@ -91,7 +91,7 @@ if (($cash_current - $cost) < 0) {
 	$site_url = home_url();
 	$link = get_permalink();
 	$city = get_the_title();
-	$output = 'A '.$structure.' was demolished in <a href="'.$link.'">'.$city.'</a> by <a href="'.$site_url.'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a>.';
+	$output = 'A '.$structures[$structure][0].' was demolished in <a href="'.$link.'">'.$city.'</a> by <a href="'.$site_url.'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a>.';
 
 	// Query the latest activity date
 	$args = array(
@@ -110,9 +110,9 @@ if (($cash_current - $cost) < 0) {
 		$already = get_post_meta(get_the_ID(), $current_user->user_login.'-'.$city.'-demo-'.$structure, true);
 		if ($already > 0) {
 			$new = $already + 1;
-			$output = $new.' '.$structure.'s were demolished in <a href="'.$link.'">'.$city.'</a> by <a href="'.$site_url.'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a>.';
-			delete_post_meta(get_the_ID(), 'activity', 'A '.$structure.' was demolished in <a href="'.$link.'">'.$city.'</a> by <a href="'.$site_url.'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a>.');
-			delete_post_meta(get_the_ID(), 'activity', $already.' '.$structure.'s were demolished in <a href="'.$link.'">'.$city.'</a> by <a href="'.$site_url.'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a>.');
+			$output = $new.' '.$structures[$structure][1].' were demolished in <a href="'.$link.'">'.$city.'</a> by <a href="'.$site_url.'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a>.';
+			delete_post_meta(get_the_ID(), 'activity', 'A '.$structures[$structure][0].' was demolished in <a href="'.$link.'">'.$city.'</a> by <a href="'.$site_url.'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a>.');
+			delete_post_meta(get_the_ID(), 'activity', $already.' '.$structures[$structure][1].' were demolished in <a href="'.$link.'">'.$city.'</a> by <a href="'.$site_url.'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a>.');
 			update_post_meta(get_the_ID(), $current_user->user_login.'-'.$city.'-demo-'.$structure, $new);
 		} else {
 			add_post_meta(get_the_ID(), $current_user->user_login.'-'.$city.'-demo-'.$structure, 1);
