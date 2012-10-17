@@ -1,4 +1,10 @@
-<?php get_header(); 
+<?php 
+add_action('wp_footer', 'cityname_validate');
+function cityname_validate() {
+	$url = get_bloginfo('template_url');
+    echo '<script src="'.$url.'/plugins/validation/cityname.js"></script>'; ?>
+<?php }
+get_header(); 
 
 // If logged in, get current user info
 global $current_user;
@@ -64,7 +70,7 @@ query_posts('posts_per_page=-1'); while (have_posts()) : the_post();
 					}
 					if ($non == 1 ) { echo ' n01'; 
 					} elseif ($non == 2 ) { echo ' n02'; 
-					} elseif ($non == 3 ) { echo ' n03'; }
+					} elseif ($non >= 3 ) { echo ' n03'; }
 					
 					$login = get_the_author_meta('user_login'); echo ' user-'.$login; ?>">
 					<a class="marker" href="<?php the_permalink(); ?>"></a>
@@ -84,15 +90,18 @@ query_posts('posts_per_page=-1'); while (have_posts()) : the_post();
 	
 	<?php } ?>
 
-		<?php if (is_user_logged_in()) { ?>
+		<?php if (is_user_logged_in()) { 
+			// Get user info to determine cost of building a new city
+			global $current_user; get_currentuserinfo(); 
+			$cities = count_user_posts($current_user->ID); ?>
 		<div id="build" class="infobox">
 			<p>Build city at (<span class="x"></span>,&nbsp;<span class="y"></span>)</p>
 			<form action="<?php echo site_url(); ?>/build" method="post">
 				<p>Name:</p>
-				<input id="cityName" name="cityName" type="text" />
+				<input id="cityName" name="cityName" type="text" maxlength="25" />
 				<input id="x" name="x" type="hidden" />
 				<input id="y" name="y" type="hidden" />			
-				<input type="submit" id="buildCity" name="buildCity" value="Build City" />
+				<input type="submit" id="buildCity" name="buildCity" value="Build City (<?php echo th(1500*$cities + 500); ?>)" />
 			</form>
 		</div>
 		<?php }

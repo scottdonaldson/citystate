@@ -48,8 +48,23 @@ a:visited:hover {
 #alert li {
   line-height: 0.8;
 }
+/* line 62, ../sass/city.scss */
+#alert .close-box {
+  cursor: pointer;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: lighter;
+  font-size: 12px;
+  letter-spacing: 1px;
+  position: absolute;
+  right: 3px;
+  top: 5px;
+}
+/* line 71, ../sass/city.scss */
+#alert .close-box:hover {
+  color: #555;
+}
 
-/* line 65, ../sass/city.scss */
+/* line 79, ../sass/city.scss */
 .container {
   background: #f4f4f4;
   border: 1px solid #ccc;
@@ -57,7 +72,7 @@ a:visited:hover {
   margin: 0 auto;
   width: 1000px;
 }
-/* line 72, ../sass/city.scss */
+/* line 86, ../sass/city.scss */
 .container .header {
   border-bottom: 1px solid #ccc;
   cursor: pointer;
@@ -67,29 +82,29 @@ a:visited:hover {
   margin: 0;
   padding: 5px 30px;
 }
-/* line 82, ../sass/city.scss */
+/* line 96, ../sass/city.scss */
 .container .header.active, .container .header:hover {
   background: #e4e4e4;
   color: #777;
 }
-/* line 87, ../sass/city.scss */
+/* line 101, ../sass/city.scss */
 .container .header.active:hover {
   background: #eee;
   color: #bbb;
 }
-/* line 93, ../sass/city.scss */
+/* line 107, ../sass/city.scss */
 .container .content {
   border-bottom: 1px solid #ccc;
   display: none;
   padding: 10px 30px;
 }
-/* line 98, ../sass/city.scss */
+/* line 112, ../sass/city.scss */
 .container .content.visible {
   display: block;
 }
 
 /* ------- MAIN PAGE -------- */
-/* line 107, ../sass/city.scss */
+/* line 121, ../sass/city.scss */
 #map {
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box;
@@ -101,134 +116,134 @@ a:visited:hover {
   width: 600px;
 }
 
-/* line 115, ../sass/city.scss */
+/* line 129, ../sass/city.scss */
 .home {
   background-image: url(../images/terrain/water.png);
 }
-/* line 118, ../sass/city.scss */
+/* line 132, ../sass/city.scss */
 .home .tile {
   background: #ddaa77;
 }
-/* line 120, ../sass/city.scss */
+/* line 135, ../sass/city.scss */
 .home .tile.water {
   background: none transparent;
 }
-/* line 124, ../sass/city.scss */
+/* line 139, ../sass/city.scss */
 .home .tile .city {
   height: 60px;
   z-index: 999;
 }
-/* line 128, ../sass/city.scss */
+/* line 143, ../sass/city.scss */
 .home .tile .city .marker {
   display: block;
   height: 60px;
   width: 60px;
 }
-/* line 135, ../sass/city.scss */
+/* line 150, ../sass/city.scss */
 .home .tile .city.r00 .marker {
   background: url(../images/city/00-00.png);
 }
-/* line 140, ../sass/city.scss */
+/* line 155, ../sass/city.scss */
 .home .tile .city.r00.n01 .marker {
   background: url(../images/city/00-01.png);
 }
-/* line 140, ../sass/city.scss */
+/* line 155, ../sass/city.scss */
 .home .tile .city.r00.n02 .marker {
   background: url(../images/city/00-02.png);
 }
-/* line 140, ../sass/city.scss */
+/* line 155, ../sass/city.scss */
 .home .tile .city.r00.n03 .marker {
   background: url(../images/city/00-03.png);
 }
-/* line 140, ../sass/city.scss */
+/* line 155, ../sass/city.scss */
 .home .tile .city.r00.n04 .marker {
   background: url(../images/city/00-04.png);
 }
-/* line 135, ../sass/city.scss */
+/* line 150, ../sass/city.scss */
 .home .tile .city.r01 .marker {
   background: url(../images/city/01-00.png);
 }
-/* line 140, ../sass/city.scss */
+/* line 155, ../sass/city.scss */
 .home .tile .city.r01.n01 .marker {
   background: url(../images/city/01-01.png);
 }
-/* line 140, ../sass/city.scss */
+/* line 155, ../sass/city.scss */
 .home .tile .city.r01.n02 .marker {
   background: url(../images/city/01-02.png);
 }
-/* line 140, ../sass/city.scss */
+/* line 155, ../sass/city.scss */
 .home .tile .city.r01.n03 .marker {
   background: url(../images/city/01-03.png);
 }
-/* line 140, ../sass/city.scss */
+/* line 155, ../sass/city.scss */
 .home .tile .city.r01.n04 .marker {
   background: url(../images/city/01-04.png);
 }
-/* line 135, ../sass/city.scss */
+/* line 150, ../sass/city.scss */
 .home .tile .city.r02 .marker {
   background: url(../images/city/02-00.png);
 }
-/* line 140, ../sass/city.scss */
+/* line 155, ../sass/city.scss */
 .home .tile .city.r02.n01 .marker {
   background: url(../images/city/02-01.png);
 }
-/* line 140, ../sass/city.scss */
+/* line 155, ../sass/city.scss */
 .home .tile .city.r02.n02 .marker {
   background: url(../images/city/02-02.png);
 }
-/* line 140, ../sass/city.scss */
+/* line 155, ../sass/city.scss */
 .home .tile .city.r02.n03 .marker {
   background: url(../images/city/02-03.png);
 }
-/* line 140, ../sass/city.scss */
+/* line 155, ../sass/city.scss */
 .home .tile .city.r02.n04 .marker {
   background: url(../images/city/02-04.png);
 }
-/* line 135, ../sass/city.scss */
+/* line 150, ../sass/city.scss */
 .home .tile .city.r03 .marker {
   background: url(../images/city/03-00.png);
 }
-/* line 140, ../sass/city.scss */
+/* line 155, ../sass/city.scss */
 .home .tile .city.r03.n01 .marker {
   background: url(../images/city/03-01.png);
 }
-/* line 140, ../sass/city.scss */
+/* line 155, ../sass/city.scss */
 .home .tile .city.r03.n02 .marker {
   background: url(../images/city/03-02.png);
 }
-/* line 140, ../sass/city.scss */
+/* line 155, ../sass/city.scss */
 .home .tile .city.r03.n03 .marker {
   background: url(../images/city/03-03.png);
 }
-/* line 140, ../sass/city.scss */
+/* line 155, ../sass/city.scss */
 .home .tile .city.r03.n04 .marker {
   background: url(../images/city/03-04.png);
 }
-/* line 135, ../sass/city.scss */
+/* line 150, ../sass/city.scss */
 .home .tile .city.r04 .marker {
   background: url(../images/city/04-00.png);
 }
-/* line 140, ../sass/city.scss */
+/* line 155, ../sass/city.scss */
 .home .tile .city.r04.n01 .marker {
   background: url(../images/city/04-01.png);
 }
-/* line 140, ../sass/city.scss */
+/* line 155, ../sass/city.scss */
 .home .tile .city.r04.n02 .marker {
   background: url(../images/city/04-02.png);
 }
-/* line 140, ../sass/city.scss */
+/* line 155, ../sass/city.scss */
 .home .tile .city.r04.n03 .marker {
   background: url(../images/city/04-03.png);
 }
-/* line 140, ../sass/city.scss */
+/* line 155, ../sass/city.scss */
 .home .tile .city.r04.n04 .marker {
   background: url(../images/city/04-04.png);
 }
-/* line 146, ../sass/city.scss */
+/* line 161, ../sass/city.scss */
 .home .tile .city:hover ~ .info {
   display: block;
 }
-/* line 152, ../sass/city.scss */
+/* line 167, ../sass/city.scss */
 .home .tile .info {
   background: #fff;
   display: none;
@@ -239,7 +254,7 @@ a:visited:hover {
   top: 66px;
   z-index: 9999;
 }
-/* line 162, ../sass/city.scss */
+/* line 177, ../sass/city.scss */
 .home .tile .info:before {
   background: #fff;
   content: '';
@@ -254,30 +269,30 @@ a:visited:hover {
   top: -4px;
   width: 10px;
 }
-/* line 173, ../sass/city.scss */
+/* line 188, ../sass/city.scss */
 .home .tile .info .city-name {
   display: block;
   font-size: 18px;
   font-weight: bold;
   margin: 0;
 }
-/* line 180, ../sass/city.scss */
+/* line 195, ../sass/city.scss */
 .home .tile .info .city-builder {
   display: block;
   font-size: 12px;
   font-style: italic;
 }
-/* line 186, ../sass/city.scss */
+/* line 201, ../sass/city.scss */
 .home .tile .info ul {
   margin: 0;
   padding: 0;
 }
-/* line 188, ../sass/city.scss */
+/* line 203, ../sass/city.scss */
 .home .tile .info ul li {
   list-style-type: none;
 }
 
-/* line 196, ../sass/city.scss */
+/* line 211, ../sass/city.scss */
 .tile {
   background: #ddaa77;
   height: 60px;
@@ -285,137 +300,219 @@ a:visited:hover {
   position: relative;
   width: 60px;
 }
-/* line 203, ../sass/city.scss */
+/* line 218, ../sass/city.scss */
 .tile:hover {
   background: #c49d76;
 }
-/* line 206, ../sass/city.scss */
+/* line 221, ../sass/city.scss */
+.tile.footprint {
+  background: #c0966b;
+}
+/* line 224, ../sass/city.scss */
 .tile.no-build:hover {
   background: #ddaa77;
 }
 
 /* ------ CITY ------------ */
-/* line 213, ../sass/city.scss */
+/* line 231, ../sass/city.scss */
 .single {
   background: url(../images/terrain/water.png);
 }
-/* line 216, ../sass/city.scss */
+/* line 234, ../sass/city.scss */
 .single #main {
   overflow: hidden;
   width: 100%;
   margin: 0 auto;
 }
-/* line 222, ../sass/city.scss */
+/* line 240, ../sass/city.scss */
 .single #map {
   background: #ddaa77;
   border: 1px dashed #333;
 }
-/* line 229, ../sass/city.scss */
+/* line 247, ../sass/city.scss */
 .single .tile.park {
   background-image: url(../images/park.png);
 }
-/* line 233, ../sass/city.scss */
+/* line 251, ../sass/city.scss */
 .single .tile.neighborhood {
   background-image: url(../images/neighborhood.png);
 }
-/* line 236, ../sass/city.scss */
+/* line 254, ../sass/city.scss */
 .single .tile.neighborhood[data-level="1"] {
   background-image: url(../images/neighborhood-1.png);
 }
-/* line 236, ../sass/city.scss */
+/* line 254, ../sass/city.scss */
 .single .tile.neighborhood[data-level="2"] {
   background-image: url(../images/neighborhood-2.png);
 }
-/* line 242, ../sass/city.scss */
+/* line 260, ../sass/city.scss */
 .single .tile.library {
   background-image: url("../images/library.png");
 }
-/* line 246, ../sass/city.scss */
+/* line 264, ../sass/city.scss */
 .single .tile.cinema {
   background-image: url("../images/cinema.png");
 }
-/* line 250, ../sass/city.scss */
+/* line 268, ../sass/city.scss */
+.single .tile.port {
+  background: url(../images/port.png);
+  margin-right: -120px;
+  width: 180px;
+}
+/* line 274, ../sass/city.scss */
 .single .tile.university {
   background-image: url("../images/university.png");
 }
-/* line 255, ../sass/city.scss */
+/* line 278, ../sass/city.scss */
+.single .tile.stadium {
+  background-image: url("../images/stadium.png");
+  height: 120px;
+  margin: 0 -60px -60px 0;
+  position: relative;
+  width: 120px;
+  z-index: 100;
+}
+/* line 288, ../sass/city.scss */
 .single .terrain {
   height: 601px;
   position: absolute;
   width: 601px;
 }
-/* line 260, ../sass/city.scss */
+/* line 293, ../sass/city.scss */
 .single .terrain.land {
   background: #ddaa77;
 }
-/* line 263, ../sass/city.scss */
+/* line 296, ../sass/city.scss */
 .single .terrain#nw {
   left: -1001px;
   top: -601px;
   width: 1000px;
 }
-/* line 268, ../sass/city.scss */
+/* line 301, ../sass/city.scss */
 .single .terrain#n {
   left: -1px;
   top: -602px;
 }
-/* line 272, ../sass/city.scss */
+/* line 305, ../sass/city.scss */
 .single .terrain#ne {
   left: 600px;
   top: -601px;
   width: 1000px;
 }
-/* line 277, ../sass/city.scss */
+/* line 310, ../sass/city.scss */
 .single .terrain#w {
   left: -1001px;
   width: 1000px;
 }
-/* line 281, ../sass/city.scss */
+/* line 314, ../sass/city.scss */
 .single .terrain#e {
   left: 601px;
   width: 1000px;
 }
-/* line 285, ../sass/city.scss */
+/* line 318, ../sass/city.scss */
 .single .terrain#sw {
   left: -1000px;
   top: 601px;
   width: 1000px;
 }
-/* line 290, ../sass/city.scss */
+/* line 323, ../sass/city.scss */
 .single .terrain#s {
   top: 601px;
   width: 601px;
 }
-/* line 294, ../sass/city.scss */
+/* line 327, ../sass/city.scss */
 .single .terrain#se {
   left: 601px;
   top: 601px;
   width: 1000px;
 }
 
-/* line 302, ../sass/city.scss */
+/* line 335, ../sass/city.scss */
 .infobox {
   background: #444e79;
   border-right: 2px solid #313958;
   color: #fff;
+  font-size: 14px;
   display: none;
   height: 100%;
   left: 0;
-  padding: 5px;
+  padding: 20px 5px 5px;
   position: fixed;
   top: 0;
   width: 180px;
 }
-/* line 313, ../sass/city.scss */
+/* line 348, ../sass/city.scss */
 .admin-bar .infobox {
   top: 28px;
 }
-/* line 317, ../sass/city.scss */
+/* line 352, ../sass/city.scss */
 .infobox.active {
   display: block !important;
 }
+/* line 356, ../sass/city.scss */
+.infobox .helper {
+  clear: both;
+}
+/* line 360, ../sass/city.scss */
+.infobox input[type="submit"] {
+  background: #eee;
+  border: 0 none;
+  color: #444e79;
+  display: block;
+  margin: 8px 0;
+  padding: 5px 0;
+  text-transform: capitalize;
+}
+/* line 368, ../sass/city.scss */
+.infobox input[type="submit"]:hover {
+  background: #fff;
+}
+/* line 373, ../sass/city.scss */
+.infobox .close-box {
+  color: #eee;
+  cursor: pointer;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: lighter;
+  font-size: 12px;
+  letter-spacing: 1px;
+  position: absolute;
+  right: 3px;
+  top: 5px;
+}
+/* line 383, ../sass/city.scss */
+.infobox .close-box:hover {
+  color: #fff;
+}
 
-/* line 325, ../sass/city.scss */
+/* line 392, ../sass/city.scss */
+#build ul,
+#extra ul {
+  list-style: none;
+  padding-left: 0;
+}
+/* line 396, ../sass/city.scss */
+#build ul li,
+#extra ul li {
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+/* line 399, ../sass/city.scss */
+#build ul li:before,
+#extra ul li:before {
+  border: 2px solid #fff;
+  content: '';
+  cursor: pointer;
+  float: left;
+  height: 15px;
+  margin-right: 8px;
+  width: 15px;
+}
+/* line 408, ../sass/city.scss */
+#build ul li.chosen:before,
+#extra ul li.chosen:before {
+  background: #fff;
+}
+/* line 414, ../sass/city.scss */
 #build input,
 #extra input {
   display: block;
@@ -423,26 +520,24 @@ a:visited:hover {
   margin: 5px auto;
   width: 100%;
 }
-/* line 332, ../sass/city.scss */
-#build input[type="radio"],
-#extra input[type="radio"] {
-  clear: left;
-  float: left;
-  width: 20px;
-}
-/* line 338, ../sass/city.scss */
+/* line 421, ../sass/city.scss */
 #build label,
 #extra label {
   float: left;
 }
-/* line 342, ../sass/city.scss */
+/* line 425, ../sass/city.scss */
 #build .upgrade,
 #extra .upgrade {
   display: none;
 }
+/* line 429, ../sass/city.scss */
+#build .name-structure,
+#extra .name-structure {
+  text-transform: capitalize;
+}
 
 /* -------- TO DO ------------ */
-/* line 349, ../sass/city.scss */
+/* line 436, ../sass/city.scss */
 #todo {
   background: #eee;
   height: 350px;
@@ -450,7 +545,7 @@ a:visited:hover {
   padding: 10px;
   width: 500px;
 }
-/* line 356, ../sass/city.scss */
+/* line 443, ../sass/city.scss */
 #todo h2 {
   border-bottom: 1px solid #999;
   color: #999;
@@ -458,16 +553,16 @@ a:visited:hover {
   font-size: 24px;
   margin-bottom: 10px;
 }
-/* line 364, ../sass/city.scss */
+/* line 451, ../sass/city.scss */
 #todo ul {
   margin-bottom: 25px;
 }
-/* line 368, ../sass/city.scss */
+/* line 455, ../sass/city.scss */
 #todo ul li {
   list-style: disc;
   margin: 0 0 5px 20px;
 }
-/* line 372, ../sass/city.scss */
+/* line 459, ../sass/city.scss */
 #todo ul li.completed {
   color: #999;
   font-style: italic;
@@ -475,56 +570,56 @@ a:visited:hover {
 }
 
 /* ------ SCOREBOARD --------- */
-/* line 384, ../sass/city.scss */
+/* line 471, ../sass/city.scss */
 #scoreboard .row {
   margin: 5px 0;
   padding: 5px;
 }
-/* line 388, ../sass/city.scss */
+/* line 475, ../sass/city.scss */
 #scoreboard .row.current {
   background: #fdd;
 }
-/* line 392, ../sass/city.scss */
+/* line 479, ../sass/city.scss */
 #scoreboard .row div {
   float: left;
 }
-/* line 396, ../sass/city.scss */
+/* line 483, ../sass/city.scss */
 #scoreboard .row .nutzername {
   width: 40%;
 }
-/* line 402, ../sass/city.scss */
+/* line 489, ../sass/city.scss */
 #scoreboard .row .cities,
 #scoreboard .row .cash,
 #scoreboard .row .total-population {
   width: 20%;
 }
 
-/* line 410, ../sass/city.scss */
+/* line 497, ../sass/city.scss */
 #budget {
   margin-top: 20px;
   width: 100%;
 }
-/* line 414, ../sass/city.scss */
+/* line 501, ../sass/city.scss */
 #budget div {
   background: #ddd;
   float: left;
   margin: 0 2% 2% 0;
   padding: 5px;
 }
-/* line 420, ../sass/city.scss */
+/* line 507, ../sass/city.scss */
 #budget div:nth-child(3n+3) {
   margin-right: 0;
 }
-/* line 424, ../sass/city.scss */
+/* line 511, ../sass/city.scss */
 #budget div.first {
   width: 48%;
 }
-/* line 429, ../sass/city.scss */
+/* line 516, ../sass/city.scss */
 #budget div.second, #budget div.third {
   text-align: right;
   width: 24%;
 }
-/* line 434, ../sass/city.scss */
+/* line 521, ../sass/city.scss */
 #budget div.grand {
   float: right;
   margin-right: 0;
@@ -533,11 +628,15 @@ a:visited:hover {
 }
 
 /* ------ TOOLBAR ------------ */
-/* line 445, ../sass/city.scss */
+/* line 532, ../sass/city.scss */
 #toolbar {
   background: #ddd;
   border-top: 1px solid #ccc;
   bottom: 0;
+  -moz-box-shadow: 0 0 12px #666666;
+  -webkit-box-shadow: 0 0 12px #666666;
+  -o-box-shadow: 0 0 12px #666666;
+  box-shadow: 0 0 12px #666666;
   height: 100px;
   min-width: 1000px;
   padding: 15px;
@@ -545,70 +644,70 @@ a:visited:hover {
   width: 100%;
   z-index: 9998;
 }
-/* line 456, ../sass/city.scss */
+/* line 544, ../sass/city.scss */
 #toolbar input {
   font-family: 'Ubuntu', sans-serif;
 }
-/* line 460, ../sass/city.scss */
+/* line 548, ../sass/city.scss */
 #toolbar .return {
   float: left;
   min-height: 2px;
   width: 120px;
 }
-/* line 467, ../sass/city.scss */
+/* line 555, ../sass/city.scss */
 #toolbar .user,
 #toolbar .city {
   float: left;
   margin-right: 15px;
   width: 200px;
 }
-/* line 472, ../sass/city.scss */
+/* line 560, ../sass/city.scss */
 #toolbar .user p,
 #toolbar .city p {
   margin: 2px 0;
 }
-/* line 476, ../sass/city.scss */
+/* line 564, ../sass/city.scss */
 #toolbar .city {
   width: 350px;
 }
-/* line 480, ../sass/city.scss */
+/* line 568, ../sass/city.scss */
 #toolbar #loginform {
   width: 330px;
 }
-/* line 483, ../sass/city.scss */
+/* line 571, ../sass/city.scss */
 #toolbar #loginform .login-remember {
   float: left;
   width: 130px;
 }
-/* line 486, ../sass/city.scss */
+/* line 574, ../sass/city.scss */
 #toolbar #loginform .login-remember input {
   margin-top: 4px;
 }
-/* line 491, ../sass/city.scss */
+/* line 579, ../sass/city.scss */
 #toolbar #loginform input {
   font-size: 13px;
   float: right;
 }
-/* line 496, ../sass/city.scss */
+/* line 584, ../sass/city.scss */
 #toolbar #loginform .forgetmenot {
   clear: left;
   float: left;
   width: 130px;
 }
-/* line 500, ../sass/city.scss */
+/* line 588, ../sass/city.scss */
 #toolbar #loginform .forgetmenot label {
   float: left;
 }
-/* line 503, ../sass/city.scss */
+/* line 591, ../sass/city.scss */
 #toolbar #loginform .forgetmenot input {
   float: none;
 }
-/* line 508, ../sass/city.scss */
+/* line 596, ../sass/city.scss */
 #toolbar #loginform .submit {
   float: right;
   width: 200px;
 }
-/* line 514, ../sass/city.scss */
+/* line 602, ../sass/city.scss */
 #toolbar .create {
   background: #fff;
   -moz-border-radius: 0 10px 10px 0;
@@ -623,28 +722,28 @@ a:visited:hover {
   position: absolute;
   top: -80px;
 }
-/* line 524, ../sass/city.scss */
+/* line 612, ../sass/city.scss */
 #toolbar .nav {
   float: right;
   text-align: right;
 }
-/* line 528, ../sass/city.scss */
+/* line 616, ../sass/city.scss */
 #toolbar .nav ul {
   margin: 0;
   padding: 0;
 }
-/* line 530, ../sass/city.scss */
+/* line 618, ../sass/city.scss */
 #toolbar .nav ul li {
   list-style-type: none;
 }
 
-/* line 536, ../sass/city.scss */
+/* line 624, ../sass/city.scss */
 #version {
   position: absolute;
   right: 5px;
   top: 5px;
 }
-/* line 540, ../sass/city.scss */
+/* line 628, ../sass/city.scss */
 .admin-bar #version {
   top: 33px;
 }

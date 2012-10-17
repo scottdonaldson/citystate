@@ -8,8 +8,14 @@ include( MAIN .'structures.php');
 
 // Get structure info
 $structure = $_POST['build-structure'];
-$x = $_POST['build-x'];
-$y = $_POST['build-y'];
+if ($structure == 'stadium') {
+	$x = min($_POST['build-x'], $_POST['build-x-1'], $_POST['build-x-2'], $_POST['build-x-3']);
+	$y = min($_POST['build-x'], $_POST['build-y-1'], $_POST['build-y-2'], $_POST['build-y-3']);
+} else { 
+	$x = $_POST['build-x'];
+	$y = $_POST['build-y'];
+}
+
 $cost = $structures[$structure][3];
 $target_increase = $structures[$structure][4];
 
@@ -22,8 +28,7 @@ $cash_current = get_field('cash', 'user_'.$current_user->ID);
 
 // Make sure we're not bankrupting, then proceed
 if (($cash_current - $cost) < 0) {
-	$alert = '<p>You can&#39;t do that &mdash; you&#39;d go bankrupt!</p>
-		  	<p>Back to <a href="'.get_bloginfo('home_url').'">main map</a>.</p>';
+	$alert = '<p>You can&#39;t do that &mdash; you&#39;d go bankrupt!</p>';
 } else {
 
 	// Take cash from user

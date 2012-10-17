@@ -111,6 +111,7 @@ get_currentuserinfo();
 			<p>Build a structure at (<span class="x"></span>,&nbsp;<span class="y"></span>):</p>
 			<form method="post" action="<?php echo get_permalink().'?structure=build'; ?>">
 				<?php 
+				echo '<ul>';
 				foreach ($structures as $structure=>$values) { 
 					include( MAIN .'structures/values.php');
 
@@ -122,19 +123,25 @@ get_currentuserinfo();
 
 						// Only show build option if structure is not yet built
 						if ($x == '0' && $y == '0') { ?>
-							<input id="<?php echo $structure; ?>" name="build-structure" type="radio" value="<?php echo $structure; ?>" />
-							<label><?php echo ucfirst($name).' ('.$cost.')'; ?></label>
+							<li id="<?php echo $structure; ?>">
+								<?php echo ucfirst($name).' ('.th($cost).')'; ?>
+							</li>
 						<?php 
 						}
 					// Repeating structures	
 					} else { ?>
-						<input id="<?php echo $structure; ?>" name="build-structure" type="radio" value="<?php echo $structure; ?>" />
-						<label><?php echo ucfirst($name).' ('.$cost.')'; ?></label>
+						<li id="<?php echo $structure; ?>">
+							<?php echo ucfirst($name).' ('.th($cost).')'; ?>
+						</li>
 					<?php 
 					}
-				} ?>
+				} 
+				echo '</ul>';
+				?>
+				<input id="build-structure" name="build-structure" type="hidden" />
 				<input id="build-x" name="build-x" type="hidden" />
 				<input id="build-y" name="build-y" type="hidden" />	
+				<p class="helper"></p>
 				<input type="submit" value="build" name="update" />
 			</form>
 		</div>
@@ -152,6 +159,7 @@ get_currentuserinfo();
 				<input id="demo-x" name="demo-x" type="hidden" />
 				<input id="demo-y" name="demo-y" type="hidden" />
 				<input id="demo-id" name="demo-id" type="hidden" />
+				<p class="helper"></p>
 				<input type="submit" value="Demolish (50)" name="update" />
 			</form>
 		</div>
