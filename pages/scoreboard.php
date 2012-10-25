@@ -31,7 +31,7 @@ get_header(); ?>
 				get_currentuserinfo(); ?>
 
 				<div class="row clearfix <?php if ($current_user->ID == $user->ID) { echo 'current'; } ?>"><?php
-					echo '<div class="nutzername"><a href="'.site_url().'/user/'.$user->user_login.'">'.$user->display_name.'</a></div>';
+					echo '<div class="nutzername"><a href="'.home_url().'/user/'.$user->user_login.'">'.$user->display_name.'</a></div>';
 					echo '<div class="cities">'.$cities.'</div>';
 					echo '<div class="cash">'.th(get_field('cash','user_'.$user->ID)).'</div>';
 					
@@ -52,6 +52,7 @@ get_header(); ?>
 	<div class="module">
 		<h2 class="header active">Cities</h2>
 		<div class="content visible">
+			<h3>Most populous cities</h3>
 			<?php 
 			$place = 0;
 			query_posts(
@@ -63,8 +64,24 @@ get_header(); ?>
 				)
 			); while (have_posts()) : the_post(); 
 				$place++;
-				if (get_the_author() == $current_user->ID) { $current = 'class="current"'; }
-				echo '<p '.$current.'>'.$place.'. <a href="'.get_permalink().'">'.get_the_title().'</a> (Pop. '.th(get_post_meta(get_the_ID(), 'population', true)).')</p>';
+				if (get_the_author_meta('ID') == $current_user->ID) { $current = 'class="current"'; }
+				echo '<p '.$current.'>'.$place.'. <a href="'.get_permalink().'"><strong>'.get_the_title().'</strong></a> (Pop. '.th(get_post_meta(get_the_ID(), 'population', true)).') - <a href="'.home_url().'/user/'.get_the_author_meta('user_id').'">'.get_the_author_meta('display_name').'</a></p>';
+
+			endwhile; wp_reset_query(); ?>
+			<h3>Happiest cities</h3>
+			<?php 
+			$place = 0;
+			query_posts(
+				array(
+				'posts_per_page' => 5,
+				'orderby' => 'meta_value_num',
+				'meta_key' => 'happiness',
+				'order' => 'DESC',
+				)
+			); while (have_posts()) : the_post(); 
+				$place++;
+				if (get_the_author_meta('ID') == $current_user->ID) { $current = 'class="current"'; }
+				echo '<p '.$current.'>'.$place.'. <a href="'.get_permalink().'"><strong>'.get_the_title().'</strong></a> - <a href="'.home_url().'/user/'.get_the_author_meta('user_id').'">'.get_the_author_meta('display_name').'</a></p>';
 
 			endwhile; wp_reset_query(); ?>
 		</div>
