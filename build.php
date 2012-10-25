@@ -47,6 +47,7 @@ if (isset($_POST['buildCity'])) {
 		add_post_meta($ID, 'location-y', $y);
 		add_post_meta($ID, 'population', 0);
 		add_post_meta($ID, 'target-pop', 1000);
+		add_post_meta($ID, 'happiness', 50);
 
 		// Set geographic characteristics...
 		include ( MAIN . 'build/geo.php');
