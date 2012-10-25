@@ -49,26 +49,26 @@ get_header(); ?>
 		</div><!-- .content -->
 	</div><!-- #scoreboard .module-->
 
-	<!-- <div class="module">
+	<div class="module">
 		<h2 class="header active">Cities</h2>
 		<div class="content visible">
 			<?php 
 			$place = 0;
 			query_posts(
 				array(
-				'posts_per_page' => 10,
-				'orderby' => 'meta_value',
+				'posts_per_page' => 5,
+				'orderby' => 'meta_value_num',
 				'meta_key' => 'population',
-				'order' => DESC,
+				'order' => 'DESC',
 				)
 			); while (have_posts()) : the_post(); 
 				$place++;
 				if (get_the_author() == $current_user->ID) { $current = 'class="current"'; }
-				echo '<p '.$current.'>'.$place.'. <a href="'.get_permalink().'">'.get_the_title().'</a> (Pop. '.get_post_meta(get_the_ID(), 'population', true).')</p>';
+				echo '<p '.$current.'>'.$place.'. <a href="'.get_permalink().'">'.get_the_title().'</a> (Pop. '.th(get_post_meta(get_the_ID(), 'population', true)).')</p>';
 
 			endwhile; wp_reset_query(); ?>
 		</div>
-	</div> -->
+	</div>
 
 </div>
 

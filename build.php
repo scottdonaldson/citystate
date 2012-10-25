@@ -66,7 +66,7 @@ if (isset($_POST['buildCity'])) {
 		}
 
 		// Takes moneyz to build a city
-		update_field('cash', $cash_current - 1000, 'user_'.$current_user->ID);
+		update_field('cash', $cash_current - (1500*$cities + 500), 'user_'.$current_user->ID);
 
 		// Update the activity log. The output:
 		$site_url = home_url();
