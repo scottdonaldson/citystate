@@ -206,6 +206,27 @@ jQuery(document).ready(function($){
 		}
 	});
 
+	// ----- UPDATING USER PROFILE
+
+	var profile = $('.profile'),
+		section = profile.find('section');
+	
+	section.find('h3').each(function(){
+		$this = $(this);
+		$this.nextAll().hide();
+		$(this).on('click',function(){
+			$this = $(this);
+			$(this).toggleClass('chosen').nextAll().toggle();
+
+			var chosen = $('.chosen').length;
+			if (chosen > 0) {
+				profile.find('.submit').show();
+			} else if (chosen === 0) {
+				profile.find('.submit').hide();
+			}
+		});
+	});
+
 	// ----- BUDGET
 	var budget = $('#budget'),
 		taxes = [],

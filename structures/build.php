@@ -18,6 +18,7 @@ if ($structure == 'stadium') {
 
 $cost = $structures[$structure][3];
 $target_increase = $structures[$structure][4];
+$happy_increase = $structures[$structure][7];
 
 if ($x == 10) { $x = 0; }
 
@@ -43,6 +44,10 @@ if (($cash_current - $cost) < 0) {
 		$target_current = get_post_meta($ID, 'target-pop', true);
 		update_post_meta($ID, 'target-pop', $target_current + $target_increase);
 
+		// Update happiness
+		$happiness = get_post_meta($ID, 'happiness', true);
+		update_post_meta($ID, 'happiness', $happiness + ceil(($happy_increase/100)*(100 - $happiness)) );
+
 	// Set location for repeating
 	} else {
 		$num = get_post_meta($ID, $structure.'s', true);
@@ -58,6 +63,10 @@ if (($cash_current - $cost) < 0) {
 		// Update target population
 		$target_current = get_post_meta($ID, 'target-pop', true);
 		update_post_meta($ID, 'target-pop', $target_current + $target_increase);
+
+		// Update happiness
+		$happiness = get_post_meta($ID, 'happiness', true);
+		update_post_meta($ID, 'happiness', $happiness + ceil(($happy_increase/100)*(100 - $happiness)) );
 
 		// Update population for residential types
 		if ($structure == 'neighborhood') {

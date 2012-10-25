@@ -1,7 +1,9 @@
 <?php
 
 // Load functions
-include('functions/register.php');
+define('MAIN', dirname(__FILE__) . '/');
+include( MAIN . 'functions/register.php');
+include( MAIN . 'functions/strip-category.php');
 
 // Load scripts and styles
 wp_enqueue_script('jquery');
@@ -15,13 +17,6 @@ function city_admin_css() {
 	echo '<link rel="stylesheet" href="'.$template_url.'/css/admin-style.css" />';
 }
 add_action('admin_head', 'city_admin_css');
-
-// Admin JS
-function city_admin_js() {
-	$template_url = get_bloginfo('template_url');
-	echo '<script src="'.$template_url.'/js/admin.js"></script>';
-}
-add_action('admin_footer', 'city_admin_js');
 
 // Remove a few admin pages
 function remove_admin() {

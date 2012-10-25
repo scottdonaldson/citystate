@@ -37,7 +37,15 @@ get_header(); ?>
 		<?php } else { ?>
 		<div class="module">
 			<h2 class="header"><?php the_title(); ?></h2>
-			<div class="content"></div>
+			<div class="content">
+				<?php 
+				// New activities get added to the bottom, so need to reverse to show in proper order
+				$activities = array_reverse(get_post_custom_values('activity')); 
+				foreach ($activities as $key=>$activity) {
+					echo '<p>'.$activity.'</p>';
+				}
+				?>
+			</div>
 		</div>
 		<?php } 
 

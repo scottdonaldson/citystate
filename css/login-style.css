@@ -1,7 +1,6 @@
 /* line 2, ../sass/login-style.scss */
 .login * {
-  font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
-}
+  font-family: 'Ubuntu', Helvetica, Arial, sans-serif; }
 /* line 6, ../sass/login-style.scss */
 .login h1 a {
   background: none transparent;
@@ -11,9 +10,7 @@
   text-decoration: none;
   font-weight: normal;
   overflow: visible;
-  padding-bottom: 0;
-}
+  padding-bottom: 0; }
 /* line 16, ../sass/login-style.scss */
 .login h1:hover {
-  color: #999;
-}
+  color: #999; }

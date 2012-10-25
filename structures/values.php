@@ -9,5 +9,7 @@ $max	  = $values[2];
 $cost     = $values[3];
 $target   = $values[4];
 $upgrade  = $values[5];
+$desired  = $values[6];
+$happy    = $values[7];
 
 ?>

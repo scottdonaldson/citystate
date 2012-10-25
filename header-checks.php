@@ -19,6 +19,9 @@ if (isset($_POST['pass'])) {
 			$target = get_post_meta($ID, 'target-pop', true);
 			$newpop = $pop + floor(0.2*($target - $pop));
 			update_post_meta($ID, 'population', $newpop);
+
+			// Population milestones
+			include ( MAIN . 'update/pop-milestones.php');
 				
 			// Taxes
 			$cash = get_field('cash','user_'.$user_ID);
@@ -26,7 +29,7 @@ if (isset($_POST['pass'])) {
 			update_field('cash', $cash+$taxes, 'user_'.$user_ID);
 
 			// Structure-related
-			include 'structures.php';
+			include ( MAIN . 'structures.php' );
 			foreach ($structures as $structure=>$values) {
 				include( MAIN .'structures/values.php');
 
@@ -42,6 +45,18 @@ if (isset($_POST['pass'])) {
 						$cash = get_field('cash','user_'.$user_ID);
 						update_field('cash', $cash-(0.02 * $cost), 'user_'.$user_ID);
 
+					}
+
+					// Happiness is reduced by 10% if the structure is not in the city
+					// and the population has crossed the point for desiring it
+					if ($newpop > $desired) {
+						$happiness = get_post_meta($ID, 'happiness', true);
+
+						if ( $loc_x_[$structure][0] == 0 && $loc_y_[$structure][0] == 0 ) {
+										
+							update_post_meta($ID, 'happiness', floor(.9*$happiness));
+
+						}
 					}
 				}
 			}
@@ -81,16 +96,24 @@ if ($_GET['login'] == 'failed') {
  */
 // Bankrupt
 if ($_GET['err'] == 'bankrupt') {
-	$alert = '<p>You can&#39;t do that &mdash; you&#39;d go bankrupt!</p><p>Back to <a href="'.home_url().'">main map</a>.</p>';
+	$alert = '<p>You can&#39;t do that &mdash; you&#39;d go bankrupt!</p>';
 }
 
 /*
  *	UPDATING PROFILE
  */
 if ($_GET['profile'] == 'updated') { 
+	$user = (isset($_GET['author_name'])) ? get_user_by('slug', $author_name) : get_userdata(intval($author));
+	if (isset($_POST['color'])) {
+		update_field('color', $_POST['color'], 'user_'.$user->ID);
+	}
+	if (isset($_POST['displayName']) && $_POST['displayName'] !== '') {
+		$name = $_POST['displayName'];
+		wp_update_user(array('ID'=>$user->ID, 'display_name'=>$name));
+		update_field('name_change', 1, 'user_'.$user->ID);
+	}
 	if (isset($_POST['pass1']) && isset($_POST['pass2']) && !empty($_POST['pass1']) && $_POST['pass1'] == $_POST['pass2']) {
-		$user = (isset($_GET['author_name'])) ? get_user_by('slug', $author_name) : get_userdata(intval($author));
-	    $update = $wpdb->query($wpdb->prepare("UPDATE {$wpdb->users} SET `user_pass` = %s WHERE `ID` = %d", array(wp_hash_password($_POST['pass1']), $user_ID)));
+		$update = $wpdb->query($wpdb->prepare("UPDATE {$wpdb->users} SET `user_pass` = %s WHERE `ID` = %d", array(wp_hash_password($_POST['pass1']), $user_ID)));
 	    if (!is_wp_error($update)) {
 	        wp_cache_delete($user_ID, 'users');
 	        wp_cache_delete($user->user_login, 'userlogins');
@@ -100,10 +123,7 @@ if ($_GET['profile'] == 'updated') {
             ob_start();
 	    }
 	} 
-	if (isset($_POST['color'])) {
-		$user = (isset($_GET['author_name'])) ? get_user_by('slug', $author_name) : get_userdata(intval($author));
-		update_field('color', $_POST['color'], 'user_'.$user->ID);
-	}
+	header('Location: '.home_url().'/user/'.$user->user_login);
 	$alert = '<p>Profile updated. Keep on keepin&apos; on.</p>';
 }
 ?>

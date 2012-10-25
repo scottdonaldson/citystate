@@ -13,6 +13,7 @@ $y = $_POST['upgrade-y'];
 $id = $_POST['upgrade-id']; // Lowercase $id is for repeating structures
 $cost = 100; // Flat cost of 100
 $target_increase = $structures[$structure][4];
+$happy_increase = $structures[$structure][7];
 
 if ($x == 10) { $x = 0; }
 
@@ -23,8 +24,7 @@ $cash_current = get_field('cash', 'user_'.$current_user->ID);
 
 // Make sure we're not bankrupting, then proceed
 if (($cash_current - $cost) < 0) {
-	$alert = '<p>You can&#39;t do that &mdash; you&#39;d go bankrupt!</p>
-		  	<p>Back to <a href="'.get_bloginfo('home_url').'">main map</a>.</p>';
+	$alert = '<p>You can&#39;t do that &mdash; you&#39;d go bankrupt!</p>';
 } else {
 
 	// Take cash from user
@@ -43,6 +43,10 @@ if (($cash_current - $cost) < 0) {
 		$target_current = get_post_meta($ID, 'target-pop', true);
 		update_post_meta($ID, 'target-pop', $target_current + $target_increase);
 
+		// Update happiness
+		$happiness = get_post_meta($ID, 'happiness', true);
+		update_post_meta($ID, 'happiness', $happiness + ceil(($happy_increase/100)*(100 - $happiness)) );
+
 	// For repeating structures...
 	} else {
 		$num = get_post_meta($ID, $structure.'s', true);
@@ -56,6 +60,10 @@ if (($cash_current - $cost) < 0) {
 		// Update target population
 		$target_current = get_post_meta($ID, 'target-pop', true);
 		update_post_meta($ID, 'target-pop', $target_current + $target_increase);
+
+		// Update happiness
+		$happiness = get_post_meta($ID, 'happiness', true);
+		update_post_meta($ID, 'happiness', $happiness + ceil(($happy_increase/100)*(100 - $happiness)) );
 
 		// Update population for residential types
 		if ($structure = 'neighborhood') {

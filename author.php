@@ -59,27 +59,42 @@ $cash = get_field('cash','user_'.$id);
 	// (also admins)
 	if ($current_user->ID == $user->ID || current_user_can('switch_themes')) { ?>
 	
-		<div class="module">	
+		<div class="module profile">	
 			<h2 class="header">Profile</h2>
 			<div class="content">
+				<p>Select the parts of your profile you want to update.</p>
 				<form id="profile" action="?profile=updated" method="post">
-					<h3>Color</h3>
-					<div class="color">
+					<section class="name">
+						<h3>Name</h3>
+						<?php 
+						// If 0, then the user has NOT changed his/her name
+						if (get_field('name_change', 'user_'.$current_user->ID) == 0) { ?>
+							<small>You can't change your username (what you use to log in with), but you can change the way your name is displayed on scoreboards and the like. You can only change your name once!</small>
+							<input type="text" maxlength="25" id="displayName" name="displayName" placeholder="<?php echo $current_user->display_name; ?>" />
+							<small><em>*Name changes will appear after logging out and in again.</em></small>
+						<?php } else { ?>
+							<small>You've already changed your name! Doing it more than once would be confusing for everyone. If you still want to change your name, you could post on <a href="http://www.reddit.com/r/citystate" target="_blank">Reddit</a> and hope that you're answered.</small>
+						<?php } ?>
+					</section>
+					<section class="color">
+						<h3>Color</h3>
 						<input type="text" id="color" name="color" value="<?php the_field('color','user_'.$user->ID); ?>" />
 						<div id="colorpicker"></div>
-					</div>
-					<h3>Password</h3>
-					<div class="pass1">
-				        <input type="password" name="pass1" id="pass1" size="16" value="" autocomplete="off" />
-				        <span class="description"><?php _e("If you would like to change the password type a new one. Otherwise leave this blank."); ?></span>
-				    </div>
-				    <div class="pass2">
-			            <input type="password" name="pass2" id="pass2" size="16" value="" autocomplete="off" />
-			            <span class="description"><?php _e("Type your new password again."); ?></span>
-			        </div>
-			        <p class="submit">
+					</section>
+					<section class="password">
+						<h3>Password</h3>
+						<div class="pass1">
+					        <input type="password" name="pass1" id="pass1" />
+					        <span class="description"><?php _e("If you would like to change the password type a new one. Otherwise leave this blank."); ?></span>
+					    </div>
+					    <div class="pass2">
+				            <input type="password" name="pass2" id="pass2" />
+				            <span class="description"><?php _e("Type your new password again."); ?></span>
+				        </div>
+				    </section>
+				    <p class="submit">
 			            <input type="hidden" name="user_login" id="user_login" value="<?php echo $user->user_login; ?>" />
-			            <input type="submit" class="button-primary" value="Update Profile" name="submit" />
+			            <input type="submit" value="Update Profile" name="submit" />
 			        </p>
 			    </form>
 			</div><!-- .content -->
@@ -95,7 +110,7 @@ $cash = get_field('cash','user_'.$id);
 				<?php
 				while ($u_query->have_posts()) : $u_query->the_post(); 
 					$post_id = get_the_ID();
-					$pop = get_field('population');
+					$pop = get_post_meta(get_the_ID(), 'population', true);
 					echo '<div class="first city">'.get_the_title().'</div>';
 
 					// Taxes
@@ -105,17 +120,17 @@ $cash = get_field('cash','user_'.$id);
 					// Upkeep costs
 					$upkeep = array();
 					foreach ($structures as $structure=>$values) {
-						$values[] = $values;
+						include( MAIN .'structures/values.php');
 
 						// Only non-repeating for now
-						if ($values[0] == false) {
-							$loc_x_[$structure] = get_post_meta($post_id, $structure.'-x');
-							$loc_y_[$structure] = get_post_meta($post_id, $structure.'-y');
+						if ($max != 0) {
+							$loc_x_[$structure] = get_post_meta($post_id, $structure.'-x', true);
+							$loc_y_[$structure] = get_post_meta($post_id, $structure.'-y', true);
 
-							if ( !($loc_x_[$structure][0] == 0 && $loc_y_[$structure][0] == 0) ) {
+							if ( !($loc_x_[$structure] == 0 && $loc_y_[$structure] == 0) ) {
 								
 								// Upkeep costs (.02*cost)	
-								array_push($upkeep,-(0.02*$values[1]));
+								array_push($upkeep,-(0.02*$cost));
 							}
 						}
 					}

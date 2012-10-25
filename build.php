@@ -12,15 +12,18 @@ if (isset($_POST['buildCity'])) {
 	global $current_user;
 	get_currentuserinfo();
 	$cash_current = get_field('cash','user_'.$current_user->ID);
+	$cities = count_user_posts($current_user->ID);
 
 	// Make sure we're not bankrupting, then proceed
-	if (($cash_current - 1000) < 0) {
+	if (($cash_current - (1500*$cities + 500)) < 0) {
 		// Redirect
 		header('Location: '.home_url().'?err=bankrupt');
 	} else {
 		// Get info
 		$title = $_POST['cityName'];
 		$slug = create_slug($title);
+		$region_id = $_POST['region_id'];
+		$region_slug = $_POST['region_slug'];
 		$x = $_POST['x'];
 		$y = $_POST['y'];
 
@@ -32,6 +35,9 @@ if (isset($_POST['buildCity'])) {
 				'post_status' => 'publish'
 			)	
 		);
+		// Set region
+		wp_set_post_terms($ID, $region_id, 'category');
+
 		// Get URL (will redirect to this later)
 		$url = get_permalink($ID);
 
@@ -42,42 +48,11 @@ if (isset($_POST['buildCity'])) {
 		add_post_meta($ID, 'population', 0);
 		add_post_meta($ID, 'target-pop', 1000);
 
-		// Set geographic characteristics
-		$geo = array('nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se');
-
-		foreach ($geo as $cardinal) {
-			// Find $map_x and $map_y on the map and set value (land or water)
-			if ($cardinal == 'nw') {
-				$map_x = $x - 1; $map_y = $y - 1;
-			} elseif ($cardinal == 'n') {
-				$map_x = $x; $map_y = $y - 1;
-			} elseif ($cardinal == 'ne') {
-				$map_x = $x + 1; $map_y = $y - 1;
-			} elseif ($cardinal == 'w') {
-				$map_x = $x - 1; $map_y = $y;
-			} elseif ($cardinal == 'e') {
-				$map_x = $x + 1; $map_y = $y;	
-			} elseif ($cardinal == 'sw') {
-				$map_x = $x - 1; $map_y = $y + 1;
-			} elseif ($cardinal == 's') {
-				$map_x = $x; $map_y = $y + 1;	
-			} elseif ($cardinal == 'se') {
-				$map_x = $x + 1; $map_y = $y + 1;	
-			}		
-
-			include( MAIN .'maps/originalia.php');
-			$val = $map[$map_y][$map_x - 1];
-			if ($val == 0) {
-				$val = 'water';
-			} elseif ($val == 1) {
-				$val = 'land';
-			} else { $val = $val; }
-
-			add_post_meta($ID, 'map-'.$cardinal, $val);
-		}
+		// Set geographic characteristics...
+		include ( MAIN . 'build/geo.php');
 
 		// Set locations of all structures to (0,0) (unbuilt)
-		include 'structures.php';
+		include ( MAIN . 'structures.php');
 		foreach ($structures as $structure=>$values) {
 			include( MAIN .'structures/values.php');
 
@@ -94,7 +69,8 @@ if (isset($_POST['buildCity'])) {
 
 		// Update the activity log. The output:
 		$site_url = home_url();
-		$output = '<strong>The city of <a href="'.$url.'">'.$title.'</a> was built by <a href="'.$site_url.'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a>.</strong>';
+		$region = get_the_category($ID);
+		$output = '<strong>The city of <a href="'.$url.'">'.$title.'</a> was built in '.$region[0]->cat_name.' by <a href="'.$site_url.'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a>.</strong>';
 
 		// Check to see if it's the same day as most recent activity
 		$args = array(

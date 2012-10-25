@@ -3,7 +3,7 @@
 <div class="container">
 
 	<div class="module">
-		<h1 class="header active"></h1>
+		<h1 class="header active"><?php the_title(); ?></h1>
 		<div class="content visible">
 			<?php the_content(); ?>
 		</div>
