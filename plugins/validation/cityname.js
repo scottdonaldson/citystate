@@ -1,6 +1,6 @@
 jQuery(document).ready(function($){
 	
-	var buildCity = $('.home #build');
+	var buildCity = $('.category #build');
 
 	// Validate form before submitting
 	buildCity.find('form').on('submit',function(){
