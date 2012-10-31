@@ -108,7 +108,7 @@ wp_reset_postdata();
 				update_field('cash', $cash + $fund, 'user_'.$current_user->ID);
 			} ?>
 
-		<a class="again" href="<?php the_permalink(); ?>">Adventure again</a>
+		<a class="again" href="<?php the_permalink(); ?>">More bizness</a>
 			
 		</div>
 	</div>

@@ -192,7 +192,7 @@ wp_reset_postdata();
 					} 
 				} ?>
 				
-			<a class="again" href="<?php the_permalink(); ?>">Adventure again</a>		
+			<a class="again" href="<?php the_permalink(); ?>">More bizness</a>		
 		</div>
 	</div>
 </div>

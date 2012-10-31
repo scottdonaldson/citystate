@@ -165,9 +165,14 @@ if ( !isset($stadium) || !isset($foe_stadium) ) {
 			$new_user_wins = get_post_meta($user_ID, 'wins', true);
 			$new_user_total = $new_user_wins + get_post_meta($user_ID, 'losses', true);
 			update_post_meta($user_ID, 'ratio', number_format(100*$new_user_wins/$new_user_total, 2, '.', ','));
+			$new_foe_wins = get_post_meta($foe_ID, 'wins', true);
+			$new_foe_total = $new_foe_wins + get_post_meta($foe_ID, 'losses', true);
+			update_post_meta($foe_ID, 'ratio', number_format(100*$new_user_wins/$new_user_total, 2, '.', ','));
+			
+
 			?>
 
-		<a class="again" href="<?php the_permalink(); ?>">Adventure again</a>
+		<a class="again" href="<?php the_permalink(); ?>">More bizness</a>
 			
 		</div>
 	</div>
