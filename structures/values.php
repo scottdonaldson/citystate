@@ -11,5 +11,7 @@ $target   = $values[4];
 $upgrade  = $values[5];
 $desired  = $values[6];
 $happy    = $values[7];
+$culture  = $values[8];
+$edu      = $values[9];
 
 ?>

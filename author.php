@@ -45,7 +45,7 @@ $cash = get_field('cash','user_'.$id);
 				<?php 
 				$u_query = new WP_Query('posts_per_page=-1&author='.$id);
 				while ($u_query->have_posts()) : $u_query->the_post(); ?>
-					<li><?php the_title(); ?> (Pop: <?php $pop = get_field('population'); echo th($pop); ?>)</li>
+					<li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a> (Pop: <?php $pop = get_field('population'); echo th($pop); ?>)</li>
 				<?php endwhile; rewind_posts(); ?>
 				</ul>
 		</div><!-- .content -->

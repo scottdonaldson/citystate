@@ -19,6 +19,8 @@ if ($structure == 'stadium') {
 $cost = $structures[$structure][3];
 $target_increase = $structures[$structure][4];
 $happy_increase = $structures[$structure][7];
+$cult_increase = $structures[$structure][8];
+$edu_increase = $structures[$structure][9];
 
 if ($x == 10) { $x = 0; }
 
@@ -44,14 +46,20 @@ if (($cash_current - $cost) < 0) {
 		$target_current = get_post_meta($ID, 'target-pop', true);
 		update_post_meta($ID, 'target-pop', $target_current + $target_increase);
 
-		// Update happiness
-		$happiness = get_post_meta($ID, 'happiness', true);
-		update_post_meta($ID, 'happiness', $happiness + ceil(($happy_increase/100)*(100 - $happiness)) );
+		// Update happiness, culture, education
+		$happy = get_post_meta($ID, 'happiness', true);
+		update_post_meta($ID, 'happiness', $happy + ceil($happy_increase - $happy_increase * $happy/100));
+		
+		$culture = get_post_meta($ID, 'culture', true);
+		update_post_meta($ID, 'culture', $culture + ceil($cult_increase - $cult_increase * $culture/100));
+
+		$edu = get_post_meta($ID, 'education', true);
+		update_post_meta($ID, 'education', $edu + ceil($edu_increase - $edu_increase * $edu/100));
 
 	// Set location for repeating
 	} else {
 		$num = get_post_meta($ID, $structure.'s', true);
-		$new = $num+1;
+		$new = $num + 1;
 		
 		// Add location of new structure
 		add_post_meta($ID, $structure.'-'.$new.'-x', $x);
@@ -64,9 +72,15 @@ if (($cash_current - $cost) < 0) {
 		$target_current = get_post_meta($ID, 'target-pop', true);
 		update_post_meta($ID, 'target-pop', $target_current + $target_increase);
 
-		// Update happiness
-		$happiness = get_post_meta($ID, 'happiness', true);
-		update_post_meta($ID, 'happiness', $happiness + ceil(($happy_increase/100)*(100 - $happiness)) );
+		// Update happiness, culture, education
+		$happy = get_post_meta($ID, 'happiness', true);
+		update_post_meta($ID, 'happiness', $happy + ceil($happy_increase - $happy_increase * $happy/100));
+		
+		$culture = get_post_meta($ID, 'culture', true);
+		update_post_meta($ID, 'culture', $culture + ceil($cult_increase - $cult_increase * $culture/100));
+
+		$edu = get_post_meta($ID, 'education', true);
+		update_post_meta($ID, 'education', $edu + ceil($edu_increase - $edu_increase * $edu/100));
 
 		// Update population for residential types
 		if ($structure == 'neighborhood') {

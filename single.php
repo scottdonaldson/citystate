@@ -4,16 +4,6 @@ if ($_GET['visit'] == 'first') {
 	echo '<div id="alert">Welcome to your new city!</div>';
 }
 
-if ($_GET['meta'] == 'true') {
-	$meta = get_post_custom();
-	echo '<div id="alert"><pre>';
-	the_meta(); 
-	echo '</pre></div>';
-}
-
-// Get main map
-include 'maps/originalia.php';
-
 // Get all structures
 include 'structures.php';
 
@@ -122,7 +112,10 @@ get_currentuserinfo();
 						$y = get_post_meta($post->ID, $structure.'-y', true);		
 
 						// Only show build option if structure is not yet built
-						if ($x == '0' && $y == '0') { ?>
+						// and if has passed 1/2 of population at which it is desired
+						if ($x == '0' && $y == '0' 
+							&& get_post_meta(get_the_ID(), 'population', true) >= .5*$desired) { ?>
+						
 							<li id="<?php echo $structure; ?>">
 								<?php echo ucfirst($name).' ('.th($cost).')'; ?>
 							</li>

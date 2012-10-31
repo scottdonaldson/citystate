@@ -6,6 +6,13 @@
 if (isset($_POST['pass'])) {
 	$pass = $_POST['pass'];
 	if (md5($pass) == 'd7bd30db1b34953089b9e33e5a2d4b3b') {
+		
+		// Reset all users' turns to 10
+		$users = get_users();
+		foreach ($users as $user) {
+			update_field('turns', 10, 'user_'.$user->ID);
+		}
+
 		// Update all cities
 		query_posts('posts_per_page=-1');
 		while (have_posts()) : the_post();
@@ -13,12 +20,26 @@ if (isset($_POST['pass'])) {
 			// Get info
 			$ID = get_the_ID();
 			$user_ID = get_the_author_meta('ID');
+
+			// Resets
+			include ( MAIN . 'update/resets.php');
 					
 			// Update population
 			$pop = get_post_meta($ID, 'population', true);
+			$happy = get_post_meta($ID, 'happiness', true);
 			$target = get_post_meta($ID, 'target-pop', true);
-			$newpop = $pop + floor(0.2*($target - $pop));
-			update_post_meta($ID, 'population', $newpop);
+			
+			// If target population is greater than population,
+			// happiness helps it grow quicker
+			if ($target >= $pop) {
+				$newpop = $pop + ceil((.004 * $happy) * ($target - $pop));
+				update_post_meta($ID, 'population', $newpop);
+			// If target population is lower than population,
+			// happiness slows down population loss
+			} else {
+				$newpop = $pop + floor((.004 * (100 - $happy)) * ($target - $pop));
+				update_post_meta($ID, 'population', $newpop);
+			}
 
 			// Population milestones
 			include ( MAIN . 'update/pop-milestones.php');
@@ -49,7 +70,7 @@ if (isset($_POST['pass'])) {
 
 					// Happiness is reduced by 10% if the structure is not in the city
 					// and the population has crossed the point for desiring it
-					if ($newpop > $desired) {
+					if ($newpop >= $desired) {
 						$happiness = get_post_meta($ID, 'happiness', true);
 
 						if ( $loc_x_[$structure][0] == 0 && $loc_y_[$structure][0] == 0 ) {

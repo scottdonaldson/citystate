@@ -12,8 +12,10 @@ $x = $_POST['demo-x'];
 $y = $_POST['demo-y'];
 $id = $_POST['demo-id']; // Lowercase $id is for repeating structures
 $cost = 50; // Flat cost of 50
-$target_decrease = -$structures[$structure][4]; // Note that it's negative! the opposite of the increase
-$happy_decrease = -$structures[$structure][7];  // Same as above. Negative
+$target_decrease = -$structures[$structure][4]; // Note that it's negative! the opposite of the increase.
+$happy_decrease = -$structures[$structure][7];  // Same
+$cult_decrease = -$structures[$structure][8];	// as
+$edu_decrease = -$structures[$structure][9];	// above.
 
 if ($x == 10) { $x = 0; }
 
@@ -43,9 +45,15 @@ if (($cash_current - $cost) < 0) {
 		$target_current = get_post_meta($ID, 'target-pop', true);
 		update_post_meta($ID, 'target-pop', $target_current + $level * $target_decrease);
 
-		// Update happiness
-		$happiness = get_post_meta($ID, 'happiness', true);
-		update_post_meta($ID, 'happiness', floor($happiness * (1 + $happy_decrease/100)));
+		// Update happiness, culture, education
+		$happy = get_post_meta($ID, 'happiness', true);
+		update_post_meta($ID, 'happiness', floor(100 * ( ($happy + $happy_decrease) / (100 + $happy_decrease) )));
+		
+		$culture = get_post_meta($ID, 'culture', true);
+		update_post_meta($ID, 'culture', floor(100 * ( ($culture + $cult_decrease) / (100 + $cult_decrease) )));
+
+		$edu = get_post_meta($ID, 'education', true);
+		update_post_meta($ID, 'education', floor(100 * ( ($edu + $edu_decrease) / (100 + $edu_decrease) )));
 
 	// For repeating structures...
 	} elseif ($structures[$structure][0] == true) {
@@ -84,12 +92,18 @@ if (($cash_current - $cost) < 0) {
 		$target_current = get_post_meta($ID, 'target-pop', true);
 		update_post_meta($ID, 'target-pop', $target_current + ($level * $target_decrease));
 
-		// Update happiness
-		$happiness = get_post_meta($ID, 'happiness', true);
-		update_post_meta($ID, 'happiness', floor($happiness * (1 + $happy_decrease/100)));
+		// Update happiness, culture, education
+		$happy = get_post_meta($ID, 'happiness', true);
+		update_post_meta($ID, 'happiness', floor(100 * ( ($happy + $happy_decrease) / (100 + $happy_decrease) )));
+		
+		$culture = get_post_meta($ID, 'culture', true);
+		update_post_meta($ID, 'culture', floor(100 * ( ($culture + $cult_decrease) / (100 + $cult_decrease) )));
+
+		$edu = get_post_meta($ID, 'education', true);
+		update_post_meta($ID, 'education', floor(100 * ( ($edu + $edu_decrease) / (100 + $edu_decrease) )));
 
 		// Update population for residential types
-		if ($structure = 'neighborhood') {
+		if ($structure == 'neighborhood') {
 			$pop = get_post_meta($ID, 'population', true);
 			update_post_meta($ID, 'population', $pop - ($level * 20));
 		}
