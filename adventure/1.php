@@ -167,7 +167,7 @@ if ( !isset($stadium) || !isset($foe_stadium) ) {
 			update_post_meta($user_ID, 'ratio', number_format(100*$new_user_wins/$new_user_total, 2, '.', ','));
 			$new_foe_wins = get_post_meta($foe_ID, 'wins', true);
 			$new_foe_total = $new_foe_wins + get_post_meta($foe_ID, 'losses', true);
-			update_post_meta($foe_ID, 'ratio', number_format(100*$new_user_wins/$new_user_total, 2, '.', ','));
+			update_post_meta($foe_ID, 'ratio', number_format(100*$new_foe_wins/$new_foe_total, 2, '.', ','));
 			
 
 			?>

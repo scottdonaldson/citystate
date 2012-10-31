@@ -37,13 +37,19 @@ $cash = get_field('cash','user_'.$id);
 
 <div class="container">
 	<div class="module">
-		<h1 class="header active"><?php echo $user->nickname; ?></h1>
+		<h1 class="header active"><?php echo $user->display_name; ?></h1>
 		<div class="content visible">
+			<?php 
+			$u_query = new WP_Query('posts_per_page=-1&author='.$id);
+			$totalpop = 0;
+			while ($u_query->have_posts()) : $u_query->the_post(); 
+				$totalpop += get_post_meta(get_the_ID(), 'population', true);
+			endwhile; rewind_posts(); ?>
+			<p>Total population: <?php echo th($totalpop); ?></p>
 			<p>Cash: <?php echo th($cash); ?></p>
 			<p>Cities: <?php echo count_user_posts($id); ?></p>
 				<ul>
 				<?php 
-				$u_query = new WP_Query('posts_per_page=-1&author='.$id);
 				while ($u_query->have_posts()) : $u_query->the_post(); ?>
 					<li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a> (Pop: <?php $pop = get_field('population'); echo th($pop); ?>)</li>
 				<?php endwhile; rewind_posts(); ?>
