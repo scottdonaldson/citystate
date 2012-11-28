@@ -48,13 +48,13 @@ if (($cash_current - $cost) < 0) {
 
 		// Update happiness, culture, education
 		$happy = get_post_meta($ID, 'happiness', true);
-		update_post_meta($ID, 'happiness', $happy + ceil($happy_increase - $happy_increase * $happy/100));
+		update_post_meta($ID, 'happiness', $happy + round($happy_increase - $happy_increase * $happy/100, 3));
 		
 		$culture = get_post_meta($ID, 'culture', true);
-		update_post_meta($ID, 'culture', $culture + ceil($cult_increase - $cult_increase * $culture/100));
+		update_post_meta($ID, 'culture', $culture + round($cult_increase - $cult_increase * $culture/100, 3));
 
 		$edu = get_post_meta($ID, 'education', true);
-		update_post_meta($ID, 'education', $edu + ceil($edu_increase - $edu_increase * $edu/100));
+		update_post_meta($ID, 'education', $edu + round($edu_increase - $edu_increase * $edu/100, 3));
 
 	// For repeating structures...
 	} else {
@@ -72,13 +72,13 @@ if (($cash_current - $cost) < 0) {
 
 		// Update happiness, culture, education
 		$happy = get_post_meta($ID, 'happiness', true);
-		update_post_meta($ID, 'happiness', $happy + ceil($happy_increase - $happy_increase * $happy/100));
+		update_post_meta($ID, 'happiness', $happy + round($happy_increase - $happy_increase * $happy/100, 3));
 		
 		$culture = get_post_meta($ID, 'culture', true);
-		update_post_meta($ID, 'culture', $culture + ceil($cult_increase - $cult_increase * $culture/100));
+		update_post_meta($ID, 'culture', $culture + round($cult_increase - $cult_increase * $culture/100, 3));
 
 		$edu = get_post_meta($ID, 'education', true);
-		update_post_meta($ID, 'education', $edu + ceil($edu_increase - $edu_increase * $edu/100));
+		update_post_meta($ID, 'education', $edu + round($edu_increase - $edu_increase * $edu/100, 3));
 
 		// Update population for residential types
 		if ($structure = 'neighborhood') {

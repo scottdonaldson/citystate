@@ -172,7 +172,7 @@ if ( !isset($stadium) || !isset($foe_stadium) ) {
 
 			?>
 
-		<a class="again" href="<?php the_permalink(); ?>">More bizness</a>
+		<a class="again" href="<?php the_permalink(); ?>">Next order of business</a>
 			
 		</div>
 	</div>

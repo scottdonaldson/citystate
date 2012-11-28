@@ -47,7 +47,7 @@ $cash = get_field('cash','user_'.$id);
 			endwhile; rewind_posts(); ?>
 			<p>Total population: <?php echo th($totalpop); ?></p>
 			<p>Cash: <?php echo th($cash); ?></p>
-			<p>Cities: <?php echo count_user_posts($id); ?></p>
+			<p>Cities: <?php echo count_user_posts($user->ID); ?></p>
 				<ul>
 				<?php 
 				while ($u_query->have_posts()) : $u_query->the_post(); ?>
@@ -104,52 +104,6 @@ $cash = get_field('cash','user_'.$id);
 			        </p>
 			    </form>
 			</div><!-- .content -->
-		</div><!-- .module -->
-
-		<div class="module">
-			<h2 class="header">Budget projections</h2>
-			<div class="content clearfix" id="budget">
-				<div class="first"><strong>City name</strong></div>
-				<div class="second"><strong>Tax revenue</strong></div>
-				<div class="third"><strong>Upkeep costs</strong></div>
-				
-				<?php
-				while ($u_query->have_posts()) : $u_query->the_post(); 
-					$post_id = get_the_ID();
-					$pop = get_post_meta(get_the_ID(), 'population', true);
-					echo '<div class="first city">'.get_the_title().'</div>';
-
-					// Taxes
-					$taxes = floor(0.05*$pop);
-					echo '<div class="second taxes">'.th($taxes).'</div>';
-
-					// Upkeep costs
-					$upkeep = array();
-					foreach ($structures as $structure=>$values) {
-						include( MAIN .'structures/values.php');
-
-						// Only non-repeating for now
-						if ($max != 0) {
-							$loc_x_[$structure] = get_post_meta($post_id, $structure.'-x', true);
-							$loc_y_[$structure] = get_post_meta($post_id, $structure.'-y', true);
-
-							if ( !($loc_x_[$structure] == 0 && $loc_y_[$structure] == 0) ) {
-								
-								// Upkeep costs (.02*cost)	
-								array_push($upkeep,-(0.02*$cost));
-							}
-						}
-					}
-					echo '<div class="third upkeep">'.array_sum($upkeep).'</div>';
-				endwhile; ?>
-
-				<div class="first city"><strong>Total</strong></div>
-				<div class="second total-taxes"><strong>Loading...</strong></div>
-				<div class="third total-upkeep"><strong>Loading...</strong></div>
-
-				<div class="first"><strong>Grand total</strong></div>
-				<div class="grand"><strong>Loading...</strong></div>
-			</div><!-- .content #budget -->
 		</div><!-- .module -->
 <?php } 
 wp_reset_postdata(); ?>

@@ -4,7 +4,7 @@
    LIBRARY FUNDING
 \* --------------- */
 
-/* In this adventure:
+/* In this order of business:
 
    0. See if the user has given any funding.
    	  Adjust values in the city accordingly.
@@ -21,14 +21,14 @@ if (isset($_POST['submit'])) {
 	$funding = $_POST['funding'];
 	$link = $_POST['link'];
 	$city = $_POST['city'];
-	$ID = $_POST['ID'];
+	$ID = $_POST['id'];
 	?>
 
 <div class="container">
 	<div class="module">
 		<h2 class="header active">Library</h2>
 		<div class="content visible clearfix">
-			<img src="<?php echo bloginfo('template_url'); ?>/images/library.png" class="alignleft" alt="Neighborhood" />
+			<img src="<?php echo bloginfo('template_url'); ?>/images/library.png" class="alignleft" alt="Library" />
 				<?php 
 				// If you were a jerk and gave nothing...
 				if ($funding == 0) { ?>
@@ -91,7 +91,7 @@ if (isset($_POST['submit'])) {
 				update_field('cash', $cash - $funding, 'user_'.$current_user->ID);
 				?>
 				
-			<a class="again" href="<?php the_permalink(); ?>">Adventure again</a>		
+			<a class="again" href="<?php the_permalink(); ?>">Next order of business</a>		
 		</div>
 	</div>
 </div>
@@ -128,7 +128,7 @@ wp_reset_postdata();
 	<div class="module">
 		<h2 class="header active">Library</h2>
 		<div class="content visible clearfix">
-			<img src="<?php echo bloginfo('template_url'); ?>/images/library.png" class="alignleft" alt="Neighborhood" />
+			<img src="<?php echo bloginfo('template_url'); ?>/images/library.png" class="alignleft" alt="Library" />
 				<?php if ($library == true) { ?>
 					<p>The library in <a href="<?php echo $link; ?>"><?php echo $city; ?></a> has lots of books, but it could always use more. The citizens are asking for extra government funding to increase the library's circulation and spread knowledge. Will you grant the library more funding?</p>
 					<form method="post" action="<?php the_permalink(); ?>">
@@ -192,7 +192,7 @@ wp_reset_postdata();
 					} 
 				} ?>
 				
-			<a class="again" href="<?php the_permalink(); ?>">More bizness</a>		
+			<a class="again" href="<?php the_permalink(); ?>">Next order of business</a>		
 		</div>
 	</div>
 </div>

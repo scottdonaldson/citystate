@@ -5,11 +5,14 @@ if ($_GET['visit'] == 'first') {
 }
 
 // Get all structures
-include 'structures.php';
+include ( MAIN . 'structures.php');
 
 // Get user info
 global $current_user;
 get_currentuserinfo();
+
+// Get city ID
+$ID = get_the_ID();
 ?>
 
 <div id="map" class="clearfix">
@@ -24,18 +27,18 @@ get_currentuserinfo();
 			include( MAIN .'structures/values.php');
 
 			// Non-repeating 
-			if ($max != 0) {
-				$loc_x_[$structure] = get_post_meta($post->ID, $structure.'-x', true);
-				$loc_y_[$structure] = get_post_meta($post->ID, $structure.'-y', true);
-				if ($loc_x_[$structure] == $x && $loc_y_[$structure] == $y) {
+			if ($max == 1) {
+				$x_[$structure] = get_post_meta($ID, $structure.'-x', true);
+				$y_[$structure] = get_post_meta($ID, $structure.'-y', true);
+				if ($x_[$structure] == $x && $y_[$structure] == $y) {
 					echo $structure.' structure no-build';
 				}
 			// Repeating
 			} else {
-				$total = get_post_meta($post->ID, $structure.'s', true);
+				$total = get_post_meta($ID, $structure.'s', true);
 				for ($i = 1; $i <= $total; $i++) {
-					$x_[$structure] = get_post_meta($post->ID, $structure.'-'.$i.'-x', true);
-					$y_[$structure] = get_post_meta($post->ID, $structure.'-'.$i.'-y', true);
+					$x_[$structure] = get_post_meta($ID, $structure.'-'.$i.'-x', true);
+					$y_[$structure] = get_post_meta($ID, $structure.'-'.$i.'-y', true);
 					if ($x_[$structure] == $x && $y_[$structure] == $y) {
 						echo $structure.' structure no-build';
 					}
@@ -45,35 +48,35 @@ get_currentuserinfo();
 		<?php foreach($structures as $structure=>$values) {
 			include( MAIN .'structures/values.php');
 
-			if ($max != 0) {
-				$loc_x_[$structure] = get_post_meta($post->ID, $structure.'-x', true);
-				$loc_y_[$structure] = get_post_meta($post->ID, $structure.'-y', true);
+			if ($max == 1) {
+				$loc_x_[$structure] = get_post_meta($ID, $structure.'-x', true);
+				$loc_y_[$structure] = get_post_meta($ID, $structure.'-y', true);
 				if ($loc_x_[$structure] == $x && $loc_y_[$structure] == $y) {
 					echo 'data-structure="'.$structure.'"';
 					// Upgradeable if the level is less than max for upgrades
 					if ($upgrade > 0) {
 						// Cost to upgrade
 						echo 'data-cost="'.$cost.'" data-upgrade="true"';
-						echo 'data-level="'.get_post_meta($post->ID, $structure.'-level', true).'"';
-					} elseif (get_post_meta($post->ID, $structure.'-level', true) == $upgrade) {
-							echo 'data-level="'.get_post_meta($post->ID, $structure.'-'.$i.'-level', true).'"';
+						echo 'data-level="'.get_post_meta($ID, $structure.'-level', true).'"';
+					} elseif (get_post_meta($ID, $structure.'-level', true) == $upgrade) {
+							echo 'data-level="'.get_post_meta($ID, $structure.'-'.$i.'-level', true).'"';
 						}
 				}
 			} else {
-				$total = get_post_meta($post->ID, $structure.'s', true);
+				$total = get_post_meta($ID, $structure.'s', true);
 				for ($i = 1; $i <= $total; $i++) {
-					$x_[$structure] = get_post_meta($post->ID, $structure.'-'.$i.'-x', true);
-					$y_[$structure] = get_post_meta($post->ID, $structure.'-'.$i.'-y', true);
+					$x_[$structure] = get_post_meta($ID, $structure.'-'.$i.'-x', true);
+					$y_[$structure] = get_post_meta($ID, $structure.'-'.$i.'-y', true);
 					if ($x_[$structure] == $x && $y_[$structure] == $y) {
 						echo 'data-structure="'.$structure.'"';
 						echo 'data-id="'.$i.'"';
 						
 						// Upgradeable if the level is less than max for upgrades
-						if ($upgrade > 0 && get_post_meta($post->ID, $structure.'-'.$i.'-level', true) < $upgrade) {
+						if ($upgrade > 0 && get_post_meta($ID, $structure.'-'.$i.'-level', true) < $upgrade) {
 							echo 'data-cost="'.$cost.'" data-upgrade="true"';
-							echo 'data-level="'.get_post_meta($post->ID, $structure.'-'.$i.'-level', true).'"';
-						} elseif (get_post_meta($post->ID, $structure.'-'.$i.'-level', true) == $upgrade) {
-							echo 'data-level="'.get_post_meta($post->ID, $structure.'-'.$i.'-level', true).'"';
+							echo 'data-level="'.get_post_meta($ID, $structure.'-'.$i.'-level', true).'"';
+						} elseif (get_post_meta($ID, $structure.'-'.$i.'-level', true) == $upgrade) {
+							echo 'data-level="'.get_post_meta($ID, $structure.'-'.$i.'-level', true).'"';
 						}
 					}
 				}
@@ -106,27 +109,30 @@ get_currentuserinfo();
 					include( MAIN .'structures/values.php');
 
 					// Non-repeating structures
-					if ($max != 0) {	
+					if ($max == 1) {	
 						// Get location
-						$x = get_post_meta($post->ID, $structure.'-x', true);
-						$y = get_post_meta($post->ID, $structure.'-y', true);		
+						$y = get_post_meta($ID, $structure.'-y', true);		
 
 						// Only show build option if structure is not yet built
 						// and if has passed 1/2 of population at which it is desired
-						if ($x == '0' && $y == '0' 
-							&& get_post_meta(get_the_ID(), 'population', true) >= .5*$desired) { ?>
+						if ($y == '0' && get_post_meta($ID, 'population', true) >= 0.5*$desired) { ?>
 						
 							<li id="<?php echo $structure; ?>">
-								<?php echo ucfirst($name).' ('.th($cost).')'; ?>
+								<?php echo ucwords($name).' ('.th($cost).')'; ?>
 							</li>
 						<?php 
 						}
 					// Repeating structures	
-					} else { ?>
-						<li id="<?php echo $structure; ?>">
-							<?php echo ucfirst($name).' ('.th($cost).')'; ?>
-						</li>
-					<?php 
+					} else { 
+						// Only show if max is 0 (can build as many as desired)
+						// or if the count is less than the maximum allowed
+						// AND if has passed 1/2 of population at which it is desired
+						if (($max == 0 || get_post_meta($ID, $structure.'s', true) < $max) && get_post_meta($ID, 'population', true) >= .5*$desired) { ?>
+							<li id="<?php echo $structure; ?>">
+								<?php echo ucwords($name).' ('.th($cost).')'; ?>
+							</li>
+						<?php 
+						}
 					}
 				} 
 				echo '</ul>';

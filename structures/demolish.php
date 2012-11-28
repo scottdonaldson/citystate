@@ -33,13 +33,16 @@ if (($cash_current - $cost) < 0) {
 	update_field('cash', $cash_current - $cost, 'user_'.$current_user->ID);
 	
 	// For non-repeating structures, just remove (set location back to (0,0))
-	if ($structures[$structure][2] != 0) {
+	if ($structures[$structure][2] == 1) {
 		update_post_meta($ID, $structure.'-x', 0);
 		update_post_meta($ID, $structure.'-y', 0);
+
 		$level = get_post_meta($ID, $structure.'-level', true) + 1;
 
-		// Reset level to 0
+		// Reset level and funding to 0
 		update_post_meta($ID, $structure.'-level', 0);
+		update_post_meta($ID, 'funding-'.$structure, 0);
+		update_post_meta($ID, $structure.'-funding', 0);
 
 		// Update target population
 		$target_current = get_post_meta($ID, 'target-pop', true);
@@ -47,16 +50,16 @@ if (($cash_current - $cost) < 0) {
 
 		// Update happiness, culture, education
 		$happy = get_post_meta($ID, 'happiness', true);
-		update_post_meta($ID, 'happiness', floor(100 * ( ($happy + $happy_decrease) / (100 + $happy_decrease) )));
+		update_post_meta($ID, 'happiness', round(100 * ( ($happy + $happy_decrease) / (100 + $happy_decrease) ), 3));
 		
 		$culture = get_post_meta($ID, 'culture', true);
-		update_post_meta($ID, 'culture', floor(100 * ( ($culture + $cult_decrease) / (100 + $cult_decrease) )));
+		update_post_meta($ID, 'culture', round(100 * ( ($culture + $cult_decrease) / (100 + $cult_decrease) ), 3));
 
 		$edu = get_post_meta($ID, 'education', true);
-		update_post_meta($ID, 'education', floor(100 * ( ($edu + $edu_decrease) / (100 + $edu_decrease) )));
+		update_post_meta($ID, 'education', round(100 * ( ($edu + $edu_decrease) / (100 + $edu_decrease) ), 3));
 
 	// For repeating structures...
-	} elseif ($structures[$structure][0] == true) {
+	} else {
 		$num = get_post_meta($ID, $structure.'s', true);
 		$new = $num - 1;
 		$level = get_post_meta($ID, $structure.'-'.$id.'-level', true) + 1; 
@@ -94,13 +97,13 @@ if (($cash_current - $cost) < 0) {
 
 		// Update happiness, culture, education
 		$happy = get_post_meta($ID, 'happiness', true);
-		update_post_meta($ID, 'happiness', floor(100 * ( ($happy + $happy_decrease) / (100 + $happy_decrease) )));
+		update_post_meta($ID, 'happiness', round(100 * ( ($happy + $happy_decrease) / (100 + $happy_decrease) ), 3));
 		
 		$culture = get_post_meta($ID, 'culture', true);
-		update_post_meta($ID, 'culture', floor(100 * ( ($culture + $cult_decrease) / (100 + $cult_decrease) )));
+		update_post_meta($ID, 'culture', round(100 * ( ($culture + $cult_decrease) / (100 + $cult_decrease) ), 3));
 
 		$edu = get_post_meta($ID, 'education', true);
-		update_post_meta($ID, 'education', floor(100 * ( ($edu + $edu_decrease) / (100 + $edu_decrease) )));
+		update_post_meta($ID, 'education', round(100 * ( ($edu + $edu_decrease) / (100 + $edu_decrease) ), 3));
 
 		// Update population for residential types
 		if ($structure == 'neighborhood') {

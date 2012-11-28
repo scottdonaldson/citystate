@@ -18,4 +18,9 @@ function addCommas(nStr) {
 	while (rgx.test(x1)) {
 		x1 = x1.replace(rgx, '$1' + ',' + '$2');
 	}
-	return x1 + x2; }
+	return x1 + x2; 
+}
+
+function noCommas(nStr) {
+	return nStr.replace(/\,/g,'');
+}

@@ -21,8 +21,16 @@
 			get_currentuserinfo();
 
 			echo '<p><strong><a href="'.site_url().'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a></strong></p>'; 
-			echo '<p>Cash: '.th(get_field('cash', 'user_'.$current_user->ID)).'</p>';
-			echo '<p><a href="'.wp_logout_url( home_url() ).'">Log out</a></p>'; ?>
+			echo '<p>Cash: <span id="user-cash">'.th(get_field('cash', 'user_'.$current_user->ID)).'</span> (<a href="'.site_url().'/budget">View Budget</a>)</p>';
+			$turns = get_field('turns', 'user_'.$current_user->ID);
+			if ($turns > 1) {
+				echo '<p><a href="'.site_url().'/docket">'.$turns.' orders of business</a> on your docket.</p>';
+			} elseif ($turns > 0) {
+				echo '<p><a href="'.site_url().'/docket">'.$turns.' order of business</a> on your docket.</p>';
+			} else {
+				echo '<p>No remaining orders of business on your docket.</p>';
+			}
+			echo '<p><a href="'.wp_logout_url( home_url() ).'">Log out &raquo;</a></p>'; ?>
 		</div>
 
 		<?php if (is_single()) { ?>
@@ -31,27 +39,36 @@
 				<?php if (get_the_author_meta('ID') == $current_user->ID) { ?>
 					<p>Your City: <strong><?php the_title(); ?></strong></p>
 					<p>Population: <?php $pop = th(get_post_meta($post->ID, 'population', true)); echo $pop; ?></p>
-					<p>Happiness: <?php 
-						$happiness = get_post_meta($post->ID, 'happiness', true); 
+					<?php $happiness = get_post_meta($post->ID, 'happiness', true); 
 						if ($happiness < 5) {
-							echo 'People are fleeing the city in anger!';
+							$happy = 'fleeing';
+							$message = 'People are fleeing the city in anger!';
 						} elseif ($happiness < 10) {
-							echo 'Extremely unhappy';
+							$happy = 'extremely_unhappy';
+							$message = 'Extremely unhappy';
 						} elseif ($happiness < 20) {
-							echo 'Very unhappy';
+							$happy = 'very_unhappy';
+							$message = 'Very unhappy';
 						} elseif ($happiness < 45) {
-							echo 'Unhappy';
+							$happy = 'unhappy';
+							$message = 'Unhappy';
 						} elseif ($happiness < 55) {
-							echo 'Neither happy nor unhappy';
+							$happy = 'neutral';
+							$message = 'Neither happy nor unhappy';
 						} elseif ($happiness < 80) {
-							echo 'Happy';
+							$happy = 'happy';
+							$message = 'Happy';
 						} elseif ($happiness < 90) {
-							echo 'Very happy';
+							$happy = 'very_happy';
+							$message = 'Very happy';
 						} elseif ($happiness < 95) {
-							echo 'Extremely happy';
+							$happy = 'extremely_happy';
+							$message = 'Extremely happy';
 						} else {
-							echo 'People from all over flock to this city!';
-						} ?></p>
+							$happy = 'flocking';
+							$message = 'People from all over flock to this city!';
+						} ?>
+					<small class="face <?php echo $happy; ?>"><?php echo $message; ?></small>
 				<?php } else { ?>
 					<p>City: <strong><?php the_title(); ?></strong></p>
 					<p>Population: <?php $pop = th(get_post_meta($post->ID, 'population', true)); echo $pop; ?></p>
@@ -75,13 +92,13 @@
 			?>
 		</div>
 
+		<div class="module">
+			<p>You aren't logged in or you don't have an account. Want to <?php wp_register(); ?>?</p>
+		</div>
+
 	<?php } ?>
 	<div class="nav">
-		<?php if (!is_user_logged_in()) { ?>
-			<p class="create">You don't have an account. Want to <?php wp_register(); ?>?</p>
-		<?php }
-		
-		wp_nav_menu('primary'); ?>
+		<?php wp_nav_menu('primary'); ?>
 	</div>
 
 </div>

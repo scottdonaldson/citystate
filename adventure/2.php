@@ -8,9 +8,8 @@
 
    1. Pick a random city from the current user's cities
    2. Get structures. See if there are any that have not been built but that
-      have passed the point at which they are desired (since these negatively affect happiness).
-      If there are, suggest building one of them and give funds (between 5 (not %) and 10% of cost of
-      construction).
+      have passed 1/2 the point at which they are desired. If there are, suggest building one of them 
+      and give funds (between 5 (not %) and 10% of cost of construction).
    3. If there are no desired structures, get the city's happiness. Just a message if above 55 or between 45 and 54.
    4. If happiness is under 45, deliver a warning that the citizens are unhappy. If user has
       already been warned twice in this turn (i.e. third strike), 10% decrease in happiness.
@@ -39,7 +38,7 @@ while ($user_query->have_posts()) : $user_query->the_post();
 		if ($max != 0) {
 			if (get_post_meta($ID, $structure.'-x', true) == 0 && 
 				get_post_meta($ID, $structure.'-y', true) == 0 && 
-				$pop >= $desired) {
+				$pop >= .5*$desired) {
 				
 				// If there's a structure that's desired, add it to the $needs array
 				array_push($needs, $structure);
@@ -108,7 +107,7 @@ wp_reset_postdata();
 				update_field('cash', $cash + $fund, 'user_'.$current_user->ID);
 			} ?>
 
-		<a class="again" href="<?php the_permalink(); ?>">More bizness</a>
+		<a class="again" href="<?php the_permalink(); ?>">Next order of business</a>
 			
 		</div>
 	</div>

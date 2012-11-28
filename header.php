@@ -31,6 +31,13 @@ include('header-checks.php'); ?>
 </head>
 
 <body <?php body_class(); ?>>
+	<?php // Hidden values help us with js! ?>
+	<div id="template-url" class="hidden"><?php echo bloginfo('template_url'); ?>/</div>
+	<div id="display-name" class="hidden">
+		<?php global $current_user;
+      	get_currentuserinfo(); 
+      	echo $current_user->display_name; ?>
+    </div>
 
 	<?php if ($alert) { ?>
 		<div id="alert"><?php echo $alert; ?></div>

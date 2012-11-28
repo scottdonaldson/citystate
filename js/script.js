@@ -1,7 +1,39 @@
 jQuery(document).ready(function($){
 
-	var body = $('body'),
-		alert = $('#alert');
+	var body = $('body');
+
+	// ----- BUDGET
+	// Alert if total expenses are greater than total income
+	$.ajax({
+		url: 'budget',
+		success: function(data){
+			var data = $(data),
+				warning = data.find('#budget_warning'),
+				stateIncome  = parseInt(noCommas(data.find('.state .income span')[0].innerHTML)),
+				stateExpense = parseInt(noCommas(data.find('.state .expense span')[0].innerHTML));
+
+			if (warning.attr('checked') && stateExpense > stateIncome) {
+				body.prepend('<div id="alert">WARNING: State expenses are greater than state income. <a href="budget">Update the budget.</a><div class="close-box">[ESC]</div></div>');
+			}
+
+			var close = function(){
+				// Close infobox or alert
+				$('.infobox').removeClass('active').find('ul li').removeClass('chosen');
+				$('#build-structure').val('');
+				$('#alert').hide();
+
+				// Remove any helper text
+				$('.helper').html('');
+
+				// Deactivate all tiles
+				tile.removeClass('tile-0 tile-1 tile-2 tile-3 footprint');
+
+				// Reset count
+				var count = 0;
+			}
+			$('.close-box').on('click', close);	
+		}
+	});
 
 	/* ---------------- BUILD -------------- */
 
@@ -14,6 +46,7 @@ jQuery(document).ready(function($){
 	// Closing infoboxes and the alert
 	build.append('<div class="close-box">[ESC]</div>');
 	extra.append('<div class="close-box">[ESC]</div>');
+	var alert = $('#alert');
 	alert.append('<div class="close-box">[ESC]</div>');
 	var close = function(){
 		// Close infobox or alert
@@ -74,6 +107,28 @@ jQuery(document).ready(function($){
 
 			// Add a class of active to the build box and show it
 			build.addClass('active').show();
+
+			// Ports can only be built on the waterfront
+			var port = $('#port');
+			port.hide();
+			if ($('.terrain.water').length > 0) {
+				// North
+				if ($this.data('y') == 1 && $('#n').hasClass('water')) {
+					port.show();
+				}
+				// East
+				if ($this.data('x') == 10 && $('#e').hasClass('water')) {
+					port.show();
+				}
+				// South
+				if ($this.data('y') == 10 && $('#s').hasClass('water')) {
+					port.show();
+				}
+				// West
+				if ($this.data('x') == 1 && $('#w').hasClass('water')) {
+					port.show();
+				}
+			}
 
 			// Show location for user reference
 			build.find('.x').text($this.data('x'));
@@ -226,34 +281,6 @@ jQuery(document).ready(function($){
 			}
 		});
 	});
-
-	// ----- BUDGET
-	var budget = $('#budget'),
-		taxes = [],
-		upkeep = [];
-	
-	// Total taxes
-	budget.find('.taxes').each(function(){
-		taxes.push($(this).text().replace(/,/g, ''));
-	});
-	totalTaxes = 0;
-	for (var i = 0; i < taxes.length; i++) {
-	    totalTaxes += parseInt(taxes[i]);
-	}
-	budget.find('.total-taxes strong').text(addCommas(totalTaxes));	
-	
-	// Total upkeep
-	budget.find('.upkeep').each(function(){
-		upkeep.push($(this).text().replace(/,/g, ''));
-	});
-	totalUpkeep = 0;
-	for (var i = 0; i < upkeep.length; i++) {
-	    totalUpkeep += parseInt(upkeep[i]);
-	}
-	budget.find('.total-upkeep strong').text(addCommas(totalUpkeep));	
-
-	// Grand total
-	budget.find('.grand strong').text(addCommas(totalTaxes+totalUpkeep));
 
 
 	// ------ Containers and modules
