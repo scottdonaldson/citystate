@@ -35,10 +35,10 @@ while ($user_query->have_posts()) : $user_query->the_post();
 		include( MAIN .'structures/values.php');
 
 		// Only run for nonrepeating structures
-		if ($max != 0) {
+		if ($max == 1) {
 			if (get_post_meta($ID, $structure.'-x', true) == 0 && 
 				get_post_meta($ID, $structure.'-y', true) == 0 && 
-				$pop >= .5*$desired) {
+				$pop >= 0.5*$desired) {
 				
 				// If there's a structure that's desired, add it to the $needs array
 				array_push($needs, $structure);
