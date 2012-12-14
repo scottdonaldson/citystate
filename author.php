@@ -37,8 +37,8 @@ $cash = get_field('cash','user_'.$id);
 
 <div class="container">
 	<div class="module">
-		<h1 class="header active"><?php echo $user->display_name; ?></h1>
-		<div class="content visible">
+		<h1 class="header"><?php echo $user->display_name; ?></h1>
+		<div class="content">
 			<?php 
 			$u_query = new WP_Query('posts_per_page=-1&author='.$id);
 			$totalpop = 0;
@@ -67,7 +67,7 @@ $cash = get_field('cash','user_'.$id);
 	
 		<div class="module profile">	
 			<h2 class="header">Profile</h2>
-			<div class="content">
+			<div class="content clearfix">
 				<p>Select the parts of your profile you want to update.</p>
 				<form id="profile" action="?profile=updated" method="post">
 					<section class="name">
@@ -100,7 +100,7 @@ $cash = get_field('cash','user_'.$id);
 				    </section>
 				    <p class="submit">
 			            <input type="hidden" name="user_login" id="user_login" value="<?php echo $user->user_login; ?>" />
-			            <input type="submit" value="Update Profile" name="submit" />
+			            <input class="button" type="submit" value="Update Profile" name="submit" />
 			        </p>
 			    </form>
 			</div><!-- .content -->

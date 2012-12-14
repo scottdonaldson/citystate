@@ -1,10 +1,10 @@
 </div><!-- #main -->
-<div id="toolbar">
+<div id="toolbar" class="clearfix">
 
-	<div class="return">
+	<div class="clearfix return">
 	<?php if (is_category()) { ?>
 		<a href="<?php echo home_url(); ?>">World Map &raquo;</a>
-	<?php } elseif (is_single()) { 
+	<?php } elseif (is_single() && get_post_type($post->ID) == 'post') { 
 		$region = get_the_category(); ?>
 		<a href="<?php echo get_category_link($region[0]->term_id); ?>">Back to <?php echo $region[0]->cat_name; ?> &raquo;</a>
 		<a href="<?php echo home_url(); ?>">World Map &raquo;</a>
@@ -18,10 +18,18 @@
 		<div class="module">
 			<?php 
 			global $current_user;
-			get_currentuserinfo();
+			get_currentuserinfo(); ?>
 
-			echo '<p><strong><a href="'.site_url().'/user/'.$current_user->user_login.'">'.$current_user->display_name.'</a></strong></p>'; 
-			echo '<p>Cash: <span id="user-cash">'.th(get_field('cash', 'user_'.$current_user->ID)).'</span> (<a href="'.site_url().'/budget">View Budget</a>)</p>';
+			<p>
+				<strong>
+					<a href="<?php echo site_url(); ?>/user/<?php echo $current_user->user_login; ?>"><?php echo $current_user->display_name; ?></a>
+				</strong>
+				<small>
+					[<a href="<?php echo wp_logout_url(home_url()); ?>">Log out &raquo;</a>]
+				</small>
+			</p>
+			<p>Cash: <span id="user-cash"><?php echo th(get_field('cash', 'user_'.$current_user->ID)); ?></span> [<a href="<?php echo site_url(); ?>/budget">View Budget</a>]</p>
+			<?php 
 			$turns = get_field('turns', 'user_'.$current_user->ID);
 			if ($turns > 1) {
 				echo '<p><a href="'.site_url().'/docket">'.$turns.' orders of business</a> on your docket.</p>';
@@ -29,11 +37,32 @@
 				echo '<p><a href="'.site_url().'/docket">'.$turns.' order of business</a> on your docket.</p>';
 			} else {
 				echo '<p>No remaining orders of business on your docket.</p>';
-			}
-			echo '<p><a href="'.wp_logout_url( home_url() ).'">Log out &raquo;</a></p>'; ?>
+			} ?>
+			<p>
+				<?php 
+				$unread = 0;
+				$messages = new WP_query(array(
+					'post_type' => 'message',
+					'posts_per_page' => -1,
+					'meta_key' => 'to',
+					'meta_value' => $current_user->ID,
+					)
+				); 
+				while ($messages->have_posts()) : $messages->the_post();
+					if (get_post_meta(get_the_ID(), 'read', true) == 'unread') {
+						$unread++;
+					}
+				endwhile;
+				wp_reset_postdata(); ?>
+				<a href="<?php echo home_url(); ?>/messages">
+					<?php if ($unread > 0) { echo '<strong>'; } ?>
+					Messages <small class="messages">[<?php echo $unread; ?>]</small>
+					<?php if ($unread > 0) { echo '</strong>'; } ?>
+				</a>
+			</p>
 		</div>
 
-		<?php if (is_single()) { ?>
+		<?php if (is_single() && get_post_type($post->ID) == 'post') { ?>
 
 			<div class="module">
 				<?php if (get_the_author_meta('ID') == $current_user->ID) { ?>
@@ -68,8 +97,14 @@
 							$happy = 'flocking';
 							$message = 'People from all over flock to this city!';
 						} ?>
-					<small class="face <?php echo $happy; ?>"><?php echo $message; ?></small>
-				<?php } else { ?>
+					<small class="face <?php echo $happy; ?>"><?php echo $message; ?></small><br />
+					
+					<?php 
+					$traderoutes = get_post_meta($post->ID, 'traderoutes', true);
+					if ($traderoutes > 0) { ?>
+					<a href="<?php the_permalink(); ?>?view=trade">Trade Routes <small>[<?php echo $traderoutes; ?>]</small></a>
+					<?php } 
+				} else { ?>
 					<p>City: <strong><?php the_title(); ?></strong></p>
 					<p>Population: <?php $pop = th(get_post_meta($post->ID, 'population', true)); echo $pop; ?></p>
 					<p>Governed by <a href="<?php echo site_url(); ?>/user/<?php echo get_the_author_meta('user_login'); ?>"><?php the_author(); ?></a></p>
@@ -80,6 +115,7 @@
 		<?php } elseif (is_category()) { ?>
 
 		<?php }
+	// if user is not logged in
 	} else { ?>
 		<div class="module">
 			<?php 

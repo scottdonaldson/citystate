@@ -6,14 +6,63 @@ get_header(); ?>
 
 <div class="container">
 
+	<h1 class="visuallyhidden">Scoreboard</h1>
 	<div class="module">
 		<div class="content visible">
 			<p>The people of Originalia and Secondo keep meticulous records. Current events and cumulative tallies may be found here. Those of record may be found in the <a href="<?php echo home_url(); ?>/log">Log</a>.</p>
 		</div>
 	</div>
 	<div id="scoreboard" class="module">
-		<h2 class="header active">Players</h2>
-		<div class="content visible">
+		
+		<?php 
+		
+		/* Should probably figure out a better way to do this bizness... */
+
+		$city_query = new WP_Query('posts_per_page=-1');
+		$world = 0;
+		$originalia = 0;
+		$secondo = 0;
+		while ($city_query->have_posts()) : $city_query->the_post();
+			$ID = get_the_ID();
+			$region = get_the_category();
+			if ($region[0]->cat_name == 'Originalia') {
+				$originalia += get_post_meta($ID, 'population', true);
+			} elseif ($region[0]->cat_name == 'Secondo') {
+				$secondo += get_post_meta($ID, 'population', true);
+			}
+			$world += get_post_meta($ID, 'population', true);
+		endwhile;
+		wp_reset_postdata(); ?>
+		<h2 class="header">World Population: <?php echo th($world); ?></h2>
+		<div class="content">
+			<div class="row clearfix">
+				<div class="cash"><strong>Region</strong></div>
+				<div class="total-population"><strong>Total Population</strong></div>
+			</div>
+			<?php if ($originalia >= $secondo) { ?>
+				<div class="row clearfix">
+					<div class="cash">1. Originalia</div>
+					<div class="total-population"><?php echo th($originalia); ?></div>
+				</div>
+				<div class="row clearfix">
+					<div class="cash">2. Secondo</div>
+					<div class="total-population"><?php echo th($secondo); ?></div>
+				</div>
+			<?php } else { ?>
+				<div class="row clearfix">
+					<div class="cash">1. Secondo</div>
+					<div class="total-population"><?php echo th($secondo); ?></div>
+				</div>
+				<div class="row clearfix">
+					<div class="cash">2. Originalia</div>
+					<div class="total-population"><?php echo th($originalia); ?></div>
+				</div>
+			<?php } ?>
+
+		</div>
+
+		<h2 class="header">Players</h2>
+		<div class="content">
 			<div class="row clearfix">
 				<div class="nutzername"><strong>Name</strong></div>
 				<div class="cities"><strong># of Cities</strong></div>
@@ -55,8 +104,8 @@ get_header(); ?>
 	</div><!-- #scoreboard .module-->
 
 	<div class="module">
-		<h2 class="header active">Cities</h2>
-		<div class="content visible clearfix">
+		<h2 class="header">Cities</h2>
+		<div class="content clearfix">
 			<div class="board">
 				<h3>Most populous cities</h3>
 				<?php 
@@ -70,7 +119,7 @@ get_header(); ?>
 					)
 				); while (have_posts()) : the_post(); 
 					$place++;
-					echo '<p>'.$place.'. <a href="'.get_permalink().'"><strong>'.get_the_title().'</strong></a> (Pop. '.th(get_post_meta(get_the_ID(), 'population', true)).') - <a href="'.home_url().'/user/'.get_the_author_meta('user_login').'">'.get_the_author_meta('display_name').'</a></p>';
+					echo '<p>'.$place.'. <a href="'.get_permalink().'"><strong>'.get_the_title().'</strong></a> (Pop. '.th(get_post_meta(get_the_ID(), 'population', true)).') - <small><a href="'.home_url().'/user/'.get_the_author_meta('user_login').'">'.get_the_author_meta('display_name').'</a></small></p>';
 
 				endwhile; wp_reset_query(); ?>
 			</div>
@@ -87,7 +136,7 @@ get_header(); ?>
 					)
 				); while (have_posts()) : the_post(); 
 					$place++;
-					echo '<p>'.$place.'. <a href="'.get_permalink().'"><strong>'.get_the_title().'</strong></a> - <a href="'.home_url().'/user/'.get_the_author_meta('user_login').'">'.get_the_author_meta('display_name').'</a></p>';
+					echo '<p>'.$place.'. <a href="'.get_permalink().'"><strong>'.get_the_title().'</strong></a> - <small><a href="'.home_url().'/user/'.get_the_author_meta('user_login').'">'.get_the_author_meta('display_name').'</a></small></p>';
 
 				endwhile; wp_reset_query(); ?>
 			</div>
@@ -104,7 +153,7 @@ get_header(); ?>
 					)
 				); while (have_posts()) : the_post(); 
 					$place++;
-					echo '<p>'.$place.'. <a href="'.get_permalink().'"><strong>'.get_the_title().'</strong></a> - <a href="'.home_url().'/user/'.get_the_author_meta('user_login').'">'.get_the_author_meta('display_name').'</a></p>';
+					echo '<p>'.$place.'. <a href="'.get_permalink().'"><strong>'.get_the_title().'</strong></a> - <small><a href="'.home_url().'/user/'.get_the_author_meta('user_login').'">'.get_the_author_meta('display_name').'</a></small></p>';
 
 				endwhile; wp_reset_query(); ?>
 			</div>
@@ -121,7 +170,7 @@ get_header(); ?>
 					)
 				); while (have_posts()) : the_post(); 
 					$place++;
-					echo '<p>'.$place.'. <a href="'.get_permalink().'"><strong>'.get_the_title().'</strong></a> - <a href="'.home_url().'/user/'.get_the_author_meta('user_login').'">'.get_the_author_meta('display_name').'</a></p>';
+					echo '<p>'.$place.'. <a href="'.get_permalink().'"><strong>'.get_the_title().'</strong></a> - <small><a href="'.home_url().'/user/'.get_the_author_meta('user_login').'">'.get_the_author_meta('display_name').'</a></small></p>';
 
 				endwhile; wp_reset_query(); ?>
 			</div>
@@ -140,7 +189,7 @@ get_header(); ?>
 					$place++;
 					$wins = get_post_meta(get_the_ID(), 'wins', true);
 					$losses = get_post_meta(get_the_ID(), 'losses', true);
-					echo '<p>'.$place.'. <a href="'.get_permalink().'"><strong>'.get_the_title().'</strong></a> ('.$wins.'-'.$losses.') - <a href="'.home_url().'/user/'.get_the_author_meta('user_login').'">'.get_the_author_meta('display_name').'</a></p>';
+					echo '<p>'.$place.'. <a href="'.get_permalink().'"><strong>'.get_the_title().'</strong></a> ('.$wins.'-'.$losses.') - <small><a href="'.home_url().'/user/'.get_the_author_meta('user_login').'">'.get_the_author_meta('display_name').'</a></small></p>';
 
 				endwhile; wp_reset_query(); ?>
 			</div>
@@ -158,7 +207,7 @@ get_header(); ?>
 				while ($ratio_query->have_posts()) : $ratio_query->the_post(); 
 					$place++;
 					$ratio = get_post_meta(get_the_ID(), 'ratio', true);
-					echo '<p>'.$place.'. <a href="'.get_permalink().'"><strong>'.get_the_title().'</strong></a> ('.$ratio.'%) - <a href="'.home_url().'/user/'.get_the_author_meta('user_login').'">'.get_the_author_meta('display_name').'</a></p>';
+					echo '<p>'.$place.'. <a href="'.get_permalink().'"><strong>'.get_the_title().'</strong></a> ('.$ratio.'%) - <small><a href="'.home_url().'/user/'.get_the_author_meta('user_login').'">'.get_the_author_meta('display_name').'</a></small></p>';
 
 				endwhile; wp_reset_postdata(); ?>
 			</div>

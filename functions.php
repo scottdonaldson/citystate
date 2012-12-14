@@ -8,8 +8,12 @@ include( MAIN . 'functions/strip-category.php');
 // Load scripts and styles
 wp_enqueue_script('jquery');
 
-// Register nav menu
-register_nav_menu('primary','Primary Menu');
+// Register nav menus
+register_nav_menus( array(
+		'primary' => 'Primary Menu',
+		'messages' => 'Messages Menu'
+	) 
+);
 
 // Admin CSS and JS
 function city_admin_css() {
@@ -61,7 +65,7 @@ function change_title_on_logo() {
 add_filter('login_headertitle', 'change_title_on_logo');
 
 
-/* ------------ CUSTOM POST TYPE: ACTIVITY ------- */
+/* ------------ CUSTOM POST TYPE: ACTIVITY and MESSAGE ------- */
 
 add_action( 'init', 'create_post_type' );
 function create_post_type() {
@@ -77,6 +81,22 @@ function create_post_type() {
 			'rewrite' => array('slug' => 'activity'),
 			'supports' => array(
 				'title', 'custom-fields'
+			),
+		)
+	);
+	register_post_type( 'message',
+		array(
+			'labels' => array(
+				'name' => __( 'Messages' ),
+				'singular_name' => __( 'Message' )
+			),
+			'public' => true,
+			'has_archive' => true,
+			'menu_position=' => 5,
+			'rewrite' => false,
+			'with_front' => false,
+			'supports' => array(
+				'title', 'editor', 'custom-fields'
 			),
 		)
 	);

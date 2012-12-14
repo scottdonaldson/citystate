@@ -282,16 +282,4 @@ jQuery(document).ready(function($){
 		});
 	});
 
-
-	// ------ Containers and modules
-	var container = $('.container'),
-	header = container.find('.header');
-
-	header.each(function(){
-		$(this).on('click',function(){
-			$this = $(this);
-			$this.toggleClass('active').next().slideToggle();
-		});
-	});
-
 });

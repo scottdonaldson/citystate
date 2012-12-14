@@ -36,8 +36,8 @@ while ($user_query->have_posts()) : $user_query->the_post();
 
 		// Only run for nonrepeating structures
 		if ($max == 1) {
-			if (get_post_meta($ID, $structure.'-x', true) == 0 && 
-				get_post_meta($ID, $structure.'-y', true) == 0 && 
+			if (get_post_meta($ID, $structure.'-y', true) == 0 && 
+				$structure != 'port' && // Landlocked cities can't build ports. Thus they get ignored here altogether.
 				$pop >= 0.5*$desired) {
 				
 				// If there's a structure that's desired, add it to the $needs array
@@ -49,12 +49,12 @@ endwhile;
 wp_reset_postdata();
 
 ?>
-<div class="container">
+<div class="container docket-<?php echo $adv; ?>">
 	<div class="module">
 		<h2 class="header active">City Council</h2>
 		<div class="content visible clearfix">
 			<img src="<?php echo bloginfo('template_url'); ?>/images/neighborhood.png" class="alignleft" alt="Neighborhood" />
-			<p>The city council in <a href="<?php echo $link; ?>"><?php echo $city; ?></a> is meeting to discuss local matters.</p>
+			<p>The city council in <a href="<?php echo $link; ?>" target="_blank"><?php echo $city; ?></a> is meeting to discuss local matters.</p>
 
 			<?php 
 			// If there are NOT any structures that should be built...
@@ -70,26 +70,9 @@ wp_reset_postdata();
 					<p>The citizens are going about their business without too much concern for your performance as a governor. No news is often good news, but if you want to make your citizens happier, you might consider building some parks or new neighborhoods.</p>
 				<?php	
 				// Otherwise, it's unhappy
-				} else { 
-					// Update warning
-					$warning = get_post_meta($ID, 'warning', true);
-					update_post_meta($ID, 'warning', $warning + 1);
-
-					// If less than three strikes, just warn
-					if ($warning < 2) {
-					?>
-						<p>The citizens are ill at ease, and no one's quite sure why. Building new parks and neighborhoods might be a way to restore their satisfaction.</p>
-						
-						<?php // Call out two strikes...
-						if ($warning == 1) { ?>
-							<p>This is the second council meeting in a short amount of time where the citizens' discontentment has been brought to your attention. If it happens again soon, your abilities as a leader might be called into question...</p>
-						<?php }
-					// At third strike (or beyond), reduce happiness by 10%
-					} else { ?>
-						<p>The citizens are still unhappy, and now they're tired of feeling like they're not being listened to. A large group walks out of the council meeting, shouting curses at you. Their anger spreads to other areas of the city.</p>
-						<?php 
-						update_post_meta($ID, 'happiness', .9*$happy);
-					}
+				} else { ?>
+					<p>The citizens are ill at ease, and they're letting you know about it! Building new parks or <a href="<?php echo home_url(); ?>/budget" target="_blank">increasing funding to certain structures</a> might be a way to restore their satisfaction.</p>
+				<?php
 				}
 			// If there ARE structures that should be built...
 			} else { ?>
@@ -99,15 +82,15 @@ wp_reset_postdata();
 				// Use the first structure that needs to be built.
 				// Funds raised is a random value between 5 (not %) and 
 				// 10% of the construction cost
-				$fund = rand(5, .1*$structures[$needs[0]][3]); ?>
-				<p>A group of concerned citizens have donated <?php echo $fund; ?> in cash to a fund for the construction.</p>
+				$fund = rand(5, 0.1*$structures[$needs[0]][3]); ?>
+				<p>A group of concerned citizens have donated <strong><?php echo $fund; ?></strong> in cash to a fund for the construction.</p>
 				<?php
 				// Update cash
 				$cash = get_field('cash', 'user_'.$current_user->ID);
 				update_field('cash', $cash + $fund, 'user_'.$current_user->ID);
-			} ?>
+			} 
 
-		<a class="again" href="<?php the_permalink(); ?>">Next order of business</a>
+		include ( MAIN .'docket/next.php'); ?>
 			
 		</div>
 	</div>

@@ -14,8 +14,11 @@ if (isset($_POST['pass'])) {
 		}
 
 		// Update all cities
-		query_posts('posts_per_page=-1');
-		while (have_posts()) : the_post();
+		$city_query = new WP_query(array(
+			'posts_per_page' => -1
+			)
+		);
+		while ($city_query->have_posts()) : $city_query->the_post();
 		
 			// Get info
 			$ID = get_the_ID();
@@ -24,7 +27,7 @@ if (isset($_POST['pass'])) {
 			// Resets
 			include ( MAIN . 'update/resets.php');
 					
-			// Update population
+			// Get population, happiness, and target pop values
 			$pop = get_post_meta($ID, 'population', true);
 			$city_happy = get_post_meta($ID, 'happiness', true);
 			$target = get_post_meta($ID, 'target-pop', true);
@@ -32,13 +35,27 @@ if (isset($_POST['pass'])) {
 			// If target population is greater than population,
 			// happiness helps it grow quicker
 			if ($target >= $pop) {
-				$newpop = $pop + ceil((0.00333 * $city_happy) * ($target - $pop));
-				update_post_meta($ID, 'population', $newpop);
+				$newpop = $pop + ceil((0.00333 * $city_happy) * ($target - $pop));			
 			// If target population is lower than population,
 			// happiness slows down population loss
 			} else {
 				$newpop = $pop + floor((0.00333 * (100 - $city_happy)) * ($target - $pop));
-				update_post_meta($ID, 'population', $newpop);
+			}
+			update_post_meta($ID, 'population', $newpop);
+
+			// Update target population based on each trade route in city
+			if (get_post_meta($ID, 'traderoutes', true) > 0) {
+				$trades = get_post_meta($ID, 'trade');
+				foreach ($trades as $trade) {
+					// If the population of trade partners has changed, update
+					// target population of this city accordingly
+					$trade_orig = get_post_meta($ID, 'trade-'.$trade.'-orig', true);
+					$trade_change = get_post_meta($trade, 'population', true) - $trade_orig;
+					update_post_meta($ID, 'target-pop', $target + floor(0.075 * $trade_change));
+
+					// Update target pop again
+					$target = get_post_meta($ID, 'target-pop', true);
+				}
 			}
 
 			// Population milestones
@@ -206,7 +223,7 @@ if (isset($_POST['pass'])) {
 			} // end structure array foreach
 
 		endwhile;
-		wp_reset_query();
+		wp_reset_postdata();
 
 		$alert = '<p>Daily update complete.</p>';
 	} else {

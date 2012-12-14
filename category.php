@@ -31,6 +31,12 @@ query_posts('posts_per_page=-1&category_name='.$region_slug); while (have_posts(
 			$x++;
 			$y = $row; ?>
 
+		<?php 
+		// Wrap rows in a div
+		if ($x == 1) { ?>
+		<div class="row row-<?php echo $y; ?> clearfix">
+		<?php } ?>	
+
 		<div 
 			data-x="<?php echo $x; ?>" 
 			data-y="<?php echo $row; ?>"
@@ -91,6 +97,11 @@ query_posts('posts_per_page=-1&category_name='.$region_slug); while (have_posts(
 			endwhile; ?>
 		</div><!-- .tile -->	
 	
+	<?php } ?>
+		<?php 
+	// End of row
+	if ($x == 10) { ?>
+	</div>
 	<?php } 
 	} 
 
@@ -130,7 +141,7 @@ query_posts('posts_per_page=-1&category_name='.$region_slug); while (have_posts(
 				<input id="y" name="y" type="hidden" />	
 				<input id="region_id" name="region_id" value="<?php echo get_query_var('cat'); ?>" type="hidden" />	
 				<input id="region_slug" name="region_slug" value="<?php echo $region_slug; ?>" type="hidden" />	
-				<input type="submit" id="buildCity" name="buildCity" value="Build City (<?php echo th(1500*$cities + 500); ?>)" />
+				<input class="button" type="submit" id="buildCity" name="buildCity" value="Build City (<?php echo th(1500*$cities + 500); ?>)" />
 			</form>
 		</div>
 	<?php } 

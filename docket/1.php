@@ -27,12 +27,12 @@ $user_args = array(
 $user_query = new WP_query($user_args);
 while ($user_query->have_posts()) : $user_query->the_post();
 
-	$ID = get_the_ID();
-	if (get_post_meta($ID, 'stadium-x', true) != 0 && get_post_meta($ID, 'stadium-y', true) != 0) {
-		$user_ID = $ID;
+	if (get_post_meta(get_the_ID(), 'stadium-y', true) != 0) {
+		$user_ID = get_the_ID();
 		$user_city = get_the_title();
 		$user_link = get_permalink();
-		$stadium = true;
+		$user_pop = get_post_meta($user_ID, 'population', true);
+		$user_stadium = true;
 
 		// Stop the search
 		break;
@@ -49,11 +49,11 @@ $foe_args = array(
 $foe_query = new WP_query($foe_args);
 while ($foe_query->have_posts()) : $foe_query->the_post();
 
-	$ID = get_the_ID();
-	if (get_post_meta($ID, 'stadium-x', true) != 0 && get_post_meta($ID, 'stadium-y', true) != 0) {
-		$foe_ID = $ID;
+	if (get_post_meta(get_the_ID(), 'stadium-y', true) != 0) {
+		$foe_ID = get_the_ID();
 		$foe_city = get_the_title();
 		$foe_link = get_permalink();
+		$foe_pop = get_post_meta($foe_ID, 'population', true);
 		$foe_stadium = true;
 
 		// Check to see if the foe city is one of the user's own cities (it happens!)
@@ -70,21 +70,26 @@ wp_reset_postdata();
 // If the user doesn't have a stadium in any of their cities,
 // or there are no stadiums in any other cities,
 // move on and pick another random adventure
-if ( !isset($stadium) || !isset($foe_stadium) ) {
-	$adv = rand(2, 3);
-	include( MAIN . 'adventure/' . $adv . '.php' );
-} ?>
+if ( !$user_stadium || !$foe_stadium ) {
+	$adv = rand(2, 4);
+	include( MAIN . 'docket/' . $adv . '.php' );
 
-<div class="container">
+// Otherwise, the game is on!
+} else {
+// Get structures to use stadium values
+include( MAIN . 'structures.php');
+$stadium = $structures['stadium'];
+?>
+
+<div class="container docket-<?php echo $adv; ?>">
 	<div class="module">
 		<h2 class="header active">Sports</h2>
 		<div class="content visible clearfix">
 			<img src="<?php echo bloginfo('template_url'); ?>/images/stadium.png" class="alignleft" alt="Stadium" />
 			<?php if ($foe_self == true) { ?>
 			<p>It's an intrastate game!</p>
-
 			<?php } ?>
-			<p>The team from your city of <a href="<?php echo $user_link; ?>"><?php echo $user_city; ?></a> is playing a game against the team from <?php if ($foe_self == true) { echo 'another city of yours, '; } ?><a href="<?php echo $foe_link; ?>"><?php echo $foe_city; ?></a>.</p>
+			<p>The team from your city of <a href="<?php echo $user_link; ?>" target="_blank"><?php echo $user_city; ?></a> is playing a game against the team from <?php if ($foe_self == true) { echo 'another city of yours, '; } ?><a href="<?php echo $foe_link; ?>" target="_blank"><?php echo $foe_city; ?></a>.</p>
 			<?php 
 			// Get a random outcome between 1 and 100
 			$outcome = rand(1, 100); 
@@ -92,12 +97,18 @@ if ( !isset($stadium) || !isset($foe_stadium) ) {
 			// Calculate the difference in happiness (must be between 0 and 100)
 			$user_happy = get_post_meta($user_ID, 'happiness', true);
 			$foe_happy = get_post_meta($foe_ID, 'happiness', true);
-			$diff = $user_happy - $foe_happy;
+
+			// Get respective funding (per population) for each city
+			$user_funding = get_post_meta($user_ID, 'funding-stadium', true) ? get_post_meta($user_ID, 'funding-stadium', true) : 0.02*$stadium[3];
+			$user_funding = $user_funding/$user_pop;
+			$foe_funding = get_post_meta($foe_ID, 'funding-stadium', true) ? get_post_meta($foe_ID, 'funding-stadium', true) : 0.02*$stadium[3];
+			$foe_funding = $foe_funding/$foe_pop;
+			$diff = $user_happy - $foe_happy + 1000*($user_funding - $foe_funding);
 
 			// The chance of winning will be determined by the difference... above 50% of 
 			// user's city is happier than foe's, and below 50% if user's city is less 
 			// happier than foe's
-			$chance = 50 + $diff/2;
+			$chance = 50 + $diff;
 
 			// USER WIN, FOE LOSS
 			if ($outcome < $chance) { 
@@ -106,7 +117,7 @@ if ( !isset($stadium) || !isset($foe_stadium) ) {
 				<?php } else { ?>
 					<p><strong>Your team won!</strong></p>
 				<?php } ?>
-				<p>The citizens of <a href="<?php echo $user_link; ?>"><?php echo $user_city; ?></a> are a little bit happier for the win. Those of <a href="<?php echo $foe_link; ?>"><?php echo $foe_city; ?></a> will surely cry themselves to sleep.</p>
+				<p>The citizens of <a href="<?php echo $user_link; ?>" target="_blank"><?php echo $user_city; ?></a> are a little bit happier for the win. Those of <a href="<?php echo $foe_link; ?>" target="_blank"><?php echo $foe_city; ?></a> will surely cry themselves to sleep.</p>
 				<?php
 				// Increase happiness of user city
 				// If happiness is under 80, increase by 2
@@ -136,7 +147,7 @@ if ( !isset($stadium) || !isset($foe_stadium) ) {
 				<?php } else { ?>
 					<p><strong>Your team lost...</strong></p>
 				<?php } ?>
-				<p>Because of this loss, the citizens of <a href="<?php echo $user_link; ?>"><?php echo $user_city; ?></a> are less happy than before. Meanwhile, the citizens of <a href="<?php echo $foe_link; ?>"><?php echo $foe_city; ?></a> have all got grins on their smug faces...</p>
+				<p>Because of this loss, the citizens of <a href="<?php echo $user_link; ?>" target="_blank"><?php echo $user_city; ?></a> are less happy than before. Meanwhile, the citizens of <a href="<?php echo $foe_link; ?>" target="_blank"><?php echo $foe_city; ?></a> have all got grins on their smug faces...</p>
 				<?php
 				// Decrease happiness of user city
 				// If happiness is above 20, decrease by 2
@@ -168,16 +179,12 @@ if ( !isset($stadium) || !isset($foe_stadium) ) {
 			$new_foe_wins = get_post_meta($foe_ID, 'wins', true);
 			$new_foe_total = $new_foe_wins + get_post_meta($foe_ID, 'losses', true);
 			update_post_meta($foe_ID, 'ratio', number_format(100*$new_foe_wins/$new_foe_total, 2, '.', ','));
-			
 
-			?>
-
-		<a class="again" href="<?php the_permalink(); ?>">Next order of business</a>
+		include ( MAIN .'docket/next.php'); ?>
 			
 		</div>
 	</div>
 </div>
 
-
-
-<?php ?>
+<?php } // end game is on
+?>

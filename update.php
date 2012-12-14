@@ -11,10 +11,10 @@ get_header(); ?>
 		<?php 
 		// Only admins can run update
 		if (is_user_logged_in() && current_user_can('switch_themes')) { ?>
-			<p>Run daily update below:</p>
-			<form action="" method="post">
-				<input type="password" name="pass" />
-				<input type="submit" value="Run daily update" />
+			<form action="<?php the_permalink(); ?>" method="POST">
+				<label for="pass">Run daily update below:</label>
+				<input type="password" id="pass" name="pass" />
+				<input class="button" type="submit" value="Run daily update" />
 			</form>
 		<?php } else { ?>
 			<p>Only logged in administrators can run a daily update. That's just the way it is.</p>

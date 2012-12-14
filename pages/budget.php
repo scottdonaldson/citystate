@@ -7,7 +7,21 @@ get_header();
 // Only logged in users can view
 if (is_user_logged_in()) {
 
+// Users with no cities got no budgets, obvi
+if (count_user_posts($current_user->ID) == 0) { ?>
+
+<div class="container">
+	<div class="module">
+		<h1 class="header">No cities, no budget</h1>
+		<div class="content">
+			<p>If you don't even have a single city, how do you expect to be making or losing any money? Perhaps you should go and <a href="<?php echo home_url(); ?>">build one</a>.</p>
+		</div>
+	</div>
+</div>
+
+<?php 
 // First things first, get user's cities
+} else { 
 $user_args = array(
 	'author' => $current_user->ID,
 	'posts_per_page' => -1,
@@ -49,8 +63,8 @@ if (isset($_POST['submit'])) {
 
 <div class="container">
 	<div class="module">
-		<h2 class="header active"><?php echo $current_user->display_name; ?> - Budget Review</h2>
-		<div class="content visible clearfix">
+		<h2 class="header"><?php echo $current_user->display_name; ?> - Budget Review</h2>
+		<div class="content clearfix">
 			<?php if (isset($_POST['submit'])) { ?>
 				<small class="grey">Budget updated. Happy fiscal new year!</small>
 			<?php } ?>
@@ -96,8 +110,9 @@ if (isset($_POST['submit'])) {
 							$message = 'People from all over flock to this city!';
 						} ?>
 					<small class="face <?php echo $happy; ?>"><?php echo $message; ?></small>
-					<?php include ( MAIN . 'structures.php');
-					foreach ($structures as $structure=>$values) {
+					<?php include ( MAIN . 'structures.php'); ?>
+					<div class="structures clearfix">
+					<?php foreach ($structures as $structure=>$values) {
 						include ( MAIN . 'structures/values.php');
 
 						// Determine placeholder value. If funding is set, then that funding,
@@ -138,9 +153,10 @@ if (isset($_POST['submit'])) {
 								} elseif ($diff_[$structure] >= 5) {
 									$funding = 'excellent';
 								} ?>
-
-								<label for="<?php echo basename($link).'-'.$structure; ?>"><?php echo ucfirst($name); ?><small> (Min: <?php echo .02*$cost; ?>)</small></label>
-								<input type="number" id="<?php echo basename($link).'-'.$structure; ?>" name="<?php echo basename($link).'-'.$structure; ?>" max="<?php echo 10*$need_funding_[$structure]; ?>" min="<?php echo .02*$cost; ?>" placeholder="<?php echo th($placeholder_[$structure]); ?>" class="funding-<?php echo $funding; ?>" />
+								<div class="clearfix">
+									<label for="<?php echo basename($link).'-'.$structure; ?>"><?php echo ucfirst($name); ?><small> (Min: <?php echo .02*$cost; ?>)</small></label>
+									<input type="number" id="<?php echo basename($link).'-'.$structure; ?>" name="<?php echo basename($link).'-'.$structure; ?>" max="<?php echo 10*$need_funding_[$structure]; ?>" min="<?php echo .02*$cost; ?>" placeholder="<?php echo th($placeholder_[$structure]); ?>" class="funding-<?php echo $funding; ?>" />
+								</div><!-- just a clearfix -->
 							<?php }
 
 						// Parks and ports require funding but can build multiple	
@@ -162,10 +178,11 @@ if (isset($_POST['submit'])) {
 								} elseif ($diff_[$structure] >= 5) {
 									$funding = 'excellent';
 								} ?>
-
-								<label for="<?php echo basename($link).'-'.$structure; ?>">
-									<?php if ($count == 1) { echo ucfirst($name); } else { echo $count.' '.ucfirst($plural); } ?><small> (Min: <?php echo .02*$cost*$count; ?>)</small></label>
-								<input type="number" id="<?php echo basename($link).'-'.$structure; ?>" name="<?php echo basename($link).'-'.$structure; ?>" max="<?php echo 10*$need_funding_[$structure]; ?>" min="<?php echo .02*$cost*$count; ?>" placeholder="<?php echo th($placeholder_[$structure]); ?>" class="funding-<?php echo $funding; ?>" />
+								<div class="clearfix">
+									<label for="<?php echo basename($link).'-'.$structure; ?>">
+										<?php if ($count == 1) { echo ucfirst($name); } else { echo $count.' '.ucfirst($plural); } ?><small> (Min: <?php echo .02*$cost*$count; ?>)</small></label>
+									<input type="number" id="<?php echo basename($link).'-'.$structure; ?>" name="<?php echo basename($link).'-'.$structure; ?>" max="<?php echo 10*$need_funding_[$structure]; ?>" min="<?php echo .02*$cost*$count; ?>" placeholder="<?php echo th($placeholder_[$structure]); ?>" class="funding-<?php echo $funding; ?>" />
+								</div><!-- just a clearfix -->
 							<?php }
 						}
 					} 
@@ -174,6 +191,7 @@ if (isset($_POST['submit'])) {
 					if (!isset($at_least_one_[$ID])) {
 						echo '<p>No structures in this city require funding.</p>';
 					} ?>
+					</div><!-- .structures -->
 					
 					<section>
 						<p class="alignleft">City Income:</p>
@@ -220,7 +238,7 @@ if (isset($_POST['submit'])) {
 
 				</div>
 					
-				<input method="POST" type="submit" id="submit" name="submit" value="Submit for review" class="again" />	
+				<input method="POST" type="submit" id="submit" name="submit" value="Submit for review" class="button" />	
 			</form>	
 		</div>
 	</div>
@@ -279,7 +297,7 @@ if (isset($_POST['submit'])) {
 		        	// stop updating when the input loses focus
 		        	$this.blur(function(){
 		        		clearInterval(keepAtIt);
-		        	})
+		        	});
 		        }
 		    });
 
@@ -304,7 +322,11 @@ if (isset($_POST['submit'])) {
 	});
 </script>
 
-<?php } else { ?>
+<?php 
+} // end does user have cities
+
+// if user is not logged in
+} else { ?>
 
 <div class="container">
 	<div class="header"></div>

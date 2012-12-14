@@ -22,7 +22,7 @@ $happy_increase = $structures[$structure][7];
 $cult_increase = $structures[$structure][8];
 $edu_increase = $structures[$structure][9];
 
-if ($x == 10) { $x = 0; }
+// if ($x == 10) { $x = 0; }
 
 // Get user info
 global $current_user;
