@@ -7,6 +7,7 @@ Orders of business:
 2. City Council Recommendations
 3. Library Funding
 4. Trading Between Ports
+5. Population Growth
 
 
 The following orders of business have certain requirements, which, if not met, result 
@@ -19,3 +20,4 @@ The following orders of business will always run.
 
 2. City Council Recommendations
 3. Library Funding
+5. Population Growth

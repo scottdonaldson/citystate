@@ -98,13 +98,12 @@
 							$message = 'People from all over flock to this city!';
 						} ?>
 					<small class="face <?php echo $happy; ?>"><?php echo $message; ?></small><br />
+					<p><a href="<?php echo the_permalink($post->ID); ?>/?view=resources">View Resources
+						<?php $traderoutes = get_post_meta($post->ID, 'traderoutes', true);
+						if ($traderoutes > 0) { echo ' and Trade ['.$traderoutes.']'; } ?></a></p>
 					
-					<?php 
-					$traderoutes = get_post_meta($post->ID, 'traderoutes', true);
-					if ($traderoutes > 0) { ?>
-					<a href="<?php the_permalink(); ?>?view=trade">Trade Routes <small>[<?php echo $traderoutes; ?>]</small></a>
-					<?php } 
-				} else { ?>
+ 
+				<?php } else { ?>
 					<p>City: <strong><?php the_title(); ?></strong></p>
 					<p>Population: <?php $pop = th(get_post_meta($post->ID, 'population', true)); echo $pop; ?></p>
 					<p>Governed by <a href="<?php echo site_url(); ?>/user/<?php echo get_the_author_meta('user_login'); ?>"><?php the_author(); ?></a></p>

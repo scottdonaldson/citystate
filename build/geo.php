@@ -129,12 +129,12 @@ foreach ($geo as $cardinal) {
 			break;	
 	}	
 
-	$val = $map[$map_y][$map_x - 1];
-	if ($val == 0) {
+	$val = $map[$map_y][$map_x - 1][0];
+	if ($val == 'water') {
 		$val = 'water';
-	} elseif ($val == 1) {
-		$val = 'land';
-	} else { $val = $val; }
+	} else { 
+		$val = 'land'; 
+	}
 
 	add_post_meta($ID, 'map-'.$cardinal, $val);
 }

@@ -5,8 +5,27 @@ define('MAIN', dirname(__FILE__) . '/');
 include( MAIN . 'functions/register.php');
 include( MAIN . 'functions/strip-category.php');
 
-// Load scripts and styles
-wp_enqueue_script('jquery');
+// Update - THE BIG ONE - unfortunately not so sure about running it via cron yet
+/* 
+add_action('daily_update', 'update_everything');
+function activate_update() {
+	if ( !wp_next_scheduled( 'daily_update' ) ) {
+		wp_schedule_event( time(), 'hourly', 'daily_update');
+	}
+}
+add_action('wp', 'activate_update');
+function update_everything(){
+	include( MAIN . 'functions/update.php');
+}
+*/
+
+// include jQuery
+// if (!is_admin()) add_action("wp_enqueue_scripts", "my_jquery_enqueue", 11);
+function my_jquery_enqueue() {
+    wp_deregister_script('jquery');
+    wp_register_script('jquery', "http" . ($_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js", false, null);
+    wp_enqueue_script('jquery');
+}
 
 // Register nav menus
 register_nav_menus( array(
@@ -112,7 +131,7 @@ function strip_city($string) {
 
 // Generate slug from a string
 function create_slug($string){
-   $slug=preg_replace('/[^A-Za-z0-9-]+/', '-', $string);
+   $slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $string);
    return $slug;
 }
 

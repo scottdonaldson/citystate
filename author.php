@@ -1,29 +1,7 @@
 <?php 
-add_action('wp_head', 'farb_css');
-add_action('wp_head', 'farb_js');
-function farb_css() {
-	$url = get_bloginfo('template_url');
-    echo '<link rel="stylesheet" href="'.$url.'/plugins/farb/farbtastic.css" />';
-}
-function farb_js() {
-	$url = get_bloginfo('template_url');
-    echo '<script src="'.$url.'/plugins/farb/farbtastic.js"></script>'; ?>
-    <script>
-    jQuery(document).ready(function($){
-
-		var colorInput = $('#color'),
-			color = colorInput.val();
-		colorInput.css({
-			'background': color,
-			'color': 'transparent',
-		});
-		$('#colorpicker').farbtastic(colorInput);
-    });
-    </script>
-<?php }
-
 get_header(); 
-include ('structures.php');
+
+include ( MAIN . 'structures.php');
 
 // Get user info
 $user = (isset($_GET['author_name'])) ? get_user_by('slug', $author_name) : get_userdata(intval($author));
@@ -51,7 +29,7 @@ $cash = get_field('cash','user_'.$id);
 				<ul>
 				<?php 
 				while ($u_query->have_posts()) : $u_query->the_post(); ?>
-					<li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a> (Pop: <?php $pop = get_field('population'); echo th($pop); ?>)</li>
+					<li><a class="snapshot" href="<?php the_permalink(); ?>"><?php the_title(); ?></a> (Pop: <?php $pop = get_field('population'); echo th($pop); ?>)</li>
 				<?php endwhile; rewind_posts(); ?>
 				</ul>
 		</div><!-- .content -->
@@ -81,11 +59,6 @@ $cash = get_field('cash','user_'.$id);
 						<?php } else { ?>
 							<small>You've already changed your name! Doing it more than once would be confusing for everyone. If you still want to change your name, you could post on <a href="http://www.reddit.com/r/citystate" target="_blank">Reddit</a> and hope that you're answered.</small>
 						<?php } ?>
-					</section>
-					<section class="color">
-						<h3>Color</h3>
-						<input type="text" id="color" name="color" value="<?php the_field('color','user_'.$user->ID); ?>" />
-						<div id="colorpicker"></div>
 					</section>
 					<section class="password">
 						<h3>Password</h3>

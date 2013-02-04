@@ -39,6 +39,7 @@ if (isset($_POST['submit'])) {
 
 		$ID = get_the_ID();
 		$link = get_permalink();
+		$pop = get_post_meta($ID, 'population', true);
 
 		include ( MAIN . 'structures.php');
 		foreach ($structures as $structure=>$values) {
@@ -48,6 +49,42 @@ if (isset($_POST['submit'])) {
 				$_POST[basename($link).'-'.$structure] != '') {
 				$newfund = $_POST[basename($link).'-'.$structure];
 				update_post_meta($ID, 'funding-'.$structure, $newfund);
+
+				$multiples = array('park', 'farm', 'fishery', 'lumberyard', 'port');
+
+				if ($max == 1) {
+					if ($pop >= $desired) {
+						$need_funding_[$structure] = round(0.02*$cost * (1 + 0.1 * (($pop - $desired) / 1000) ));
+					} else {
+						$need_funding_[$structure] = 0.02*$cost;
+					}
+					$diff_[$structure] = $newfund / $need_funding_[$structure];
+					if ($diff_[$structure] < 1) {
+						$funding = 'bad';
+					} elseif ($diff_[$structure] < 1.5) {
+						$funding = 'fair';
+					} elseif ($diff_[$structure] < 5) {
+						$funding = 'good';
+					} elseif ($diff_[$structure] >= 5) {
+						$funding = 'excellent';
+					}
+
+				} elseif (in_array($structure, $multiples)) { 
+					$count = get_post_meta($ID, $structure.'s', true);
+
+					$need_funding_[$structure] = $count * round(0.02*$cost * (1 + 0.1 * ((get_post_meta($ID, 'population', true) - $desired) / 1000) ));
+					$diff_[$structure] = $newfund / $need_funding_[$structure];
+					if ($diff_[$structure] < 1) {
+						$funding = 'bad';
+					} elseif ($diff_[$structure] < 1.5) {
+						$funding = 'fair';
+					} elseif ($diff_[$structure] < 5) {
+						$funding = 'good';
+					} elseif ($diff_[$structure] >= 5) {
+						$funding = 'excellent';
+					}
+				}
+				update_post_meta($ID, $structure.'-funding', $funding);
 			}
 		}
 	endwhile;
@@ -65,7 +102,10 @@ if (isset($_POST['submit'])) {
 	<div class="module">
 		<h2 class="header"><?php echo $current_user->display_name; ?> - Budget Review</h2>
 		<div class="content clearfix">
-			<?php if (isset($_POST['submit'])) { ?>
+			<?php 
+			$state_income = 0;
+			$state_expenses = 0;
+			if (isset($_POST['submit'])) { ?>
 				<small class="grey">Budget updated. Happy fiscal new year!</small>
 			<?php } ?>
 
@@ -80,7 +120,7 @@ if (isset($_POST['submit'])) {
 					$happiness = get_post_meta($ID, 'happiness', true); ?>
 
 				<div id="city-<?php the_ID(); ?>" class="board">
-					<h3><a href="<?php echo $link; ?>"><?php echo $city; ?></a> <small>(Pop: <?php echo th(get_post_meta($ID, 'population', true)); ?>)</small></h3>
+					<h3><a class="snapshot" href="<?php echo $link; ?>"><?php echo $city; ?></a> <small>(Pop: <?php echo th(get_post_meta($ID, 'population', true)); ?>)</small></h3>
 					<?php if ($happiness < 5) {
 							$happy = 'fleeing';
 							$message = 'People are fleeing the city in anger!';
@@ -122,11 +162,11 @@ if (isset($_POST['submit'])) {
 						} else {
 							// Nonrepeating
 							if ($max == 1) {
-								$placeholder_[$structure] = 0.02*$cost; 
+								$placeholder_[$structure] = 0.02 * $cost; 
 							// Repeating
 							} else {
 								$count = get_post_meta($ID, $structure.'s', true);
-								$placeholder_[$structure] = 0.02*$cost*$count; 
+								$placeholder_[$structure] = 0.02 * $cost * $count; 
 							}
 						}
 
@@ -159,8 +199,9 @@ if (isset($_POST['submit'])) {
 								</div><!-- just a clearfix -->
 							<?php }
 
-						// Parks and ports require funding but can build multiple	
-						} elseif ($structure == 'park' || $structure == 'port') { 
+						// Some structures require funding but can build multiple
+						$multiples = array('park', 'farm', 'fishery', 'lumberyard', 'port');
+						} elseif (in_array($structure, $multiples)) { 
 							$count = get_post_meta($ID, $structure.'s', true);
 							if ($count > 0) {
 								$at_least_one_[$ID] = true; 
@@ -181,7 +222,7 @@ if (isset($_POST['submit'])) {
 								<div class="clearfix">
 									<label for="<?php echo basename($link).'-'.$structure; ?>">
 										<?php if ($count == 1) { echo ucfirst($name); } else { echo $count.' '.ucfirst($plural); } ?><small> (Min: <?php echo .02*$cost*$count; ?>)</small></label>
-									<input type="number" id="<?php echo basename($link).'-'.$structure; ?>" name="<?php echo basename($link).'-'.$structure; ?>" max="<?php echo 10*$need_funding_[$structure]; ?>" min="<?php echo .02*$cost*$count; ?>" placeholder="<?php echo th($placeholder_[$structure]); ?>" class="funding-<?php echo $funding; ?>" />
+									<input type="number" id="<?php echo basename($link).'-'.$structure; ?>" name="<?php echo basename($link).'-'.$structure; ?>" max="<?php echo 10*$need_funding_[$structure]; ?>" min="<?php echo 0.02*$cost*$count; ?>" placeholder="<?php echo th($placeholder_[$structure]); ?>" class="funding-<?php echo $funding; ?>" />
 								</div><!-- just a clearfix -->
 							<?php }
 						}
@@ -198,13 +239,15 @@ if (isset($_POST['submit'])) {
 						<p class="alignright income"><?php $income_[$ID] = ceil(0.05*$pop); echo th($income_[$ID]); ?></p>
 
 						<p class="alignleft">City Expenses: <?php
+							$expenses_[$ID] = 0;
 							foreach ($structures as $structure=>$values) {
 								include ( MAIN . 'structures/values.php');
+								
 								if ($max == 1) {
 									if (get_post_meta($ID, $structure.'-y', true) != 0) { 
 										$expenses_[$ID] += $placeholder_[$structure];
 									}
-								} elseif ($structure == 'park' || $structure == 'port') {
+								} elseif (in_array($structure, $multiples)) {
 									if (get_post_meta($ID, $structure.'s', true) > 0) {
 										$expenses_[$ID] += $placeholder_[$structure];
 									}
@@ -267,6 +310,8 @@ if (isset($_POST['submit'])) {
 	        			stateIncome = parseInt(noCommas($('.state .income span').text())),
 	        			stateNet = $('.state .net span'),
 		        		original = parseInt(noCommas($this.attr('placeholder')));
+
+		        	console.log(cityExpense);	
 
 		        	if ($this.hasClass('f')) {
 		        		oldCityExpense = origCityExpense;

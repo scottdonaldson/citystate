@@ -1,7 +1,7 @@
 <?php 
 // Refresh if this is a confirmed or denied trade proposal
 if (isset($_POST['submit'])) {
-	header('Location:'.get_permalink());
+	header( 'Location:'.get_permalink() );
 }
 
 get_header(); the_post(); 
@@ -30,6 +30,8 @@ get_currentuserinfo();
 				<div class="clearfix">
 				<span class="alignleft">From: <?php if ($user == $from) { 
 						echo 'You'; 
+					} elseif ($from == 0) {
+						echo '-----';
 					} else { 
 						$users = get_users(); 
 						foreach ($users as $from_user) {

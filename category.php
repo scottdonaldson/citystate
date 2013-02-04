@@ -29,7 +29,8 @@ query_posts('posts_per_page=-1&category_name='.$region_slug); while (have_posts(
 		$x = 0; 
 		foreach ($tiles as $tile) { 
 			$x++;
-			$y = $row; ?>
+			$y = $row; 
+			$type = $tile[0]; ?>
 
 		<?php 
 		// Wrap rows in a div
@@ -40,9 +41,27 @@ query_posts('posts_per_page=-1&category_name='.$region_slug); while (have_posts(
 		<div 
 			data-x="<?php echo $x; ?>" 
 			data-y="<?php echo $row; ?>"
+			data-terrain="<?php echo $type; ?>"
 			class="tile <?php 
 
-				if ($tile == 0) { echo 'water'; }
+				if ($type == 'water') { 
+					echo 'water'; 
+				} else { 
+					echo 'land '.$type; 
+				}
+
+				// If user is scouting the territory, highlight it
+				if (get_field('scouting', 'user_'.$current_user->ID) == 'yes' &&
+					get_field('scouting_region', 'user_'.$current_user->ID) == get_query_var('category_name') &&
+					get_field('scouting_x', 'user_'.$current_user->ID) == $x && 
+					get_field('scouting_y', 'user_'.$current_user->ID) == $y) {
+					echo ' scouting';
+				}
+				if (isset($_GET['x']) && isset($_GET['y'])) {
+					if ($x == $_GET['x'] && $y == $_GET['y']) {
+						echo ' scouting';
+					}
+				}
 
 			?>">
 			<?php while (have_posts()) : the_post(); 
@@ -117,7 +136,7 @@ query_posts('posts_per_page=-1&category_name='.$region_slug); while (have_posts(
 					$y = $row; ?>
 				<div class="tile no-build <?php 
 
-					if ($tile == 0) { echo 'water'; }
+					echo $tile[0];
 
 				?>">
 				</div>
@@ -133,9 +152,10 @@ query_posts('posts_per_page=-1&category_name='.$region_slug); while (have_posts(
 			global $current_user; get_currentuserinfo(); 
 			$cities = count_user_posts($current_user->ID); ?>
 		<div id="build" class="infobox">
-			<p>Build city at (<span class="x"></span>,&nbsp;<span class="y"></span>)</p>
-			<form action="<?php echo site_url(); ?>/build" method="post">
-				<p>Name:</p>
+			<p><span class="terrain"></span> at (<span class="x"></span>,&nbsp;<span class="y"></span>):</p>
+
+			<form action="<?php echo site_url(); ?>/build" method="POST">
+				<p>Build a city:</p>
 				<input id="cityName" name="cityName" type="text" maxlength="25" />
 				<input id="x" name="x" type="hidden" />
 				<input id="y" name="y" type="hidden" />	
@@ -143,6 +163,17 @@ query_posts('posts_per_page=-1&category_name='.$region_slug); while (have_posts(
 				<input id="region_slug" name="region_slug" value="<?php echo $region_slug; ?>" type="hidden" />	
 				<input class="button" type="submit" id="buildCity" name="buildCity" value="Build City (<?php echo th(1500*$cities + 500); ?>)" />
 			</form>
+			<?php 
+			// If scouts are already out in the field, can't sent more
+			if (get_field('scouting', 'user_'.$current_user->ID) != 'yes') { ?>
+			<small>or</small>
+			<form action="<?php echo home_url().'/'.$region_slug.'/'; ?>" method="POST">
+				<input id="scout-x" name="scout-x" type="hidden">
+				<input id="scout-y" name="scout-y" type="hidden">
+				<input id="scout-region" name="scout-region" value="<?php echo $region_slug; ?>" type="hidden">
+				<input class="button" type="submit" id="scout" name="scout" value="Scout Territory (350)">
+			</form>
+			<?php } ?>
 		</div>
 	<?php } 
 

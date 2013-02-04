@@ -119,6 +119,16 @@ while ($other_query->have_posts()) : $other_query->the_post();
 endwhile;
 wp_reset_postdata();
 
+// Make sure user's city doesn't have any trade routes with these already
+$current_trades = get_post_meta($user_ID, 'trade');
+foreach ($others as $key=>$other) {
+	foreach ($current_trades as $current_trade) {
+		if ($other['ID'] == $current_trade) {
+			unset($others[$key]);
+		}
+	}
+}
+
 // Next, we check the list of open trade proposals.
 // If any of the cities on the list of potentials have open proposals
 // with our city, we remove them from the list
@@ -161,11 +171,11 @@ if ( !$user_port || count($others) == 0) {
 		<div class="content clearfix">
 			<img src="<?php echo bloginfo('template_url'); ?>/images/port-e.png" class="alignleft" alt="Port" />
 			
-			<p>Business representatives from your city of <a href="<?php echo $user_link; ?>" target="_blank"><?php echo $user_city; ?></a> have been seeking to open up a trade route. From market research, they've found several cities that would make mutually beneficial trade partners:</p>
+			<p>Business representatives from your city of <a class="snapshot" href="<?php echo $user_link; ?>"><?php echo $user_city; ?></a> have been seeking to open up a trade route. From market research, they've found several cities that would make mutually beneficial trade partners:</p>
 			<ul>
 				<?php foreach ($others as $other) { ?>
 				<li>
-					<a href="<?php echo $other['link']; ?>" target="_blank"><?php echo $other['name']; ?></a>&nbsp;<small>(Pop: <?php echo th($other['pop']); ?>) - <?php echo $other['gov']; ?></small>
+					<a class="snapshot" href="<?php echo $other['link']; ?>" target="_blank"><?php echo $other['name']; ?></a>&nbsp;<small>(Pop: <?php echo th($other['pop']); ?>) - <?php echo $other['gov']; ?></small>
 				</li>
 				<?php } ?>
 			</ul>

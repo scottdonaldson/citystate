@@ -18,8 +18,6 @@ $happy_increase = $structures[$structure][7];
 $cult_increase = $structures[$structure][8];
 $edu_increase = $structures[$structure][9];
 
-if ($x == 10) { $x = 0; }
-
 // Get user info
 global $current_user;
 get_currentuserinfo();
@@ -62,6 +60,45 @@ if (($cash_current - $cost) < 0) {
 
 		// Get current level
 		$level = get_post_meta($ID, $structure.'-'.$id.'-level', true);
+		
+		// Upgrading neighborhoods requires food and/or fish
+		if ($structure == 'neighborhood') {
+			switch($level) {
+				// If we're upgrading a fresh neighborhood, randomly pick food or fish and take 1
+				case 0:
+					$need = rand(0, 1);
+					if ($need == 0) { $needed = 'food'; } else { $needed = 'fish'; }
+					$current = get_post_meta($ID, $needed.'_stock', true);
+					if ($current > 0) {
+						update_post_meta($ID, $needed.'_stock', $current - 1);
+					} else {
+						// If there's none of one, choose the other and repeat
+						$need = ($need + 1) % 2;
+						if ($need == 0) { $needed = 'food'; } else { $needed = 'fish'; }
+						$current = get_post_meta($ID, $needed.'_stock', true);
+						if ($current > 0) {
+							update_post_meta($ID, $needed.'_stock', $current - 1);
+						// If there's 0 food and 0 fish, we can't upgrade
+						} else {
+							$alert = '<p>You need at least 1 food or 1 fish to upgrade that neighborhood.</p>';
+							return false;
+						}
+					}
+					break;
+				// Once-upgraded neighborhoods take both 1 food and 1 fish
+				case 1:
+					$food = get_post_meta($ID, 'food_stock', true);
+					$fish = get_post_meta($ID, 'fish_stock', true);
+					if ($food > 0 && $fish > 0) {
+						update_post_meta($ID, 'food_stock', $food - 1);
+						update_post_meta($ID, 'fish_stock', $fish - 1);
+					} else {
+						$alert = '<p>You need at least 1 food and 1 fish to upgrade that neighborhood.</p>';
+						return false;
+					}
+					break;
+			}
+		}
 
 		// Increase level by 1
 		update_post_meta($ID, $structure.'-'.$id.'-level', $level + 1);

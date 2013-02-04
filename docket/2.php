@@ -54,7 +54,7 @@ wp_reset_postdata();
 		<h2 class="header active">City Council</h2>
 		<div class="content visible clearfix">
 			<img src="<?php echo bloginfo('template_url'); ?>/images/neighborhood.png" class="alignleft" alt="Neighborhood" />
-			<p>The city council in <a href="<?php echo $link; ?>" target="_blank"><?php echo $city; ?></a> is meeting to discuss local matters.</p>
+			<p>The city council in <a class="snapshot" href="<?php echo $link; ?>"><?php echo $city; ?></a> is meeting to discuss local matters.</p>
 
 			<?php 
 			// If there are NOT any structures that should be built...

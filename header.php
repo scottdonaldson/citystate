@@ -25,12 +25,15 @@ include('header-checks.php'); ?>
 	<link rel="stylesheet" href="<?php echo bloginfo('template_url'); ?>/style.css" />
 	<link rel="stylesheet" href="<?php echo bloginfo('template_url'); ?>/css/city.css" />
 	
+	<script src="<?php echo bloginfo('template_url'); ?>/js/jquery.min.js"></script>
+
 	<?php include('colors.php'); ?>
 
 <?php wp_head(); ?>
 </head>
 
 <body <?php body_class(); ?>>
+
 	<?php // Hidden values help us with js! ?>
 	<div id="template-url" class="hidden"><?php echo bloginfo('template_url'); ?>/</div>
 	<div id="display-name" class="hidden">
@@ -39,7 +42,7 @@ include('header-checks.php'); ?>
       	echo $current_user->display_name; ?>
     </div>
 
-	<?php if ($alert) { ?>
+	<?php if (isset($alert)) { ?>
 		<div id="alert"><?php echo $alert; ?></div>
 	<?php } ?>
 

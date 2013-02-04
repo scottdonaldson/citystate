@@ -33,12 +33,6 @@ if (isset($_POST['submit'])) {
 			add_post_meta($to_city, 'trade', $from_city);
 			add_post_meta($from_city, 'trade', $to_city);
 
-			// Store the population at the time the trade begins (trade-ID-orig)
-			$from_pop = get_post_meta($from_city, 'population', true);
-			$to_pop = get_post_meta($to_city, 'population', true);
-			update_post_meta($to_city, 'trade-'.$from_city.'-orig', $from_pop);
-			update_post_meta($from_city, 'trade-'.$to_city.'-orig', $to_pop);
-
 			// update number of trade routes in each city
 			$to_routes = get_post_meta($to_city, 'traderoutes', true);
 			$from_routes = get_post_meta($from_city, 'traderoutes', true);
@@ -95,7 +89,15 @@ switch ($trade) {
 			
 			<p>The people of <?php echo $from_user->display_name; ?>'s city of <?php echo $from_city; ?> are interested in forming a trade agreement with your city of <?php echo $to_city; ?>. Take your time, do your research, and when you're ready, you can approve or deny the proposal below:</p>
 			<form action="<?php the_permalink(); ?>" method="POST">
+				<?php 
+				// If the city is full up on trade routes, the user can only deny it! 
+				if (get_post_meta(get_post_meta($ID, 'to-city', true), 'traderoutes', true) == get_post_meta(get_post_meta($ID, 'to-city', true), 'ports', true)) { ?>
+				<p>Unfortunately, <?php echo $to_city; ?> can't accomodate any more trade routes! Unless you visit the city and cancel one or more, you can only deny this request.</p>
+				<?php
+				// Otherwise, we're ok to approve
+				} else { ?>
 				<input type="radio" name="trade" id="approve" value="approve" /><label for="approve">Approve</label><br />
+				<?php } ?>
 				<input type="radio" name="trade" id="deny" value="deny" /><label for="deny">Deny</label><br />
 
 				<!-- reversing the order of to and from since we're going to be sending a notification to the from user -->

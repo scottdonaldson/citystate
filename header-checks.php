@@ -1,230 +1,7 @@
-<?php
-
-/* 
- *	DAILY UPDATE
- */
-if (isset($_POST['pass'])) {
+<?php if (isset($_POST['pass'])) {
 	$pass = $_POST['pass'];
 	if (md5($pass) == 'd7bd30db1b34953089b9e33e5a2d4b3b') {
-		
-		// Reset all users' turns to 10
-		$users = get_users();
-		foreach ($users as $user) {
-			update_field('turns', 10, 'user_'.$user->ID);
-		}
-
-		// Update all cities
-		$city_query = new WP_query(array(
-			'posts_per_page' => -1
-			)
-		);
-		while ($city_query->have_posts()) : $city_query->the_post();
-		
-			// Get info
-			$ID = get_the_ID();
-			$user_ID = get_the_author_meta('ID');
-
-			// Resets
-			include ( MAIN . 'update/resets.php');
-					
-			// Get population, happiness, and target pop values
-			$pop = get_post_meta($ID, 'population', true);
-			$city_happy = get_post_meta($ID, 'happiness', true);
-			$target = get_post_meta($ID, 'target-pop', true);
-			
-			// If target population is greater than population,
-			// happiness helps it grow quicker
-			if ($target >= $pop) {
-				$newpop = $pop + ceil((0.00333 * $city_happy) * ($target - $pop));			
-			// If target population is lower than population,
-			// happiness slows down population loss
-			} else {
-				$newpop = $pop + floor((0.00333 * (100 - $city_happy)) * ($target - $pop));
-			}
-			update_post_meta($ID, 'population', $newpop);
-
-			// Update target population based on each trade route in city
-			if (get_post_meta($ID, 'traderoutes', true) > 0) {
-				$trades = get_post_meta($ID, 'trade');
-				foreach ($trades as $trade) {
-					// If the population of trade partners has changed, update
-					// target population of this city accordingly
-					$trade_orig = get_post_meta($ID, 'trade-'.$trade.'-orig', true);
-					$trade_change = get_post_meta($trade, 'population', true) - $trade_orig;
-					update_post_meta($ID, 'target-pop', $target + floor(0.075 * $trade_change));
-
-					// Update target pop again
-					$target = get_post_meta($ID, 'target-pop', true);
-				}
-			}
-
-			// Population milestones
-			include ( MAIN . 'update/pop-milestones.php');
-				
-			// Taxes
-			$cash = get_field('cash', 'user_'.$user_ID);
-			$taxes = ceil(0.05*$pop);
-			update_field('cash', $cash + $taxes, 'user_'.$user_ID);
-
-			// Structure-related
-			include ( MAIN . 'structures.php' );
-			foreach ($structures as $structure=>$values) {
-				include( MAIN .'structures/values.php');
-
-				// Non-repeating structures
-				if ($max == 1) {
-					// Assign some variables.
-					// $y tells us the y position. If the structure hasn't been built, it's 0.
-					// $cost is originally the cost of construction. Multiplying it by 0.02,
-					//     it will here be used as our base upkeep costs.
-					// $funding is the funding for the structure. If it hasn't been set, it's
-					//     equal to the previously defined $cost
-					$y = get_post_meta($ID, $structure.'-y', true);
-					$cost = 0.02*$cost;
-					$funding = get_post_meta($ID, 'funding-'.$structure, true) > 0 ? get_post_meta($ID, 'funding-'.$structure, true) : $cost;
-
-					// If the structure has been built, we subtract upkeep costs/funding
-					if ($y != 0) {
-						$cash = get_field('cash','user_'.$user_ID);
-						update_field('cash', $cash - $funding, 'user_'.$user_ID);
-					}
-
-					// If the population of the city is already at or above the point 
-					// where the structure is desired, certain things start to happen.
-					if ($pop >= $desired) {
-						$city_happy = get_post_meta($ID, 'happiness', true);
-
-						// If the structure hasn't been built, we reduce happiness by 5%
-						if ($y == 0) {				
-							update_post_meta($ID, 'happiness', floor(0.95 * $city_happy));
-						
-						// If the structure has been built...
-						} else {
-							
-							// For each 1000 people in the population greater than the 
-							// desired population, base costs needed to keep the peace are 
-							// increased by 10% (rounded to nearest 1)
-							$need_funding = round($cost * (1 + 0.1 * (($pop - $desired) / 1000) ));
-
-							// $diff is the percentage supplied vs. what is needed
-							$diff = $funding / $need_funding;
-
-							$city_happy = get_post_meta($ID, 'happiness', true);
-							$city_culture = get_post_meta($ID, 'culture', true);
-							$city_edu = get_post_meta($ID, 'education', true);
-
-							// If the funding supplied for this structure is less than required,
-							// people get unhappy, less cultural, and stupider.
-							if ($diff < 1) {
-								update_post_meta($ID, $structure.'-funding', 'bad');
-								
-								// To determine the reduction:
-								// Take original city happy/culture/edu. 
-								// Take away 1/2 of original structural increase.
-								// Take weighted average of $diff and 1 (i.e. 70% -> 90%) percentage of that value.
-								update_post_meta($ID, 'happiness', round($city_happy * (1 - 0.005*$happy) * (2 + $diff)/3), 3);
-								update_post_meta($ID, 'culture', round($city_culture * (1 - 0.005*$culture) * (2 + $diff)/3), 3);
-								update_post_meta($ID, 'education', round($city_edu * (1 - 0.005*$edu) * (2 + $diff)/3), 3);
-
-							// Between 100% and 150%, funding is fair and no values change
-							} elseif ($diff >= 1 && $diff < 1.5) {
-								update_post_meta($ID, $structure.'-funding', 'fair');
-
-							// Between 150% and 300%, funding is good and values change
-							} elseif ($diff >= 1.5) {
-								update_post_meta($ID, $structure.'-funding', 'good');
-
-								// Increase is similar to building a structure but factoring in
-								// our new friend $diff
-								update_post_meta($ID, 'happiness', $city_happy + round(0.04 * $happy * ($diff - 1.5) * (1 - 0.01*$city_happy), 3));
-								update_post_meta($ID, 'culture', $city_culture + round(0.04 * $culture * ($diff - 1.5) * (1 - 0.01*$city_culture), 3));
-								update_post_meta($ID, 'education', $city_edu + round(0.04 * $edu * ($diff - 1.5) * (1 - 0.01*$city_edu), 3));
-							} 
-							// Above 500%, funding is EXCELLENT
-							if ($diff >= 5) {
-								update_post_meta($ID, $structure.'-funding', 'excellent');
-							}
-						
-						} // end structure has been built
-					
-					} // end is current pop greater than desired pop
-
-				// Repeating structures (just park and port for now)
-				} elseif ( $structure == 'park' || $structure == 'port' ) {
-					
-					// $count tells us how many have been built.
-					// $cost is originally the cost of construction. Multiplying it by 0.02,
-					//     it will here be used as our base upkeep costs.
-					// Here, funding is for ALL the structures together (or, if it hasn't been set, it's the 
-					//     base upkeep times the number of structures)
-					$count = get_post_meta($ID, $structure.'s', true);
-					$cost = 0.02*$cost;
-					$funding = get_post_meta($ID, 'funding-'.$structure, true) > 0 ? get_post_meta($ID, 'funding-'.$structure, true) : $cost*$count;
-
-					// If the structure has been built, we subtract upkeep costs/funding
-					if ($count > 0) {
-						$cash = get_field('cash', 'user_'.$user_ID);
-						update_field('cash', $cash - $funding, 'user_'.$user_ID);
-
-						// If the population of the city is already at or above the point 
-						// where the structure is desired, certain things start to happen.
-						if ($pop >= $desired) {
-
-							// For each 1000 people in the population greater than the 
-							// desired population, base costs needed to keep the peace are 
-							// increased by 10% (rounded to nearest 1)
-							$need_funding = $count * round($cost * (1 + 0.1 * (($pop - $desired) / 1000) ));
-
-							// $diff is the percentage supplied vs. what is needed
-							$diff = $funding / $need_funding;
-
-							$city_happy = get_post_meta($ID, 'happiness', true);
-							$city_culture = get_post_meta($ID, 'culture', true);
-							$city_edu = get_post_meta($ID, 'education', true);
-
-							// If the funding supplied for this structure is less than required,
-							// people get unhappy, less cultural, and stupider.
-							if ($diff < 1) {
-								update_post_meta($ID, $structure.'-funding', 'bad');
-								
-								// To determine the reduction:
-								// Take original city happy/culture/edu. 
-								// Take away 1/2 of original structural increase.
-								// Take weighted average of $diff and 1 (i.e. 70% -> 90%) percentage of that value.
-								update_post_meta($ID, 'happiness', round($city_happy * (1 - 0.005*$count*$happy) * (2 + $diff)/3), 3);
-								update_post_meta($ID, 'culture', round($city_culture * (1 - 0.005*$count*$culture) * (2 + $diff)/3), 3);
-								update_post_meta($ID, 'education', round($city_edu * (1 - 0.005*$count*$edu) * (2 + $diff)/3), 3);
-
-							// Between 100% and 150%, funding is fair and no values change
-							} elseif ($diff >= 1 && $diff < 1.5) {
-								update_post_meta($ID, $structure.'-funding', 'fair');
-
-							// Between 150% and 300%, funding is good and values change
-							} elseif ($diff >= 1.5) {
-								update_post_meta($ID, $structure.'-funding', 'good');
-
-								// Increase is similar to building a structure but factoring in
-								// our new friend $diff
-								update_post_meta($ID, 'happiness', $city_happy + $count*round(0.04 * $happy * ($diff - 1.5) * (1 - 0.01*$city_happy), 3));
-								update_post_meta($ID, 'culture', $city_culture + $count*round(0.04 * $culture * ($diff - 1.5) * (1 - 0.01*$city_culture), 3));
-								update_post_meta($ID, 'education', $city_edu + $count*round(0.04 * $edu * ($diff - 1.5) * (1 - 0.01*$city_edu), 3));
-							} 
-							// Above 500%, funding is EXCELLENT
-							if ($diff >= 5) {
-								update_post_meta($ID, $structure.'-funding', 'excellent');
-							}
-						
-						} // end is current pop greater than desired pop
-
-					} // end is $count greater than 0
-
-				} // End non-repeating or repeating structure
-
-			} // end structure array foreach
-
-		endwhile;
-		wp_reset_postdata();
-
+		include ( MAIN . 'functions/update.php');
 		$alert = '<p>Daily update complete.</p>';
 	} else {
 		$alert = '<p>Bad password. Best try again.</p>';
@@ -250,7 +27,7 @@ if (isset($_POST['update'])) {
 /*
  *	BAD LOGIN
  */
-if ($_GET['login'] == 'failed') {
+if (isset($_GET['login']) && $_GET['login'] == 'failed') {
 	$alert = '<p>Bad login. Check your username or password and try again.</p><p><a href="'.home_url().'/wp-login.php?action=lostpassword">Did you forget your password?</a></p>';
 }
 
@@ -258,18 +35,16 @@ if ($_GET['login'] == 'failed') {
  *	BANKRUPT
  */
 // About to go bankrupt
-if ($_GET['err'] == 'bankrupt') {
+if (isset($_GET['err']) && $_GET['err'] == 'bankrupt') {
 	$alert = '<p>You can&#39;t do that &mdash; you&#39;d go bankrupt!</p>';
 }
 
 /*
  *	UPDATING PROFILE
  */
-if ($_GET['profile'] == 'updated') { 
+if (isset($_GET['profile']) && $_GET['profile'] == 'updated') { 
 	$user = (isset($_GET['author_name'])) ? get_user_by('slug', $author_name) : get_userdata(intval($author));
-	if (isset($_POST['color'])) {
-		update_field('color', $_POST['color'], 'user_'.$user->ID);
-	}
+
 	if (isset($_POST['displayName']) && $_POST['displayName'] !== '') {
 		$name = $_POST['displayName'];
 		wp_update_user(array('ID'=>$user->ID, 'display_name'=>$name));
@@ -289,4 +64,71 @@ if ($_GET['profile'] == 'updated') {
 	header('Location: '.home_url().'/user/'.$user->user_login);
 	$alert = '<p>Profile updated. Keep on keepin&apos; on.</p>';
 }
+
+// If user is canceling any trade routes
+if (isset($_POST['cancel'])) {
+	$traderoutes = $_POST['traderoute'];
+
+	// For each trade route being canceled...
+	foreach ($traderoutes as $traderoute) {
+		// Dump the route itself
+		delete_post_meta($ID, 'trade', $traderoute); // This city with partner
+		delete_post_meta($traderoute, 'trade', $ID); // Partner with city
+		// Update number of routes in each city
+		update_post_meta($ID, 'traderoutes', get_post_meta($ID, 'traderoutes', true) - 1);
+		update_post_meta($traderoute, 'traderoutes', get_post_meta($traderoute, 'traderoutes', true) - 1);
+	}
+	
+	// Display confirmation
+	if (count($traderoutes) == 1) {
+		$trade_update = '<p>1 route successfully canceled.</p>';
+	} else {
+		$trade_update = '<p>'.count($traderoutes).' routes successfully canceled.</p>';
+	}
+
+	// Send a message
+	$notify = wp_insert_post(array(
+		'post_type' => 'message',
+		'post_title' => 'Trade route between '.get_post($traderoute)->post_title.' and '.get_post($ID)->post_title.' has been canceled',
+		'post_content' => $current_user->display_name.' canceled the trade route between '.get_post($ID)->post_title.' and your city of '.get_post($traderoute)->post_title.'. This will take some getting used to.',
+		'post_status' => 'publish'
+		)
+	);
+	add_post_meta($notify, 'to', get_post($traderoute)->post_author);
+	add_post_meta($notify, 'from', $current_user->ID);
+	add_post_meta($notify, 'read', 'unread');
+
+	// Now we update the target pop. values of each city (going down).
+	// Decreases are based on 7.5% of partner's actual population
+	$to_pop = floor(0.075 * get_post_meta($traderoute, 'population', true)); 
+	$from_pop = floor(0.075 * get_post_meta($ID, 'population', true));
+	$to_target_current = get_post_meta($traderoute, 'target-pop', true);
+	$from_target_current = get_post_meta($ID, 'target-pop', true);
+	update_post_meta($to_city, 'target-pop', $to_target_current - $from_pop);
+	update_post_meta($from_city, 'target-pop', $from_target_current - $to_pop);
+}
+
+/*
+ *  SCOUTING TERRITORIES
+ */
+if (isset($_POST['scout'])) {
+
+	// Get user info
+	global $current_user;
+	get_currentuserinfo();
+	$cash_current = get_field('cash', 'user_'.$current_user->ID);
+
+	// Costs 350 to scout
+	update_field('cash', $cash_current - 350, 'user_'.$current_user->ID);;
+
+	// And now we're scouting
+	update_field('scouting', 'yes', 'user_'.$current_user->ID);
+	update_field('scouting_region', $_POST['scout-region'], 'user_'.$current_user->ID);
+	update_field('scouting_x', $_POST['scout-x'], 'user_'.$current_user->ID);
+	update_field('scouting_y', $_POST['scout-y'], 'user_'.$current_user->ID);
+
+	$alert = '<p>Scouts have been sent to the territory, and it has been highlighted on your map.</p>'.
+			 '<p>The scouts will return with a report tomorrow! Be sure to check your messages then.</p>';	
+}
+
 ?>

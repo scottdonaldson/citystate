@@ -35,6 +35,27 @@ jQuery(document).ready(function($){
 		}
 	});
 
+	/* ------------- SNAPSHOT LINKS -------- */
+
+	var snapshot = $('.snapshot');
+	snapshot.click(function(e){
+		$.ajax({
+			url: $(this).attr('href'),
+			success: function(data){
+				$('html, body').animate({ scrollTop: 0 });
+				$('#alert').remove(); // hide any alerts that are out there
+
+				var data = $(data),
+					info = data.find('#snapshot')[0].innerHTML;
+
+				body.prepend('<div id="alert">'+info+'<div class="close-box">[ESC]</div></div>');	
+
+				$('.close-box').on('click', function(){ $('#alert').hide(); });	
+			}
+		});
+		e.preventDefault();
+	});
+
 	/* ---------------- BUILD -------------- */
 
 	var tile = $('.tile'),
@@ -108,36 +129,41 @@ jQuery(document).ready(function($){
 			// Add a class of active to the build box and show it
 			build.addClass('active').show();
 
-			// Ports can only be built on the waterfront
-			var port = $('#port');
-			port.hide();
+			// Ports and fisheries can only be built on the waterfront
+			var waterfront = $('#port, #fishery');
+			waterfront.hide();
 			if ($('.terrain.water').length > 0) {
 				// North
 				if ($this.data('y') == 1 && $('#n').hasClass('water')) {
-					port.show();
+					waterfront.show();
 				}
 				// East
-				if ($this.data('x') == 10 && $('#e').hasClass('water')) {
-					port.show();
+				if ($this.data('x') == 0 && $('#e').hasClass('water')) {
+					waterfront.show();
 				}
 				// South
 				if ($this.data('y') == 10 && $('#s').hasClass('water')) {
-					port.show();
+					waterfront.show();
 				}
 				// West
 				if ($this.data('x') == 1 && $('#w').hasClass('water')) {
-					port.show();
+					waterfront.show();
 				}
 			}
 
-			// Show location for user reference
-			build.find('.x').text($this.data('x'));
+			// Show location and terrain type for user reference
+			if ($this.data('x') == 0) { 
+				build.find('.x').text('10'); 
+			} else {
+				build.find('.x').text($this.data('x'));
+			}
 			build.find('.y').text($this.data('y'));
+			build.find('.terrain').text($this.data('terrain'));
 
 			// Set location values if not selecting
 			if (!body.hasClass('selecting')) {
-				$('#x, #build-x').val($this.data('x'));
-				$('#y, #build-y').val($this.data('y'));
+				$('#x, #build-x, #scout-x').val($this.data('x'));
+				$('#y, #build-y, #scout-y').val($this.data('y'));
 			// Otherwise, add new inputs for extra location values
 			} else {
 				count++;
@@ -210,13 +236,24 @@ jQuery(document).ready(function($){
 
 		// If structure can be upgraded, show upgrade box
 		if (structure.data('upgrade') == 1) {
-			upgrade.show();
-			upgrade.find('input[type="submit"]').val('Upgrade (' + $this.data('cost') + ')');
+			if (structure.data('structure') == 'neighborhood') {
+				if (structure.data('level') == 1) {
+					var addedCost = ' + 1 Food and 1 Fish';
+				} else if (structure.data('level') == 0) {
+					var addedCost = ' + 1 Food or 1 Fish';
+				}
+			}
+			upgrade.show()
+				.find('input[type="submit"]').val('Upgrade (' + $this.data('cost') + addedCost + ')');
 		}
 
 		// Fill in structure name and location for user reference
 		extra.find('.name-structure').text(structure.data('structure'));
-		extra.find('.x').text(structure.data('x'));
+		if (structure.data('x') == 0) { 
+			extra.find('.x').text('10'); 
+		} else {
+			extra.find('.x').text($this.data('x'));
+		}
 		extra.find('.y').text(structure.data('y'));
 
 		// Set form location values and structure/id values
@@ -226,10 +263,12 @@ jQuery(document).ready(function($){
 		$('#demo-id, #upgrade-id').val($this.data('id'));
 	});
 
-	// Building stadiums (2x2 structures)
-	$('#stadium').click(function(){
+	// Building 2x2 structures
+	$('#stadium, #farm, #pasture').click(function(){
+		var placeholder = $(this).attr('ID').toLowerCase();
+
 		// Show the helper text
-		$('.helper').html('To build a stadium, now select 3 more tiles to make a 2x2 square.');
+		$('.helper').html('To build a '+placeholder+', now select 3 more tiles to make a 2x2 square.');
 		
 		// We are definitely selecting more tiles
 		body.addClass('selecting');
@@ -251,7 +290,7 @@ jQuery(document).ready(function($){
 			// Conditions for not building:
 			// Not in a square / haven't clicked enough to make a square
 			if (hiX > lowX + 1 || hiY > lowY + 1 || count < 3) {
-				$('.helper').html('Make sure you&apos;re building that stadium within a 2x2 square.');
+				$('.helper').html('Make sure you&apos;re building within a 2x2 square.');
 				return false;
 			}
 		}

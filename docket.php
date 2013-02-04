@@ -13,7 +13,7 @@ if (isset($_POST['submit'])) {
 	$adv = $_POST['adv'];
 // If not, choose a random order of business.
 } else {
-	$adv = rand(1, 4);
+	$adv = rand(1, 5);
 }
 
 get_header();
@@ -61,10 +61,11 @@ if (!is_user_logged_in()) { ?>
 				);
 				while ($rand_city->have_posts()) : $rand_city->the_post();
 				$city = get_the_title();
+				$link = get_permalink();
 				$city_builder = get_the_author();
 				endwhile; wp_reset_postdata(); ?>
 				
-				<p>Until you build at least one city, there isn't really much for you to do around here. You spend some time wandering around <?php echo $city_builder; ?>'s city of <?php echo $city; ?>, and thinking about how great it would be to have a city of your own. You've got the cash - why not <a href="<?php echo home_url(); ?>">claim some land</a>?</p>
+				<p>Until you build at least one city, there isn't really much for you to do around here. You spend some time wandering around <?php echo $city_builder; ?>'s city of <a class="snapshot" href="<?php echo $link; ?>"><?php echo $city; ?></a>, and thinking about how great it would be to have a city of your own. You've got the cash - why not <a href="<?php echo home_url(); ?>">claim some land</a>?</p>
 			</div>
 		</div>
 	</div>

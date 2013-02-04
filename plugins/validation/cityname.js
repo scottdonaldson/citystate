@@ -3,7 +3,7 @@ jQuery(document).ready(function($){
 	var buildCity = $('.category #build');
 
 	// Validate form before submitting
-	buildCity.find('form').on('submit',function(){
+	buildCity.find('form:first').on('submit',function(){
 		var cityName = $('#cityName').val(),
 			$this = $(this),
 			special = [ '`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', '{', ']', '}', '\\', '|', ';', ':', '"', '<', '>', '/', '?'];

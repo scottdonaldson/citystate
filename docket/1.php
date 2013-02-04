@@ -89,7 +89,7 @@ $stadium = $structures['stadium'];
 			<?php if ($foe_self == true) { ?>
 			<p>It's an intrastate game!</p>
 			<?php } ?>
-			<p>The team from your city of <a href="<?php echo $user_link; ?>" target="_blank"><?php echo $user_city; ?></a> is playing a game against the team from <?php if ($foe_self == true) { echo 'another city of yours, '; } ?><a href="<?php echo $foe_link; ?>" target="_blank"><?php echo $foe_city; ?></a>.</p>
+			<p>The team from your city of <a class="snapshot" href="<?php echo $user_link; ?>"><?php echo $user_city; ?></a> is playing a game against the team from <?php if ($foe_self == true) { echo 'another city of yours, '; } ?><a class="snapshot" href="<?php echo $foe_link; ?>"><?php echo $foe_city; ?></a>.</p>
 			<?php 
 			// Get a random outcome between 1 and 100
 			$outcome = rand(1, 100); 
@@ -117,7 +117,7 @@ $stadium = $structures['stadium'];
 				<?php } else { ?>
 					<p><strong>Your team won!</strong></p>
 				<?php } ?>
-				<p>The citizens of <a href="<?php echo $user_link; ?>" target="_blank"><?php echo $user_city; ?></a> are a little bit happier for the win. Those of <a href="<?php echo $foe_link; ?>" target="_blank"><?php echo $foe_city; ?></a> will surely cry themselves to sleep.</p>
+				<p>The citizens of <?php echo $user_city; ?> are a little bit happier for the win. Those of <?php echo $foe_city; ?> will surely cry themselves to sleep.</p>
 				<?php
 				// Increase happiness of user city
 				// If happiness is under 80, increase by 2
@@ -147,7 +147,7 @@ $stadium = $structures['stadium'];
 				<?php } else { ?>
 					<p><strong>Your team lost...</strong></p>
 				<?php } ?>
-				<p>Because of this loss, the citizens of <a href="<?php echo $user_link; ?>" target="_blank"><?php echo $user_city; ?></a> are less happy than before. Meanwhile, the citizens of <a href="<?php echo $foe_link; ?>" target="_blank"><?php echo $foe_city; ?></a> have all got grins on their smug faces...</p>
+				<p>Because of this loss, the citizens of <?php echo $user_city; ?> are less happy than before. Meanwhile, the citizens of <?php echo $foe_city; ?> have all got grins on their smug faces...</p>
 				<?php
 				// Decrease happiness of user city
 				// If happiness is above 20, decrease by 2

@@ -46,7 +46,13 @@ if (is_user_logged_in()) { ?>
 				?>
 					<li class="message <?php echo 'to-'.$to; ?> clearfix">
 						<span class="name"><?php foreach ($users as $user) { if ($to == $user->ID) { echo $user->display_name; break; } } ?></span>
-						<span class="subject"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></span>
+						<span class="subject"><a href="<?php the_permalink(); ?>">
+							<?php 
+							if (get_the_title()) { 
+								the_title();
+							} else { 
+								echo '[No Subject]';
+							} ?></a></span>
 						<span class="date">
 							<?php 
 							// Central time!

@@ -10,7 +10,7 @@ include( MAIN .'structures.php');
 $structure = $_POST['build-structure'];
 if ($structure == 'stadium') {
 	$x = min($_POST['build-x'], $_POST['build-x-1'], $_POST['build-x-2'], $_POST['build-x-3']);
-	$y = min($_POST['build-x'], $_POST['build-y-1'], $_POST['build-y-2'], $_POST['build-y-3']);
+	$y = min($_POST['build-y'], $_POST['build-y-1'], $_POST['build-y-2'], $_POST['build-y-3']);
 } else { 
 	$x = $_POST['build-x'];
 	$y = $_POST['build-y'];
@@ -22,7 +22,8 @@ $happy_increase = $structures[$structure][7];
 $cult_increase = $structures[$structure][8];
 $edu_increase = $structures[$structure][9];
 
-// if ($x == 10) { $x = 0; }
+// Get city population
+$pop = get_post_meta($ID, 'population', true);
 
 // Get user info
 global $current_user;
@@ -56,6 +57,19 @@ if (($cash_current - $cost) < 0) {
 		$edu = get_post_meta($ID, 'education', true);
 		update_post_meta($ID, 'education', $edu + round($edu_increase - $edu_increase * $edu/100, 3));
 
+		// Update funding
+		$funding = round(0.02 * $cost * (1 + 0.1 * (($pop - $structures[$structure][6]) / 1000) ));
+		if ($funding < 1) {
+			$funding = 'bad';
+		} elseif ($funding < 1.5) {
+			$funding = 'fair';
+		} elseif ($funding < 5) {
+			$funding = 'good';
+		} elseif ($funding >= 5) {
+			$funding = 'excellent';
+		}
+		update_post_meta($ID, $structure.'-funding', $funding);
+
 	// Set location for repeating
 	} else {
 		$num = get_post_meta($ID, $structure.'s', true);
@@ -84,9 +98,21 @@ if (($cash_current - $cost) < 0) {
 
 		// Update population for residential types
 		if ($structure == 'neighborhood') {
-			$pop = get_post_meta($ID, 'population', true);
 			update_post_meta($ID, 'population', $pop + 20);
 		}
+
+		// Update funding
+		$funding = round(0.02 * $new * $cost * (1 + 0.1 * (($pop - $structures[$structure][6]) / 1000) ));
+		if ($funding < 1) {
+			$funding = 'bad';
+		} elseif ($funding < 1.5) {
+			$funding = 'fair';
+		} elseif ($funding < 5) {
+			$funding = 'good';
+		} elseif ($funding >= 5) {
+			$funding = 'excellent';
+		}
+		update_post_meta($ID, $structure.'-funding', $funding);
 	}
 
 	// Update the activity log. The output:

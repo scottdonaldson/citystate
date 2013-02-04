@@ -15,7 +15,7 @@ if (isset($_POST['buildCity'])) {
 	$cities = count_user_posts($current_user->ID);
 
 	// Make sure we're not bankrupting, then proceed
-	if (($cash_current - (1500*$cities + 500)) < 0) {
+	if (($cash_current - (1500 * $cities + 500)) < 0) {
 		// Redirect
 		header('Location: '.home_url().'?err=bankrupt');
 	} else {
@@ -48,6 +48,13 @@ if (isset($_POST['buildCity'])) {
 		add_post_meta($ID, 'population', 0);
 		add_post_meta($ID, 'target-pop', 1000);
 		add_post_meta($ID, 'happiness', 50);
+
+		// Set natural resources
+		include ( MAIN .'maps/'.$region_slug.'.php');
+		$resources = $map[$y][$x - 1][1];
+		foreach ($resources as $resource=>$value) {
+			add_post_meta($ID, $resource, $value);
+		}
 
 		// Set geographic characteristics...
 		include ( MAIN . 'build/geo.php');

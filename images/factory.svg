@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="600px"
+	 height="600px" viewBox="0 0 600 600" enable-background="new 0 0 600 600" xml:space="preserve">
+<g id="Layer_1">
+	<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="299.5" y1="597" x2="299.5" y2="312">
+		<stop  offset="0" style="stop-color:#EDEDD6"/>
+		<stop  offset="0.442" style="stop-color:#EBEBD5"/>
+		<stop  offset="0.6012" style="stop-color:#E4E4CF"/>
+		<stop  offset="0.7147" style="stop-color:#D9D9C6"/>
+		<stop  offset="0.8065" style="stop-color:#C8C8B9"/>
+		<stop  offset="0.885" style="stop-color:#B2B2A7"/>
+		<stop  offset="0.9534" style="stop-color:#979792"/>
+		<stop  offset="1" style="stop-color:#808080"/>
+	</linearGradient>
+	<rect x="27" y="312" fill="url(#SVGID_1_)" stroke="#635050" stroke-width="6" stroke-miterlimit="10" width="545" height="285"/>
+	<rect x="27" y="312" fill="#EDEDD6" stroke="#635050" stroke-width="6" stroke-miterlimit="10" width="545" height="31"/>
+	<rect x="108" y="557" fill="#635050" width="19" height="37"/>
+	<rect x="26" y="344" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="45" height="254"/>
+	<rect x="71" y="344" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="47" height="254"/>
+	<rect x="118" y="344" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="45" height="254"/>
+	<rect x="163" y="344" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="46" height="254"/>
+	<rect x="209" y="344" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="46" height="254"/>
+	<rect x="255" y="344" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="46" height="254"/>
+	<rect x="301" y="344" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="45" height="254"/>
+	<rect x="346" y="344" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="46" height="254"/>
+	<rect x="392" y="344" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="46" height="254"/>
+	<rect x="438" y="344" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="46" height="254"/>
+	<rect x="484" y="344" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="46" height="254"/>
+	<g>
+		<rect x="50" y="516" fill="#EDEDD6" stroke="#635050" stroke-width="6" stroke-miterlimit="10" width="305" height="23"/>
+		<rect x="73" y="539" fill="#EDEDD6" stroke="#635050" stroke-width="6" stroke-miterlimit="10" width="17" height="57"/>
+		<rect x="144" y="539" fill="#EDEDD6" stroke="#635050" stroke-width="6" stroke-miterlimit="10" width="17" height="57"/>
+	</g>
+	<rect x="176" y="557" fill="#635050" width="22" height="22"/>
+	<rect x="221" y="557" fill="#635050" width="22" height="22"/>
+	<rect x="449" y="381" fill="#635050" width="22" height="22"/>
+	<rect x="496" y="381" fill="#635050" width="22" height="22"/>
+	<rect x="496" y="469" fill="#635050" width="22" height="22"/>
+	<rect x="496" y="557" fill="#635050" width="22" height="22"/>
+	<rect x="267" y="557" fill="#635050" width="22" height="22"/>
+	<rect x="313" y="557" fill="#635050" width="22" height="22"/>
+	<g>
+		<polygon fill="#EDEDD6" stroke="#635050" stroke-width="6" stroke-miterlimit="10" points="123.367,312 81.839,312 92.486,53 
+			112.719,53 		"/>
+		<polygon fill="#EDEDD6" stroke="#635050" stroke-width="6" stroke-miterlimit="10" points="251.146,312 209.617,312 220.266,53 
+			240.498,53 		"/>
+		<polygon fill="#EDEDD6" stroke="#635050" stroke-width="6" stroke-miterlimit="10" points="383.185,312 341.656,312 352.305,53 
+			372.536,53 		"/>
+		<polygon fill="#EDEDD6" stroke="#635050" stroke-width="6" stroke-miterlimit="10" points="510.963,312 469.436,312 480.083,53 
+			500.315,53 		"/>
+	</g>
+</g>
+<g id="Layer_2">
+	<g>
+		<defs>
+			<path id="SVGID_2_" d="M124.493,313h-43.78L92.607,52h19.99L124.493,313z M252.493,312l-42.78,1l9.895-261h22.99L252.493,312z
+				 M384.493,313h-43.78l10.895-261l20.99-1L384.493,313z M512.493,313h-43.78l10.895-263h21.99L512.493,313z"/>
+		</defs>
+		<clipPath id="SVGID_3_">
+			<use xlink:href="#SVGID_2_"  overflow="visible"/>
+		</clipPath>
+		<g clip-path="url(#SVGID_3_)">
+			<rect x="57" y="54" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="479" height="26"/>
+			<rect x="57" y="80" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="479" height="26"/>
+			<rect x="57" y="106" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="479" height="26"/>
+			<rect x="57" y="132" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="479" height="26"/>
+			<rect x="57" y="158" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="479" height="26"/>
+			<rect x="57" y="184" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="479" height="25"/>
+			<rect x="57" y="209" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="479" height="26"/>
+			<rect x="57" y="235" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="479" height="26"/>
+			<rect x="57" y="261" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="479" height="26"/>
+			<rect x="57" y="287" fill="none" stroke="#635050" stroke-width="2" stroke-miterlimit="10" width="479" height="26"/>
+		</g>
+	</g>
+</g>
+</svg>

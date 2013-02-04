@@ -10,108 +10,26 @@ get_currentuserinfo();
 // Get city ID
 $ID = get_the_ID();
 
-if ($_GET['visit'] == 'first') {
-	echo '<div id="alert"><h2>Welcome to your new city!</h2></div>';
+// Set initial resource costs equal to 0
+include ( MAIN . 'resources.php');
+foreach ($resources as $key=>$resource) {
+	$name = substr($resource[0], 0, -6); // remove '_stock'
+	$cost_[$name] = 0;
 }
 
-// If user is viewing trade routes
-if ($_GET['view'] == 'trade') {
-	// Must be the governor of the city
-	if ($current_user->ID == get_the_author_meta('ID')) { 
-		// If user is canceling any trade routes
-		if (isset($_POST['cancel'])) {
-			$traderoutes = $_POST['traderoute'];
-
-			// For each trade route being canceled...
-			foreach ($traderoutes as $traderoute) {
-				// Dump the route itself
-				delete_post_meta($ID, 'trade', $traderoute); // This city with partner
-				delete_post_meta($traderoute, 'trade', $ID); // Partner with city
-				// Update number of routes in each city
-				update_post_meta($ID, 'traderoutes', get_post_meta($ID, 'traderoutes', true) - 1);
-				update_post_meta($traderoute, 'traderoutes', get_post_meta($traderoute, 'traderoutes', true) - 1);
-			}
-			
-			// Display confirmation
-			if (count($traderoutes) == 1) {
-				$trade_update = '<p>1 route successfully canceled.</p>';
-			} else {
-				$trade_update = '<p>'.count($traderoutes).' routes successfully canceled.</p>';
-			}
-
-			// Send a message
-			$notify = wp_insert_post(array(
-				'post_type' => 'message',
-				'post_title' => 'Trade route between '.get_post($traderoute)->post_title.' and '.get_post($ID)->post_title.' has been canceled',
-				'post_content' => $current_user->display_name.' canceled the trade route between '.get_post($ID)->post_title.' and your city of '.get_post($traderoute)->post_title.'. This will take some getting used to.',
-				'post_status' => 'publish'
-				)
-			);
-			add_post_meta($notify, 'to', get_post($traderoute)->post_author);
-			add_post_meta($notify, 'from', $current_user->ID);
-			add_post_meta($notify, 'read', 'unread');
-
-			// Now we update the target pop. values of each city (going down).
-			// Decreases are based on 7.5% of partner's actual population
-			$to_pop = floor(0.075 * get_post_meta($traderoute, 'population', true)); 
-			$from_pop = floor(0.075 * get_post_meta($ID, 'population', true));
-			$to_target_current = get_post_meta($traderoute, 'target-pop', true);
-			$from_target_current = get_post_meta($ID, 'target-pop', true);
-			update_post_meta($to_city, 'target-pop', $to_target_current - $from_pop);
-			update_post_meta($from_city, 'target-pop', $from_target_current - $to_pop);
-		}
-		?>
-
-		<div id="alert" class="trade">
-			<h2><?php the_title(); ?> - Trade Routes</h2>
-			<?php echo $trade_update; ?>
-			<form action="<?php the_permalink(); ?>?view=trade" method="POST">
-			<?php 
-			$traderoutes = get_post_meta(get_the_ID(), 'traderoutes', true);
-			$trades = get_post_meta(get_the_ID(), 'trade');
-			for ($i = 0; $i < count($trades); $i++) { ?>
-				<div class="clearfix">
-				<input type="checkbox" name="traderoute[]" value="<?php echo $trades[$i]; ?>" />
-					<a href="<?php echo get_permalink($trades[$i]); ?>" target="_blank">
-						<?php echo get_post($trades[$i])->post_title; ?>
-					</a>&nbsp;
-					<small>(Pop: <?php echo th(get_post_meta($trades[$i], 'population', true)); ?>)</small>	
-				</div>		
-			<?php } 
-			?>
-			<p class="helper">To cancel selected trade routes, press Cancel below.</p>
-			<input class="button helper" type="submit" id="cancel" name="cancel" value="Cancel" />
-			</form>
-		</div>
-
-		<script>
-			jQuery(document).ready(function($){
-				var tradeForm = $('#alert.trade form');
-				tradeForm.find('input').change(function(){
-					if ($('input:checked').length > 0) {
-						$('.helper').show();
-					} else {
-						$('.helper').hide();
-					}
-				});
-			});
-		</script>
-	<?php 
-	// If the viewer is NOT the city governor (i.e. tryin' ta cheat)
-	} else { ?>
-	<div id="alert">
-		<h2>No peekin'.</h2>
-		<p>The trade administrators of <?php the_title(); ?> aren't so keen on letting just any Joe, Jane, or <?php echo $current_user->display_name; ?> read all about the city's trade routes without the proper authorization.</p>
-	</div>
-	<?php }
+if (isset($_GET['visit']) && $_GET['visit'] == 'first') {
+	echo '<div id="alert"><h2>Welcome to your new city!</h2></div>';
 }
 ?>
 
-<div id="map" class="clearfix">
+<?php 
+// The snapshot (used in AJAX calls)
+include( MAIN . 'single/snapshot.php'); ?>
+
+<div id="map" class="clearfix <?php if (is_user_logged_in() && $current_user->ID == get_the_author_meta('ID')) { echo 'user-city'; } else { echo 'not-user-city'; } ?>">
 
 	<?php foreach ( range(1,100) as $tile ) { 
 		$x = fmod($tile, 10);
-		$x = $x == 0 ? 10 : $x;
 		$y = ceil($tile/10);
 		?>
 
@@ -160,24 +78,40 @@ if ($_GET['view'] == 'trade') {
 						echo 'data-cost="'.$cost.'" data-upgrade="true"';
 						echo 'data-level="'.get_post_meta($ID, $structure.'-level', true).'"';
 					} elseif (get_post_meta($ID, $structure.'-level', true) == $upgrade) {
-							echo 'data-level="'.get_post_meta($ID, $structure.'-'.$i.'-level', true).'"';
-						}
+						echo 'data-level="'.get_post_meta($ID, $structure.'-'.$i.'-level', true).'"';
+					}
 				}
 			} else {
 				$total = get_post_meta($ID, $structure.'s', true);
 				for ($i = 1; $i <= $total; $i++) {
 					$x_[$structure] = get_post_meta($ID, $structure.'-'.$i.'-x', true);
 					$y_[$structure] = get_post_meta($ID, $structure.'-'.$i.'-y', true);
+					$level = get_post_meta($ID, $structure.'-'.$i.'-level', true);
 					if ($x_[$structure] == $x && $y_[$structure] == $y) {
 						echo 'data-structure="'.$structure.'"';
 						echo 'data-id="'.$i.'"';
 						
 						// Upgradeable if the level is less than max for upgrades
-						if ($upgrade > 0 && get_post_meta($ID, $structure.'-'.$i.'-level', true) < $upgrade) {
+						if ($upgrade > 0 && $level < $upgrade) {
 							echo 'data-cost="'.$cost.'" data-upgrade="true"';
-							echo 'data-level="'.get_post_meta($ID, $structure.'-'.$i.'-level', true).'"';
+							echo 'data-level="'.$level.'"';
 						} elseif (get_post_meta($ID, $structure.'-'.$i.'-level', true) == $upgrade) {
-							echo 'data-level="'.get_post_meta($ID, $structure.'-'.$i.'-level', true).'"';
+							echo 'data-level="'.$level.'"';
+						}
+
+						// Neighborhoods cost resources (used in single/view.php)
+						if ($structure == 'neighborhood' && ($level == 1 || $level == 2) ) {
+							// Once-upgraded even costs 1 food
+							if ($level == 1 && $i%2 == 0) {
+								$cost_food = $cost_food + 1;
+							// Once-upgraded odd costs 1 fish
+							} elseif ($level == 1 && $i%2 == 1) {
+								$cost_fish = $cost_fish + 1;
+							// Twice-upgraded costs 1 food and 1 fish
+							} else {
+								$cost_food = $cost_food + 1;
+								$cost_fish = $cost_fish + 1;
+							}
 						}
 					}
 				}
@@ -187,7 +121,7 @@ if ($_GET['view'] == 'trade') {
 	</div>
 	<?php 
 	// End of row
-	if ($x == 10) { ?>
+	if ($x == 0) { ?>
 	</div>
 	<?php } ?>
 
@@ -211,6 +145,13 @@ if ($_GET['view'] == 'trade') {
 			<p>Build a structure at (<span class="x"></span>,&nbsp;<span class="y"></span>):</p>
 			<form method="post" action="<?php echo get_permalink().'?structure=build'; ?>">
 				<?php 
+				// Create an empty resource structures array to populate with both
+				// structures and (preceding them) the corresponding keys. Use this later.
+				$resource_structures = [];
+				foreach ($resources as $key=>$resource) {
+					array_push($resource_structures, $key, $resource[1]);
+				}
+				// Open the list
 				echo '<ul>';
 				foreach ($structures as $structure=>$values) { 
 					include( MAIN .'structures/values.php');
@@ -222,26 +163,38 @@ if ($_GET['view'] == 'trade') {
 
 						// Only show build option if structure is not yet built
 						// and if has passed 1/2 of population at which it is desired
-						if ($y == '0' && get_post_meta($ID, 'population', true) >= 0.5*$desired) { ?>
+						if ($y == '0' && $pop >= 0.5*$desired) { ?>
 						
 							<li id="<?php echo $structure; ?>">
 								<?php echo ucwords($name).' ('.th($cost).')'; ?>
 							</li>
 						<?php 
 						}
-					// Repeating structures	
+						
+					// Repeating structures
 					} else { 
 						// Only show if max is 0 (can build as many as desired)
 						// or if the count is less than the maximum allowed
 						// AND if has passed 1/2 of population at which it is desired
-						if (($max == 0 || get_post_meta($ID, $structure.'s', true) < $max) && get_post_meta($ID, 'population', true) >= .5*$desired) { ?>
-							<li id="<?php echo $structure; ?>">
-								<?php echo ucwords($name).' ('.th($cost).')'; ?>
-							</li>
-						<?php 
+						if (($max == 0 || get_post_meta($ID, $structure.'s', true) < $max) && $pop >= 0.5*$desired) { 
+							// Resource-related structures. Now we use the above $resource_structures array.
+							if (in_array($name, $resource_structures)) {
+								// Complicated, but this is how we test if there is resource present in city
+								if (get_post_meta($ID, $resource_structures[array_search($name, $resource_structures) - 1], true) > 0 && $pop >= 1000) { ?>
+									<li id="<?php echo $structure; ?>">
+										<?php echo ucwords($name).' ('.th($cost).')'; ?>
+									</li>
+								<?php
+								}
+							} else { ?>
+								<li id="<?php echo $structure; ?>">
+									<?php echo ucwords($name).' ('.th($cost).')'; ?>
+								</li>
+							<?php 
+							}
 						}
-					}
-				} 
+					} // end repeating structures
+				} // end foreach
 				echo '</ul>';
 				?>
 				<input id="build-structure" name="build-structure" type="hidden" />
@@ -275,6 +228,10 @@ if ($_GET['view'] == 'trade') {
 
 </div><!-- #map -->
 
-
+<?php
+// If user is viewing something in the city
+// (Pull this after rendering the map so that we can use its data)
+if (isset($_GET['view'])) { include( MAIN . 'single/view.php'); }
+?>
 
 <?php get_footer(); ?>
