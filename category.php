@@ -90,11 +90,17 @@ query_posts('posts_per_page=-1&category_name='.$region_slug); while (have_posts(
 
 				<div id="city-<?php the_ID(); ?>" class="city
 					<?php 
-					if ($repeaters <= 5) { echo 'r00'; 
-					} elseif ($repeaters > 5 && $repeaters <= 10) { echo 'r01';
-					} elseif ($repeaters > 10 && $repeaters <= 15) { echo 'r02';
-					} elseif ($repeaters > 15 && $repeaters <= 20) { echo 'r03';
-					} elseif ($repeaters > 20) { echo 'r04'; 
+					// User's city?
+					if (get_the_author_meta('ID') == $current_user->ID) {
+						echo ' user-city';
+					}
+
+					// Displaying the size of the city
+					if ($repeaters <= 5) { echo ' r00'; 
+					} elseif ($repeaters > 5 && $repeaters <= 10) { echo ' r01';
+					} elseif ($repeaters > 10 && $repeaters <= 15) { echo ' r02';
+					} elseif ($repeaters > 15 && $repeaters <= 20) { echo ' r03';
+					} elseif ($repeaters > 20) { echo ' r04'; 
 					}
 					if ($non == 1 ) { echo ' n01'; 
 					} elseif ($non == 2 ) { echo ' n02'; 
