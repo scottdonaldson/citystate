@@ -62,6 +62,17 @@
 			</p>
 		</div>
 
+		<?php if (is_category()) { ?>
+			<div class="module">
+				<div class="clearfix">
+					<div class="key user-city"></div><span>Your Cities</span>
+				</div>
+				<div class="clearfix">
+					<div class="key trade-partner"></div><span>Trade Partners</span>
+				</div>
+			</div>
+		<?php } ?>
+
 		<?php if (is_single() && get_post_type($post->ID) == 'post') { ?>
 
 			<div class="module">

@@ -311,7 +311,11 @@ a.map {
 			}
 
 			&.user-city {
-				background-color: transparentize(#fff, 0.75);
+				border-bottom: 4px solid #fff;
+			}
+
+			&.trade-partner {
+				border-bottom: 4px solid $sea-blue;
 			}
 
 			@for $r from 0 through 4 {
@@ -1125,6 +1129,23 @@ a.map {
 		p {
 			margin: 0;
 		}
+
+		.key {
+			border: 1px solid #333;
+			clear: left;
+			float: left;
+			height: 20px;
+			margin: 0 6px 4px 0;
+			width: 20px;
+
+			&.user-city {
+				background-color: #fff;
+			}
+			&.trade-partner {
+				background-color: $sea-blue;
+			}
+		}
+
 		@media screen and (max-width: 960px) {
 			background: none transparent;
 			border: 0 none;

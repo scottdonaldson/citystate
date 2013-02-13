@@ -13,13 +13,39 @@ get_currentuserinfo();
 // Get region slug
 $region_slug = get_query_var('category_name');
 
-// Retrieve all the cities
-query_posts('posts_per_page=-1&category_name='.$region_slug); while (have_posts()) : the_post(); 
-	$ID = get_the_ID();
-	$loc = get_field('location');
-	$city_[$ID] = '<div id="city-'.$ID.'" class="city '.$loc.'"></div>'; ?>
+// Retrieve cities in this region.
+// Current user first, then all others
+$city_query = new WP_Query(array(
+	'category_name' => $region_slug,
+	'posts_per_page' => -1,
+	'order' => 'ASC'
+	)
+);
 
-<?php endwhile; rewind_posts(); ?>
+$cities = array(); // empty array to hold cities
+$trade_partners = array(); // empty array to hold ALL user trade partners
+
+while ($city_query->have_posts()) : $city_query->the_post();
+	$ID = get_the_ID();
+	$x = get_post_meta($ID, 'location-x', true);
+	$y = get_post_meta($ID, 'location-y', true);
+
+	// For the current user's cities, set 'current' to true
+	// and check to see if there are trade partners to add to array
+	if (get_the_author_meta('ID') == $current_user->ID) {
+		array_push($cities, array('ID' => $ID, 'x' => $x, 'y' => $y, 'current' => true));
+		
+		if (count(get_post_meta($ID, 'trade')) > 0) {
+			array_push($trade_partners, get_post_meta($ID, 'trade', true));
+		}
+	// For other users' cities, 'current' is false
+	} else {
+		array_push($cities, array('ID' => $ID, 'x' => $x, 'y' => $y, 'current' => false));
+	}
+	
+endwhile;
+wp_reset_postdata();
+?>
 
 <div id="map" class="clearfix">
 
@@ -64,62 +90,71 @@ query_posts('posts_per_page=-1&category_name='.$region_slug); while (have_posts(
 				}
 
 			?>">
-			<?php while (have_posts()) : the_post(); 
+			<?php 
+			foreach ($cities as $city) {
+				if ($x == $city['x'] && $y == $city['y']) {
+					$ID = $city['ID'];
+					$c = get_post($ID); // the post object
 
-			// Is there a city here?
-			if (get_field('location-x') == $x && get_field('location-y') == $y) { 
+					// Get city info
+					include ('structures.php');
+					$non = 0;
+					$repeaters = 0;
+					foreach($structures as $structure=>$values) {
+						include( MAIN .'structures/values.php');
 
-				// Get city info
-				include ('structures.php');
-				$non = 0;
-				$repeaters = 0;
-				foreach($structures as $structure=>$values) {
-					include( MAIN .'structures/values.php');
+						// Count non-repeaters
+						if ($max != 0) {
+							$count = get_post_meta($ID, $structure.'-y', true);
+							if ($count != 0) { $non++; }
 
-					// Count non-repeaters
-					if ($max != 0) {
-						$count = get_post_meta(get_the_ID(), $structure.'-y', true);
-						if ($count != 0) { $non++; }
+						// Count repeaters
+						} else {
+							$count = get_post_meta($ID, $structure.'s', true);
+							$repeaters = $repeaters + $count;
+						}
+					} ?>
 
-					// Count repeaters
-					} else {
-						$count = get_post_meta(get_the_ID(), $structure.'s', true);
-						$repeaters = $repeaters + $count;
-					}
-				} ?>
+					<div id="city-<?php echo $ID; ?>" class="city
+						<?php 
+						// User's city?
+						if ($city['current'] == true) {
+							echo ' user-city';
+						// Trade partner?
+							// Must not be current user
+							// and city ID must be in array of current user's cities' trade partners
+						} elseif (in_array($ID, $trade_partners)) {
+							echo ' trade-partner';
+						}
 
-				<div id="city-<?php the_ID(); ?>" class="city
-					<?php 
-					// User's city?
-					if (get_the_author_meta('ID') == $current_user->ID) {
-						echo ' user-city';
-					}
-
-					// Displaying the size of the city
-					if ($repeaters <= 5) { echo ' r00'; 
-					} elseif ($repeaters > 5 && $repeaters <= 10) { echo ' r01';
-					} elseif ($repeaters > 10 && $repeaters <= 15) { echo ' r02';
-					} elseif ($repeaters > 15 && $repeaters <= 20) { echo ' r03';
-					} elseif ($repeaters > 20) { echo ' r04'; 
-					}
-					if ($non == 1 ) { echo ' n01'; 
-					} elseif ($non == 2 ) { echo ' n02'; 
-					} elseif ($non >= 3 ) { echo ' n03'; }
+						// Displaying the size of the city
+						if ($repeaters <= 5) { echo ' r00'; 
+						} elseif ($repeaters > 5 && $repeaters <= 10) { echo ' r01';
+						} elseif ($repeaters > 10 && $repeaters <= 15) { echo ' r02';
+						} elseif ($repeaters > 15 && $repeaters <= 20) { echo ' r03';
+						} elseif ($repeaters > 20) { echo ' r04'; 
+						}
+						if ($non == 1 ) { echo ' n01'; 
+						} elseif ($non == 2 ) { echo ' n02'; 
+						} elseif ($non >= 3 ) { echo ' n03'; }
+						
+						?>">
+						<a class="marker" href="<?php echo $c->guid; ?>"></a>
+					</div><!-- .city -->	
 					
-					$login = get_the_author_meta('user_login'); echo ' user-'.$login; ?>">
-					<a class="marker" href="<?php the_permalink(); ?>"></a>
-				</div><!-- .city -->	
-				
-				<div class="info">
-					<h2 class="city-name"><?php the_title(); ?></h2>
-					<small class="city-builder"><?php the_author(); ?></small>
-					<ul>
-						<li>Pop: <?php echo th(get_field('population')); ?></li>
-					</ul>
-				</div><!-- .info -->
+					<div class="info">
+						<h2 class="city-name"><?php echo $c->post_title; ?></h2>
+						<small class="city-builder">
+							<?php echo get_user_by('id', $c->post_author)->display_name; ?>
+						</small>
+						<ul>
+							<li>Pop: <?php echo th(get_post_meta($ID, 'population', true)); ?></li>
+						</ul>
+					</div><!-- .info -->
 			
-			<?php }
-			endwhile; ?>
+					<?php
+				} // end if to check if there's a city here
+			} // end foreach ?>
 		</div><!-- .tile -->	
 	
 	<?php } ?>
@@ -154,9 +189,8 @@ query_posts('posts_per_page=-1&category_name='.$region_slug); while (have_posts(
 	}
 
 	if (is_user_logged_in()) { 
-			// Get user info to determine cost of building a new city
-			global $current_user; get_currentuserinfo(); 
-			$cities = count_user_posts($current_user->ID); ?>
+		// Get user info to determine cost of building a new city
+		$cities = count_user_posts($current_user->ID); ?>
 		<div id="build" class="infobox">
 			<p><span class="terrain"></span> at (<span class="x"></span>,&nbsp;<span class="y"></span>):</p>
 
