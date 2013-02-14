@@ -28,7 +28,7 @@ $pop = get_post_meta($ID, 'population', true);
 // Get user info
 global $current_user;
 get_currentuserinfo();
-$cash_current = get_field('cash', 'user_'.$current_user->ID);
+$cash_current = get_user_meta($current_user->ID, 'cash', true);
 
 // Make sure we're not bankrupting, then proceed
 if (($cash_current - $cost) < 0) {
@@ -36,7 +36,7 @@ if (($cash_current - $cost) < 0) {
 } else {
 
 	// Take cash from user
-	update_field('cash', $cash_current - $cost, 'user_'.$current_user->ID);
+	update_user_meta($current_user->ID, 'cash', $cash_current - $cost);
 	
 	// Set location for non-repeating
 	if ($structures[$structure][2] == 1) {

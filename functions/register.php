@@ -17,8 +17,8 @@ function my_mail_from_name( $name ) { return 'City/State'; }
 add_action( 'user_register', 'cash_it_up');
 function cash_it_up($id) {
     global $wpdb;
-    update_field('cash', 1000, 'user_'.$id); 
-    update_field('turns', 10, 'user_'.$id); 
+    update_user_meta($id, 'cash', 1000); 
+    update_user_meta($id, 'turns', 10); 
 }
 
 // No redirect to back-end on bad password

@@ -4,16 +4,17 @@ define('MAIN', dirname(__FILE__) . '/');
 // Reset all users' turns to 10
 $users = get_users();
 foreach ($users as $user) {
-	update_field('turns', 10, 'user_'.$user->ID);
+	update_user_meta($user->ID, 'turns', 10);
 
 	// Scouting territories
-	if (get_field('scouting', 'user_'.$user->ID) == 'yes') {
+	if (get_user_meta($user->ID, 'scouting', true) == 'yes') {
 
+		// Send the message for notification purposes
 		$to = $user->ID;
 		$subject = 'Scout Report';
-		$region = get_field('scouting_region', 'user_'.$user->ID);
-		$x = get_field('scouting_x', 'user_'.$user->ID);
-		$y = get_field('scouting_y', 'user_'.$user->ID);
+		$region = get_user_meta($user->ID, 'scouting_region', true);
+		$x = get_user_meta($user->ID, 'scouting_x', true);
+		$y = get_user_meta($user->ID, 'scouting_y', true);
 
 		include( MAIN . 'maps/'.$region.'.php');
 		$resources = $map[$y][$x - 1][1];
@@ -55,8 +56,16 @@ foreach ($users as $user) {
 		add_post_meta($ID, 'to', $to);
 		add_post_meta($ID, 'from', 0);
 		add_post_meta($ID, 'read', 'unread');
+
+		// Add to user's list of scouted territories
+		$scouted = get_user_meta($user->ID, 'scouted', true);
+		update_user_meta($user->ID, 'scouted', $scouted + 1);
+
+		update_user_meta($user->ID, 'scouted_'.$scouted.'-region', $region);
+		update_user_meta($user->ID, 'scouted_'.$scouted.'-x', $x);
+		update_user_meta($user->ID, 'scouted_'.$scouted.'-y', $y);
 	}
-	update_field('scouting', 'no', 'user_'.$user->ID);
+	update_user_meta($user->ID, 'scouting', 'no');
 }
 
 // Update all cities
@@ -162,9 +171,9 @@ while ($city_query->have_posts()) : $city_query->the_post();
 	include ( MAIN . 'update/pop-milestones.php');
 		
 	// Taxes
-	$cash = get_field('cash', 'user_'.$user_ID);
+	$cash = get_user_meta($user_ID, 'cash', true);
 	$taxes = ceil(0.05*$pop);
-	update_field('cash', $cash + $taxes, 'user_'.$user_ID);
+	update_user_meta($user_ID, 'cash', $cash + $taxes);
 
 	// Structure-related
 	include ( MAIN . 'structures.php' );
@@ -185,8 +194,8 @@ while ($city_query->have_posts()) : $city_query->the_post();
 
 			// If the structure has been built, we subtract upkeep costs/funding
 			if ($y != 0) {
-				$cash = get_field('cash','user_'.$user_ID);
-				update_field('cash', $cash - $funding, 'user_'.$user_ID);
+				$cash = get_user_meta($user_ID, 'cash', true);
+				update_user_meta($user_ID, 'cash', $cash - $funding);
 			}
 
 			// If the population of the city is already at or above the point 
@@ -264,8 +273,8 @@ while ($city_query->have_posts()) : $city_query->the_post();
 
 			// If the structure has been built, we subtract upkeep costs/funding
 			if ($count > 0) {
-				$cash = get_field('cash', 'user_'.$user_ID);
-				update_field('cash', $cash - $funding, 'user_'.$user_ID);
+				$cash = get_user_meta($user_ID, 'cash', true);
+				update_user_meta($user_ID, 'cash', $cash - $funding);
 
 				// If the population of the city is already at or above the point 
 				// where the structure is desired, certain things start to happen.

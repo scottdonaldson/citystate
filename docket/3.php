@@ -87,8 +87,8 @@ if (isset($_POST['submit'])) {
 					  update_post_meta($ID, 'target-pop', $target_pop + 100);
 				} 
 				// Update cash
-				$cash = get_field('cash', 'user_'.$current_user->ID);
-				update_field('cash', $cash - $funding, 'user_'.$current_user->ID);
+				$cash = get_user_meta($current_user->ID, 'cash', true);
+				update_user_meta($current_user->ID, 'cash', $cash - $funding);
 				
 
 			include ( MAIN .'docket/next.php'); ?>
@@ -183,9 +183,9 @@ wp_reset_postdata();
 						
 						<?php 
 						// Update cash and happiness
-						$cash = get_field('cash', 'user_'.$current_user->ID);
+						$cash = get_user_meta($current_user->ID, 'cash', true);
 						$happy = get_post_meta($ID, 'happiness', true);
-						update_field('cash', $cash + $funding, 'user_'.$current_user->ID);
+						update_user_meta($current_user->ID, 'cash', $cash + $funding);
 						if ($happy > 0) {
 							update_post_meta($ID, 'happiness', round(0.95*$happy, 3));
 						}

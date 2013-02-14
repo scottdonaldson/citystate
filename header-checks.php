@@ -48,7 +48,7 @@ if (isset($_GET['profile']) && $_GET['profile'] == 'updated') {
 	if (isset($_POST['displayName']) && $_POST['displayName'] !== '') {
 		$name = $_POST['displayName'];
 		wp_update_user(array('ID'=>$user->ID, 'display_name'=>$name));
-		update_field('name_change', 1, 'user_'.$user->ID);
+		update_user_meta('user_'.$user->ID, 'name_change', 1);
 	}
 	if (isset($_POST['pass1']) && isset($_POST['pass2']) && !empty($_POST['pass1']) && $_POST['pass1'] == $_POST['pass2']) {
 		$update = $wpdb->query($wpdb->prepare("UPDATE {$wpdb->users} SET `user_pass` = %s WHERE `ID` = %d", array(wp_hash_password($_POST['pass1']), $user_ID)));
@@ -116,19 +116,36 @@ if (isset($_POST['scout'])) {
 	// Get user info
 	global $current_user;
 	get_currentuserinfo();
-	$cash_current = get_field('cash', 'user_'.$current_user->ID);
+	$cash_current = get_user_meta($current_user->ID, 'cash', true);
 
 	// Costs 350 to scout
-	update_field('cash', $cash_current - 350, 'user_'.$current_user->ID);;
+	update_user_meta($current_user->ID, 'cash', $cash_current - 350);
 
 	// And now we're scouting
-	update_field('scouting', 'yes', 'user_'.$current_user->ID);
-	update_field('scouting_region', $_POST['scout-region'], 'user_'.$current_user->ID);
-	update_field('scouting_x', $_POST['scout-x'], 'user_'.$current_user->ID);
-	update_field('scouting_y', $_POST['scout-y'], 'user_'.$current_user->ID);
+	update_user_meta($current_user->ID, 'scouting', 'yes');
+	update_user_meta($current_user->ID, 'scouting_region', $_POST['scout-region']);
+	update_user_meta($current_user->ID, 'scouting_x', $_POST['scout-x']);
+	update_user_meta($current_user->ID, 'scouting_y', $_POST['scout-y']);
 
-	$alert = '<p>Scouts have been sent to the territory, and it has been highlighted on your map.</p>'.
+	$alert = '<p>Scouts have been sent to the territory.</p>'.
 			 '<p>The scouts will return with a report tomorrow! Be sure to check your messages then.</p>';	
 }
 
+/*
+ *	SHOWING / HIDING SCOUTED TERRITORIES
+ */
+if (isset($_POST['show_scouted'])) {
+	// Get user info
+	global $current_user;
+	get_currentuserinfo();
+
+	$show = $_POST['show_scouted'];
+
+	update_user_meta($current_user->ID, 'show_scouted', $show);
+	if ($show == 'show') {
+		$alert = '<p>Scouted territories will now be highlighted on the map.';
+	} else {
+		$alert = '<p>Scouted territories will now be hidden from the map.';
+	}
+}
 ?>

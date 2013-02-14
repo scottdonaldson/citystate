@@ -248,7 +248,10 @@ jQuery(document).ready(function($){
 		}
 
 		// Fill in structure name and location for user reference
-		extra.find('.name-structure').text(structure.data('structure'));
+		var name = structure.data('structure');
+		name = name.replace(/_/, ' '); // replace underscores with spaces
+
+		extra.find('.name-structure').text(name);
 		if (structure.data('x') == 0) { 
 			extra.find('.x').text('10'); 
 		} else {

@@ -28,9 +28,9 @@
 					[<a href="<?php echo wp_logout_url(home_url()); ?>">Log out &raquo;</a>]
 				</small>
 			</p>
-			<p>Cash: <span id="user-cash"><?php echo th(get_field('cash', 'user_'.$current_user->ID)); ?></span> [<a href="<?php echo site_url(); ?>/budget">View Budget</a>]</p>
+			<p>Cash: <span id="user-cash"><?php echo th(get_user_meta($current_user->ID, 'cash', true)); ?></span> [<a href="<?php echo site_url(); ?>/budget">View Budget</a>]</p>
 			<?php 
-			$turns = get_field('turns', 'user_'.$current_user->ID);
+			$turns = get_user_meta($current_user->ID, 'turns', true);
 			if ($turns > 1) {
 				echo '<p><a href="'.site_url().'/docket">'.$turns.' orders of business</a> on your docket.</p>';
 			} elseif ($turns > 0) {
@@ -63,13 +63,19 @@
 		</div>
 
 		<?php if (is_category()) { ?>
-			<div class="module">
+			<div class="module keys">
 				<div class="clearfix">
-					<div class="key user-city"></div><span>Your Cities</span>
+					<div class="key user-city"></div><small>Your Cities</small>
 				</div>
 				<div class="clearfix">
-					<div class="key trade-partner"></div><span>Trade Partners</span>
+					<div class="key trade-partner"></div><small>Trade Partners</small>
 				</div>
+				<form class="clearfix" method="POST">
+					<div class="key scout"></div>
+					<small>Scouted Territories</small>
+					<?php $show = get_user_meta($current_user->ID, 'show_scouted', true); ?>
+					<input class="button" name="show_scouted" id="show_scouted" type="submit" value="<?php if ($show == 'show') { echo 'hide'; } else { echo 'show'; } ?>">
+				</form>
 			</div>
 		<?php } ?>
 

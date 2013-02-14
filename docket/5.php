@@ -79,7 +79,7 @@ wp_reset_postdata();
 
             <p>At your insistence, they promise that large, full-color photographs of <?php echo $city; ?> will accompany their written material.</p>
 
-            <?php update_field('cash', get_field('cash', 'user_'.$current_user->ID) + $income, 'user_'.$current_user->ID); ?>
+            <?php update_user_meta($current_user->ID, 'cash', get_user_meta($current_user->ID, 'cash', true) + $income); ?>
         </div>
         <?php 
         // 2000 people or greater

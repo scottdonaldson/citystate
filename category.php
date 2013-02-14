@@ -11,12 +11,11 @@ global $current_user;
 get_currentuserinfo();
 
 // Get region slug
-$region_slug = get_query_var('category_name');
+$region = get_query_var('category_name');
 
 // Retrieve cities in this region.
-// Current user first, then all others
 $city_query = new WP_Query(array(
-	'category_name' => $region_slug,
+	'category_name' => $region,
 	'posts_per_page' => -1,
 	'order' => 'ASC'
 	)
@@ -45,12 +44,16 @@ while ($city_query->have_posts()) : $city_query->the_post();
 	
 endwhile;
 wp_reset_postdata();
+
+// Get number of regions user has scouted
+$scouted = get_user_meta($current_user->ID, 'scouted', true);
+$scouted_here = false;
 ?>
 
 <div id="map" class="clearfix">
 
 	<?php 
-	include( MAIN .'maps/'.$region_slug.'.php'); 
+	include( MAIN .'maps/'.$region.'.php'); 
 	foreach ($map as $row => $tiles) {
 		$x = 0; 
 		foreach ($tiles as $tile) { 
@@ -77,15 +80,27 @@ wp_reset_postdata();
 				}
 
 				// If user is scouting the territory, highlight it
-				if (get_field('scouting', 'user_'.$current_user->ID) == 'yes' &&
-					get_field('scouting_region', 'user_'.$current_user->ID) == get_query_var('category_name') &&
-					get_field('scouting_x', 'user_'.$current_user->ID) == $x && 
-					get_field('scouting_y', 'user_'.$current_user->ID) == $y) {
-					echo ' scouting';
+				for ($s = 0; $s < $scouted; $s++) {
+					if (get_user_meta($current_user->ID, 'show_scouted', true) == 'show' &&
+						get_user_meta($current_user->ID, 'scouted_'.$s.'-x', true) == $x &&
+						get_user_meta($current_user->ID, 'scouted_'.$s.'-y', true) == $y) {
+							echo ' scouted';
+							$scouted_here = true;
+							break;
+					}
 				}
+				// "Plain old" highlighting
 				if (isset($_GET['x']) && isset($_GET['y'])) {
 					if ($x == $_GET['x'] && $y == $_GET['y']) {
-						echo ' scouting';
+						echo ' highlighted';
+					}
+				}
+
+				// City?
+				foreach ($cities as $city) {
+					if ($x == $city['x'] && $y == $city['y']) {
+						echo ' city';
+						break;
 					}
 				}
 
@@ -143,18 +158,39 @@ wp_reset_postdata();
 					</div><!-- .city -->	
 					
 					<div class="info">
-						<h2 class="city-name"><?php echo $c->post_title; ?></h2>
-						<small class="city-builder">
+						<h2><?php echo $c->post_title; ?></h2>
+						<small>
 							<?php echo get_user_by('id', $c->post_author)->display_name; ?>
 						</small>
 						<ul>
 							<li>Pop: <?php echo th(get_post_meta($ID, 'population', true)); ?></li>
 						</ul>
 					</div><!-- .info -->
-			
-					<?php
+
+					<?php 
 				} // end if to check if there's a city here
-			} // end foreach ?>
+			} // end foreach 
+			// Show info for scouting, if there's no city here
+			if ($scouted_here == true && !($x == $city['x'] && $y == $city['y'])) { ?>
+				<div class="info">
+					<ul>
+					<?php
+					$resources = $map[$y][$x - 1][1];
+					foreach ($resources as $key=>$value) {
+				    	if ($value < 4) {
+				    		echo '<li>Scarce amounts of <strong>'.$key.'</strong></li>';
+				    	} elseif ($value >= 4 && $value < 7) {
+				    		echo '<li>Medium amounts of <strong>'.$key.'</strong></li>';
+				    	} elseif ($value >= 7) {
+				    		echo '<li>Large amounts of <strong>'.$key.'</strong></li>';
+				    	}
+				    }
+				    ?>
+					</ul>
+				</div>
+
+			<?php $scouted_here = false;
+			} ?>
 		</div><!-- .tile -->	
 	
 	<?php } ?>
@@ -200,17 +236,17 @@ wp_reset_postdata();
 				<input id="x" name="x" type="hidden" />
 				<input id="y" name="y" type="hidden" />	
 				<input id="region_id" name="region_id" value="<?php echo get_query_var('cat'); ?>" type="hidden" />	
-				<input id="region_slug" name="region_slug" value="<?php echo $region_slug; ?>" type="hidden" />	
+				<input id="region_slug" name="region_slug" value="<?php echo $region; ?>" type="hidden" />	
 				<input class="button" type="submit" id="buildCity" name="buildCity" value="Build City (<?php echo th(1500*$cities + 500); ?>)" />
 			</form>
 			<?php 
-			// If scouts are already out in the field, can't sent more
-			if (get_field('scouting', 'user_'.$current_user->ID) != 'yes') { ?>
+			// If scouts are already out in the territory, can't send more
+			if (get_user_meta($current_user->ID, 'scouting', true) != 'yes') { ?>
 			<small>or</small>
-			<form action="<?php echo home_url().'/'.$region_slug.'/'; ?>" method="POST">
+			<form action="<?php echo home_url().'/'.$region.'/'; ?>" method="POST">
 				<input id="scout-x" name="scout-x" type="hidden">
 				<input id="scout-y" name="scout-y" type="hidden">
-				<input id="scout-region" name="scout-region" value="<?php echo $region_slug; ?>" type="hidden">
+				<input id="scout-region" name="scout-region" value="<?php echo $region; ?>" type="hidden">
 				<input class="button" type="submit" id="scout" name="scout" value="Scout Territory (350)">
 			</form>
 			<?php } ?>

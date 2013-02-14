@@ -6,7 +6,7 @@ Template Name: Docket
 // Get user information
 global $current_user;
 get_currentuserinfo();
-$turns = get_field('turns', 'user_'.$current_user->ID);
+$turns = get_user_meta($current_user->ID, 'turns', true);
 
 // See if we're returning here from having submitted a form
 if (isset($_POST['submit'])) {
@@ -52,7 +52,7 @@ if (!is_user_logged_in()) { ?>
 			<div class="content">
 				<?php 
 				// Remove one turn from the user, just cuz
-				update_field('turns', $turns - 1, 'user_'.$current_user->ID);
+				update_user_meta($current_user->ID, 'turns', $turns - 1);
 
 				$rand_city = new WP_Query(array(
 					'posts_per_page' => 1,
@@ -76,7 +76,7 @@ if (!is_user_logged_in()) { ?>
 		// Assuming the user is NOT returning from a submitted form...
 		if (!isset($_POST['submit'])) {
 			// Remove one turn from the user
-			update_field('turns', $turns - 1, 'user_'.$current_user->ID);
+			update_user_meta($current_user->ID, 'turns', $turns - 1);
 		}
 		
 	include( MAIN . 'docket/' . $adv . '.php' );

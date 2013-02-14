@@ -10,7 +10,7 @@ $user = (isset($_GET['author_name'])) ? get_user_by('slug', $author_name) : get_
 $id = $user->ID; 
 
 // Get cash
-$cash = get_field('cash','user_'.$id);
+$cash = get_user_meta($id, 'cash', true);
 ?>
 
 <div class="container">
@@ -29,7 +29,7 @@ $cash = get_field('cash','user_'.$id);
 				<ul>
 				<?php 
 				while ($u_query->have_posts()) : $u_query->the_post(); ?>
-					<li><a class="snapshot" href="<?php the_permalink(); ?>"><?php the_title(); ?></a> (Pop: <?php $pop = get_field('population'); echo th($pop); ?>)</li>
+					<li><a class="snapshot" href="<?php the_permalink(); ?>"><?php the_title(); ?></a> (Pop: <?php echo th(get_post_meta(get_the_ID(), 'population', true)); ?>)</li>
 				<?php endwhile; rewind_posts(); ?>
 				</ul>
 		</div><!-- .content -->
@@ -52,7 +52,7 @@ $cash = get_field('cash','user_'.$id);
 						<h3>Name</h3>
 						<?php 
 						// If 0, then the user has NOT changed his/her name
-						if (get_field('name_change', 'user_'.$current_user->ID) == 0) { ?>
+						if (get_user_meta($current_user->ID, 'name_change', true) == 0) { ?>
 							<small>You can't change your username (what you use to log in with), but you can change the way your name is displayed on scoreboards and the like. You can only change your name once!</small>
 							<input type="text" maxlength="25" id="displayName" name="displayName" placeholder="<?php echo $current_user->display_name; ?>" />
 							<small><em>*Name changes will appear after logging out and in again.</em></small>

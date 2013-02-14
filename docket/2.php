@@ -86,8 +86,8 @@ wp_reset_postdata();
 				<p>A group of concerned citizens have donated <strong><?php echo $fund; ?></strong> in cash to a fund for the construction.</p>
 				<?php
 				// Update cash
-				$cash = get_field('cash', 'user_'.$current_user->ID);
-				update_field('cash', $cash + $fund, 'user_'.$current_user->ID);
+				$cash = get_user_meta($current_user->ID, 'cash', true);
+				update_user_meta($current_user->ID, 'cash', $cash + $fund);
 			} 
 
 		include ( MAIN .'docket/next.php'); ?>

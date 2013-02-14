@@ -91,9 +91,9 @@ if (isset($_POST['submit'])) {
 	rewind_posts();
 
 	if ($_POST['budget_warning'] == true) {
-		update_field('budget_warning', 1, 'user_'.$current_user->ID);
+		update_user_meta($current_user->ID, 'budget_warning', 1);
 	} else {
-		update_field('budget_warning', 0, 'user_'.$current_user->ID);
+		update_user_meta($current_user->ID, 'budget_warning', 0);
 	}
 
 } ?>
@@ -271,7 +271,7 @@ if (isset($_POST['submit'])) {
 
 				<div class="state">
 					<h3>State</h3>
-					<input type="checkbox" id="budget_warning" name="budget_warning" <?php if (get_field('budget_warning', 'user_'.$current_user->ID) == 1) { echo 'checked'; } ?> /><label class="grey" for="budget_warning"><small>Always warn me if state expenses are greater than state income.</small></label>
+					<input type="checkbox" id="budget_warning" name="budget_warning" <?php if (get_user_meta($current_user->ID, 'budget_warning', true) == 1) { echo 'checked'; } ?> /><label class="grey" for="budget_warning"><small>Always warn me if state expenses are greater than state income.</small></label>
 					<div class="income">Total Income: <span><?php echo th($state_income); ?></span></div>
 
 					<div class="original hidden" data-original="<?php echo $state_expenses; ?>"></div>

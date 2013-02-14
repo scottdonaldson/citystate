@@ -8,6 +8,7 @@ $sea-blue: #4d5989; .sea-blue { color: $sea-blue; }
 $grey: #777; .grey { color: $grey; }
 $green: #7eb073; .green { color: $green; }
 $red: #e03840; .red { color: $red; }
+$yellow: lighten(gold, 15%); .yellow { color: $yellow; }
 
 // ----- General styles and structure
 
@@ -276,7 +277,15 @@ a.map {
 
 	.tile {
 		background-color: $sand;
-		&.scouting { background-color: lighten(gold, 15%); }
+		&.scouted { 
+			background-color: $yellow; 
+			&.city {
+				background-color: $sand;
+			}
+		}
+		&.highlighted {
+			border: 1px solid $yellow;
+		}
 
 		&.sand {
 			background-image: url(../images/terrain/sand.png);
@@ -329,16 +338,15 @@ a.map {
 					}
 				}
 			}
+		}
 
-			&:hover ~ .info {
-				display: block;
-			}
-
+		&:hover .info {
+			display: block;
 		}
 
 		.info {
 			background: #fff;
-			display: none; // show under .home .tile .city:hover
+			display: none; // show under .home .tile:hover (see above)
 			left: 20px;
 			min-width: 150px;
 			padding: 4px;
@@ -357,14 +365,14 @@ a.map {
 				width: 10px;
 			}
 
-			.city-name {
+			h2 {
 				display: block;
 				font-size: 18px;
 				font-weight: bold;
 				margin: 0;
 			}
 
-			.city-builder {
+			small {
 				display: block;
 				font-size: 12px;
 				font-style: italic;
@@ -373,6 +381,7 @@ a.map {
 			ul {
 				@include tight;
 				li {
+					display: block;
 					list-style-type: none;
 				}
 			}
@@ -400,6 +409,17 @@ a.map {
 	.not-user-city & { // When checking out other users' cities, don't
 		&:hover,	   // change the color of tiles on hover or activate
 		&.footprint { background-color: $sand; }
+	}
+
+	&.scouted {
+		.info {
+			width: 250px;
+		}
+	}
+	&.city {
+		.info {
+			width: auto;
+		}
 	}
 }
 
@@ -1130,6 +1150,9 @@ a.map {
 			margin: 0;
 		}
 
+		&.keys {
+			width: 240px;
+		}
 		.key {
 			border: 1px solid #333;
 			clear: left;
@@ -1143,6 +1166,13 @@ a.map {
 			}
 			&.trade-partner {
 				background-color: $sea-blue;
+			}
+			&.scout {
+				background-color: $yellow;
+			}
+			.button {
+				float: left;
+				font-size: 12px;
 			}
 		}
 

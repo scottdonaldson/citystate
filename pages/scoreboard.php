@@ -87,7 +87,7 @@ get_header(); ?>
 				<div class="row clearfix <?php if ($current_user->ID == $user->ID) { echo 'current'; } ?>"><?php
 					echo '<div class="nutzername"><a href="'.home_url().'/user/'.$user->user_login.'">'.$user->display_name.'</a></div>';
 					echo '<div class="cities">'.$cities.'</div>';
-					echo '<div class="cash">'.th(get_field('cash','user_'.$user->ID)).'</div>';
+					echo '<div class="cash">'.th(get_user_meta($user->ID, 'cash', true)).'</div>';
 					
 					// Get this user's cities
 					$posts = get_posts('numberposts=-1&author='.$user->ID);
