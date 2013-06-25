@@ -238,9 +238,9 @@ jQuery(document).ready(function($){
 		if (structure.data('upgrade') == 1) {
 			if (structure.data('structure') == 'neighborhood') {
 				if (structure.data('level') == 1) {
-					var addedCost = ' + 1 Food and 1 Fish';
+					var addedCost = ' + 1 Food, 1 Fish, and 1 Wool';
 				} else if (structure.data('level') == 0) {
-					var addedCost = ' + 1 Food or 1 Fish';
+					var addedCost = ' + 1 Food and 1 Fish';
 				}
 			}
 			upgrade.show()

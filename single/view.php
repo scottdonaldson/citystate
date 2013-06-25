@@ -71,62 +71,52 @@ if ($view == 'trade') {
 			foreach ($resources as $key=>$resource) {
 
 				$miners = get_post_meta($ID, $resource[1].'s', true);
-				$name = ucfirst(substr($resource[0], 0, -6)); // remove '_stock'
-				$type = get_post_meta($ID, $key, true);
+				$name = substr($resource[0], 0, -6); // remove '_stock'
+				$amt = get_post_meta($ID, $key, true);
 				$stockpile = get_post_meta($ID, $resource[0], true) ? th(get_post_meta($ID, $resource[0], true)) : 0;
 				if ($miners > 0) {
 					$funding = get_post_meta($ID, $resource[1].'-funding', true);
 					switch ($funding) {
 						case 'bad':
-			    			$mining = $miners * floor(0.5 * $type);
+			    			$mining = $miners * floor(0.5 * $amt);
 			    			break;
 			    		case 'fair':
-			    			$mining = $miners * $type;
+			    			$mining = $miners * $amt;
 			    			break;
 			    		case 'good':
-			    			$mining = $miners * floor(1.5 * $type);
+			    			$mining = $miners * floor(1.5 * $amt);
 			    			break;
 			    		case 'excellent':
-			    			$mining = $miners * floor(2 * $type);
+			    			$mining = $miners * floor(2 * $amt);
 			    			break;
 					}
-					$mining = '<small>(+'.$mining.')</small>'; // wrap up nicely to present
 				}
+				// Check to see if user is losing more of a resource than gaining
+				$danger = $mining - $r_cost[$name] < 0 ? 'warning' : ''; 
+				// If so, check to see if user is going to bankrupt this turn
+				if ($danger == 'warning') {
+					$danger = $stockpile + $mining - $r_cost[$name] < 0 ? 'danger' : 'warning';
+				}
+
 				// First one? Then open the <ul>
 				if ($i == 0) { ?>
 					<ul class="resource-list clearfix">
-						<li><?php 
-							echo $name.': '.th($stockpile).' '.$mining; 
-							if ($name == 'Food') {
-								echo ' <small>(-'.$cost_food.')</small>';
-							} elseif ($name == 'Fish') {
-								echo ' <small>(-'.$cost_fish.')</small>';
-							}
-							?>
-						</li>
+				<?php } ?>
+					<li class="<?php echo $danger; ?>"><?php 
+						echo ucfirst($name).': '.th($stockpile);
+						if ($mining) {
+							echo ' <small>(+'.$mining.')</small>'; 
+						}
+						if ($r_cost[$name]) {
+							// echo '<small>'.$name.'</small>';
+							echo ' <small>(-'.$r_cost[$name].')</small>';
+						}
+						?>
+					</li>
 				<?php 
 				// Last one? Then close the </ul>
-				} elseif ($i == count($resources) - 1) { ?>
-						<li><?php 
-							echo $name.': '.th($stockpile).' '.$mining; 
-							if ($name == 'Food') {
-								echo ' <small>(-'.$cost_food.')</small>';
-							} elseif ($name == 'Fish') {
-								echo ' <small>(-'.$cost_fish.')</small>';
-							}
-							?>
-						</li>
+				if ($i == count($resources) - 1) { ?>
 					</ul>
-				<?php } else { ?>
-						<li><?php 
-							echo $name.': '.th($stockpile).' '.$mining; 
-							if ($name == 'Food') {
-								echo ' <small>(-'.$cost_food.')</small>';
-							} elseif ($name == 'Fish') {
-								echo ' <small>(-'.$cost_fish.')</small>';
-							}
-							?>
-						</li>
 				<?php }
 				$i++;
 				unset($mining);

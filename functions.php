@@ -2,25 +2,35 @@
 
 // Load functions
 define('MAIN', dirname(__FILE__) . '/');
+include ( MAIN . 'functions/header-checks.php');
+include ( MAIN . 'functions/structures.php');
 include( MAIN . 'functions/register.php');
 include( MAIN . 'functions/strip-category.php');
 
-// Update - THE BIG ONE - unfortunately not so sure about running it via cron yet
-/* 
-add_action('daily_update', 'update_everything');
-function activate_update() {
-	if ( !wp_next_scheduled( 'daily_update' ) ) {
-		wp_schedule_event( time(), 'hourly', 'daily_update');
+// Includes
+include ( MAIN . 'includes/structures.php');
+include ( MAIN . 'includes/resources.php');
+
+// City-specific
+include ( MAIN . 'functions/city.php');
+
+// All the checks
+include ( MAIN . 'functions/checks.php');
+
+// Important built-in: meta() -- shortcut for get_post_meta()
+function meta($key) {
+    return get_post_meta($post->ID, $key, true);
+}
+
+// Make sure user isn't going bankrupt
+function no_bankrupt($cash) {
+	if ($cash < 0) {
+		$alert = '<p>You can&#39;t do that &mdash; you&#39;d go bankrupt!</p>';
+		return;
 	}
 }
-add_action('wp', 'activate_update');
-function update_everything(){
-	include( MAIN . 'functions/update.php');
-}
-*/
 
 // include jQuery
-// if (!is_admin()) add_action("wp_enqueue_scripts", "my_jquery_enqueue", 11);
 function my_jquery_enqueue() {
     wp_deregister_script('jquery');
     wp_register_script('jquery', "http" . ($_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js", false, null);

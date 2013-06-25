@@ -1,4 +1,7 @@
-<?php get_header(); ?>
+<?php 
+// The main map.
+
+get_header(); ?>
 
 <div id="map">
 	<a href="<?php echo home_url(); ?>/originalia" title="Originalia">

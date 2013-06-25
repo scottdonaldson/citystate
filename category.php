@@ -82,6 +82,7 @@ $scouted_here = false;
 				// If user is scouting the territory, highlight it
 				for ($s = 0; $s < $scouted; $s++) {
 					if (get_user_meta($current_user->ID, 'show_scouted', true) == 'show' &&
+						get_user_meta($current_user->ID, 'scouted_'.$s.'-region', true) == $region &&
 						get_user_meta($current_user->ID, 'scouted_'.$s.'-x', true) == $x &&
 						get_user_meta($current_user->ID, 'scouted_'.$s.'-y', true) == $y) {
 							echo ' scouted';

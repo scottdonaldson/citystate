@@ -681,6 +681,15 @@ a.map {
 		li {
 			float: left;
 			width: 50%;
+
+			&.warning {
+				color: $red;
+			}
+
+			&.danger {
+				font-weight: bold;
+				color: $red;
+			}
 		}
 	}
 }

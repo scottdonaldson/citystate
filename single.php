@@ -1,7 +1,6 @@
-<?php get_header(); the_post(); 
-
-// Get all structures
-include ( MAIN . 'structures.php');
+<?php 
+get_header(); 
+the_post(); 
 
 // Get user info
 global $current_user;
@@ -14,119 +13,28 @@ $ID = get_the_ID();
 include ( MAIN . 'resources.php');
 foreach ($resources as $key=>$resource) {
 	$name = substr($resource[0], 0, -6); // remove '_stock'
-	$cost_[$name] = 0;
+	$r_cost[$name] = 0;
 }
 
-if (isset($_GET['visit']) && $_GET['visit'] == 'first') {
-	echo '<div id="alert"><h2>Welcome to your new city!</h2></div>';
-}
 ?>
 
 <?php 
+// TODO: figure this out better
 // The snapshot (used in AJAX calls)
-include( MAIN . 'single/snapshot.php'); ?>
+include( MAIN . 'single/snapshot.php'); 
 
-<div id="map" class="clearfix <?php if (is_user_logged_in() && $current_user->ID == get_the_author_meta('ID')) { echo 'user-city'; } else { echo 'not-user-city'; } ?>">
+// Variable for if this is the user's city or not
+$is_user_city = is_user_logged_in() && $current_user->ID == get_the_author_meta('ID') ? 'user-city' : 'not-user-city';
+?>
 
-	<?php foreach ( range(1,100) as $tile ) { 
-		$x = fmod($tile, 10);
-		$y = ceil($tile/10);
-		?>
+<div id="map" class="clearfix <?= $is_user_city; ?>">
 
 	<?php 
-	// Wrap rows in a div
-	if ($x == 1) { ?>
-	<div class="row row-<?php echo $y; ?> clearfix">
-	<?php } ?>
-	<div 
-		data-x="<?php echo $x; ?>" 
-		data-y="<?php echo $y; ?>" 
-		class="tile <?php 
-		foreach($structures as $structure=>$values) {
-			include( MAIN .'structures/values.php');
-
-			// Non-repeating 
-			if ($max == 1) {
-				$x_[$structure] = get_post_meta($ID, $structure.'-x', true);
-				$y_[$structure] = get_post_meta($ID, $structure.'-y', true);
-				if ($x_[$structure] == $x && $y_[$structure] == $y) {
-					echo $structure.' structure no-build';
-				}
-			// Repeating
-			} else {
-				$total = get_post_meta($ID, $structure.'s', true);
-				for ($i = 1; $i <= $total; $i++) {
-					$x_[$structure] = get_post_meta($ID, $structure.'-'.$i.'-x', true);
-					$y_[$structure] = get_post_meta($ID, $structure.'-'.$i.'-y', true);
-					if ($x_[$structure] == $x && $y_[$structure] == $y) {
-						echo $structure.' structure no-build';
-					}
-				}
-			}
-		} ?>"
-		<?php foreach($structures as $structure=>$values) {
-			include( MAIN .'structures/values.php');
-
-			if ($max == 1) {
-				$loc_x_[$structure] = get_post_meta($ID, $structure.'-x', true);
-				$loc_y_[$structure] = get_post_meta($ID, $structure.'-y', true);
-				if ($loc_x_[$structure] == $x && $loc_y_[$structure] == $y) {
-					echo 'data-structure="'.$structure.'"';
-					// Upgradeable if the level is less than max for upgrades
-					if ($upgrade > 0) {
-						// Cost to upgrade
-						echo 'data-cost="'.$cost.'" data-upgrade="true"';
-						echo 'data-level="'.get_post_meta($ID, $structure.'-level', true).'"';
-					} elseif (get_post_meta($ID, $structure.'-level', true) == $upgrade) {
-						echo 'data-level="'.get_post_meta($ID, $structure.'-'.$i.'-level', true).'"';
-					}
-				}
-			} else {
-				$total = get_post_meta($ID, $structure.'s', true);
-				for ($i = 1; $i <= $total; $i++) {
-					$x_[$structure] = get_post_meta($ID, $structure.'-'.$i.'-x', true);
-					$y_[$structure] = get_post_meta($ID, $structure.'-'.$i.'-y', true);
-					$level = get_post_meta($ID, $structure.'-'.$i.'-level', true);
-					if ($x_[$structure] == $x && $y_[$structure] == $y) {
-						echo 'data-structure="'.$structure.'"';
-						echo 'data-id="'.$i.'"';
-						
-						// Upgradeable if the level is less than max for upgrades
-						if ($upgrade > 0 && $level < $upgrade) {
-							echo 'data-cost="'.$cost.'" data-upgrade="true"';
-							echo 'data-level="'.$level.'"';
-						} elseif (get_post_meta($ID, $structure.'-'.$i.'-level', true) == $upgrade) {
-							echo 'data-level="'.$level.'"';
-						}
-
-						// Neighborhoods cost resources (used in single/view.php)
-						if ($structure == 'neighborhood' && ($level == 1 || $level == 2) ) {
-							// Once-upgraded even costs 1 food
-							if ($level == 1 && $i%2 == 0) {
-								$cost_food = $cost_food + 1;
-							// Once-upgraded odd costs 1 fish
-							} elseif ($level == 1 && $i%2 == 1) {
-								$cost_fish = $cost_fish + 1;
-							// Twice-upgraded costs 1 food and 1 fish
-							} else {
-								$cost_food = $cost_food + 1;
-								$cost_fish = $cost_fish + 1;
-							}
-						}
-					}
-				}
-			}
-		} ?>>
+	show_city_map($ID);
+	?>
 	
-	</div>
-	<?php 
-	// End of row
-	if ($x == 0) { ?>
-	</div>
-	<?php } ?>
-
-	<?php } 
-
+</div>
+	<?php
 	$geo = array('nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se'); 
 	foreach ($geo as $cardinal) { 
 		$terrain = get_post_meta(get_the_ID(), 'map-'.$cardinal, true);
@@ -176,11 +84,11 @@ include( MAIN . 'single/snapshot.php'); ?>
 						// Only show if max is 0 (can build as many as desired)
 						// or if the count is less than the maximum allowed
 						// AND if has passed 1/2 of population at which it is desired
-						if (($max == 0 || get_post_meta($ID, $structure.'s', true) < $max) && $pop >= 0.5*$desired) { 
+						if (($max == 0 || meta($structure.'s') < $max) && $pop >= 0.5*$desired) { 
 							// Resource-related structures. Now we use the above $resource_structures array.
 							if (in_array($name, $resource_structures)) {
 								// Complicated, but this is how we test if there is resource present in city
-								if (get_post_meta($ID, $resource_structures[array_search($name, $resource_structures) - 1], true) > 0 && $pop >= 1000) { ?>
+								if (meta($resource_structures[array_search($name, $resource_structures) - 1]) > 0 && $pop >= 1000) { ?>
 									<li id="<?php echo $structure; ?>">
 										<?php echo ucwords($name).' ('.th($cost).')'; ?>
 									</li>
