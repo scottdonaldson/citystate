@@ -8,11 +8,12 @@ include( MAIN . 'functions/register.php');
 include( MAIN . 'functions/strip-category.php');
 
 // Includes
+include ( MAIN . 'includes/geo.php');
 include ( MAIN . 'includes/structures.php');
 include ( MAIN . 'includes/resources.php');
 
 // City-specific
-include ( MAIN . 'functions/city.php');
+include ( MAIN . 'functions/functions-single.php');
 
 // All the checks
 include ( MAIN . 'functions/checks.php');
