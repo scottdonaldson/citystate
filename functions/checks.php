@@ -3,6 +3,7 @@
 // Header checks
 function header_checks() {
 	check_for_update( $_POST['pass'] );
+	check_for_budget_update();
 	check_for_login( $_GET['login'] );
 	check_for_bankrupt( $_GET['err'] );
 	check_for_profile_update();

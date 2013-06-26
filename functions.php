@@ -23,6 +23,17 @@ function meta($key) {
     return get_post_meta($post->ID, $key, true);
 }
 
+// Get user's cities
+function get_user_cities($current_user) {
+	$user_args = array(
+		'author' => $current_user->ID,
+		'posts_per_page' => -1,
+		'orderby' => 'title',
+		'order' => 'ASC',
+		);
+	return new WP_query($user_args);
+}
+
 // Make sure user isn't going bankrupt
 function no_bankrupt($cash) {
 	if ($cash < 0) {
@@ -30,6 +41,41 @@ function no_bankrupt($cash) {
 		return;
 	}
 }
+
+// Happiness values
+get_happiness($happiness) {
+	$happy = array();
+	if ($happiness < 5) {
+		$happy['class'] = 'fleeing';
+		$happy['message'] = 'People are fleeing the city in anger!';
+	} elseif ($happiness < 10) {
+		$happy['class'] = 'extremely_unhappy';
+		$happy['message'] = 'Extremely unhappy';
+	} elseif ($happiness < 20) {
+		$happy['class'] = 'very_unhappy';
+		$happy['message'] = 'Very unhappy';
+	} elseif ($happiness < 45) {
+		$happy['class'] = 'unhappy';
+		$happy['message'] = 'Unhappy';
+	} elseif ($happiness < 55) {
+		$happy['class'] = 'neutral';
+		$happy['message'] = 'Neither happy nor unhappy';
+	} elseif ($happiness < 80) {
+		$happy['class'] = 'happy';
+		$happy['message'] = 'Happy';
+	} elseif ($happiness < 90) {
+		$happy['class'] = 'very_happy';
+		$happy['message'] = 'Very happy';
+	} elseif ($happiness < 95) {
+		$happy['class'] = 'extremely_happy';
+		$happy['message'] = 'Extremely happy';
+	} else {
+		$happy['class'] = 'flocking';
+		$happy['message'] = 'People from all over flock to this city!';
+	}
+	return $happy;
+}
+
 
 // include jQuery
 function my_jquery_enqueue() {

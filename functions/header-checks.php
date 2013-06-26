@@ -12,6 +12,13 @@ function check_for_update($pass) {
 	}
 }
 
+// Check for budget update
+function check_for_budget_update() {
+	if (isset($_POST['submit'])) {
+		$alert = 'Budget updated. Happy fiscal new year!';
+	} 
+}
+
 // Validate the user login.
 function check_for_login($login) {
 	if (isset($login) && $login == 'failed') {
