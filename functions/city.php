@@ -92,4 +92,13 @@ function show_city_tile($ID, $x, $y) {
 	<?php
 }
 
+function show_city_neighbors($geo, $ID) {
+	foreach ($geo as $cardinal) { 
+		$terrain = meta('map-'.$cardinal);
+		?>
+		<div id="<?php echo $cardinal; ?>" class="terrain <?php echo $terrain; ?>"></div>
+		<?php
+	}
+}
+
 ?>
