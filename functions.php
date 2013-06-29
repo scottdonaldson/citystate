@@ -2,7 +2,7 @@
 
 // Load functions
 define('MAIN', dirname(__FILE__) . '/');
-include ( MAIN . 'functions/header-checks.php');
+include ( MAIN . 'functions/alerts.php');
 include ( MAIN . 'functions/structures.php');
 include( MAIN . 'functions/functions-budget.php');
 include( MAIN . 'functions/register.php');
@@ -24,6 +24,20 @@ function meta($key) {
     return get_post_meta($post->ID, $key, true);
 }
 
+// Make sure user isn't going bankrupt
+function no_bankrupt($cash, $cost) {
+	if ($cash - $cost < 0) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+// Error message for going bankrupt
+function bankrupt_message() {
+	return '<p>You can&#39;t do that &mdash; you&#39;d go bankrupt!</p>';
+}
+
 // Get user's cities
 function get_user_cities($current_user) {
 	$user_args = array(
@@ -33,13 +47,6 @@ function get_user_cities($current_user) {
 		'order' => 'ASC',
 		);
 	return new WP_query($user_args);
-}
-
-// Make sure user isn't going bankrupt
-function no_bankrupt($cash) {
-	if ($cash < 0) {
-		$alert = '<p>You can&#39;t do that &mdash; you&#39;d go bankrupt!</p>';
-	}
 }
 
 // Happiness values

@@ -214,7 +214,7 @@ jQuery(document).ready(function($){
 	// ----- Extra: Demolish/Upgrade	
 	var demolish = $('.demolish'),
 		upgrade = $('.upgrade');
-	structure.on('click',function(){
+	structure.on('click', function(){
 
 		var structure = $(this);
 
@@ -252,23 +252,23 @@ jQuery(document).ready(function($){
 		name = name.replace(/_/, ' '); // replace underscores with spaces
 
 		extra.find('.name-structure').text(name);
-		if (structure.data('x') == 0) { 
+		if (structure.attr('data-x') == 0) { 
 			extra.find('.x').text('10'); 
 		} else {
-			extra.find('.x').text($this.data('x'));
+			extra.find('.x').text($this.attr('data-x'));
 		}
-		extra.find('.y').text(structure.data('y'));
+		extra.find('.y').text(structure.attr('data-y'));
 
 		// Set form location values and structure/id values
-		$('#build-x, #demo-x, #upgrade-x').val(structure.data('x'));
-		$('#build-y, #demo-y, #upgrade-y').val(structure.data('y'));
-		$('#demo-structure, #upgrade-structure').val(structure.data('structure'));
-		$('#demo-id, #upgrade-id').val($this.data('id'));
+		$('#build-x, #demolish-x, #upgrade-x').val(structure.attr('data-x'));
+		$('#build-y, #demolish-y, #upgrade-y').val(structure.attr('data-y'));
+		$('#demolish-structure, #upgrade-structure').val(structure.attr('data-structure'));
+		$('#demolish-id, #upgrade-id').val($this.attr('data-id'));
 	});
 
 	// Building 2x2 structures
 	$('#stadium, #farm, #pasture').click(function(){
-		var placeholder = $(this).attr('ID').toLowerCase();
+		var placeholder = $(this).attr('id').toLowerCase();
 
 		// Show the helper text
 		$('.helper').html('To build a '+placeholder+', now select 3 more tiles to make a 2x2 square.');

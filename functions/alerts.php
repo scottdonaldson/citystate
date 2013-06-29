@@ -1,13 +1,14 @@
 <?php
+
 // Check for the big update:
 // Check for the right password, and if it's good, run the update.
 function check_for_update($pass) {
 	if (isset($pass)) {
 		if (md5($pass) == 'd7bd30db1b34953089b9e33e5a2d4b3b') {
-			include ( MAIN . 'functions/update.php');
-			$alert = '<p>Daily update complete.</p>';
+			include ( MAIN . 'functions/update.php'); // TODO: functionalize this
+			return '<p>Daily update complete.</p>';
 		} else {
-			$alert = '<p>Bad password. Best try again.</p>';
+			return '<p>Bad password. Best try again.</p>';
 		}
 	}
 }
@@ -15,21 +16,21 @@ function check_for_update($pass) {
 // Check for budget update
 function check_for_budget_update() {
 	if (isset($_POST['submit'])) {
-		$alert = 'Budget updated. Happy fiscal new year!';
+		return 'Budget updated. Happy fiscal new year!';
 	} 
 }
 
 // Validate the user login.
 function check_for_login($login) {
 	if (isset($login) && $login == 'failed') {
-		$alert = '<p>Bad login. Check your username or password and try again.</p><p><a href="'.home_url().'/wp-login.php?action=lostpassword">Did you forget your password?</a></p>';
+		return '<p>Bad login. Check your username or password and try again.</p><p><a href="'.home_url().'/wp-login.php?action=lostpassword">Did you forget your password?</a></p>';
 	}
 } 
 
-// Make sure that the user isn't doing something that would make them go bankrupt.
-function check_for_bankrupt($err) {
-	if (isset($err) && $err == 'bankrupt') {
-		$alert = '<p>You can&#39;t do that &mdash; you&#39;d go bankrupt!</p>';
+// If it's the first time visiting their city
+function check_for_welcome() {
+	if (isset($_GET['visit']) && $_GET['visit'] == 'first') {
+		return '<h2>Welcome to your new city!</h2>';
 	}
 }
 
@@ -55,12 +56,48 @@ function check_for_profile_update() {
 		    }
 		} 
 		header('Location: '.home_url().'/user/'.$user->user_login);
-		$alert = '<p>Profile updated. Keep on keepin&apos; on.</p>';
+		return '<p>Profile updated. Keep on keepin&apos; on.</p>';
+	}
+}
+
+// Check for user scouting territories
+function check_for_scout($current_user) {
+	if (isset($_POST['scout'])) {
+
+		// Get user cash
+		$cash_current = get_user_meta($current_user->ID, 'cash', true);
+
+		// Costs 350 to scout
+		update_user_meta($current_user->ID, 'cash', $cash_current - 350);
+
+		// And now we're scouting
+		update_user_meta($current_user->ID, 'scouting', 'yes');
+		update_user_meta($current_user->ID, 'scouting_region', $_POST['scout-region']);
+		update_user_meta($current_user->ID, 'scouting_x', $_POST['scout-x']);
+		update_user_meta($current_user->ID, 'scouting_y', $_POST['scout-y']);
+
+		return '<p>Scouts have been sent to the territory.</p>'.
+			   '<p>The scouts will return with a report tomorrow! Be sure to check your messages then.</p>';	
+	}
+}
+
+// Check for showing/hiding scouted territories
+function check_for_show_hide_scout($current_user) {
+	if (isset($_POST['show_scouted'])) {
+		// Get user info
+		$show = $_POST['show_scouted'];
+
+		update_user_meta($current_user->ID, 'show_scouted', $show);
+		if ($show == 'show') {
+			return '<p>Scouted territories will now be highlighted on the map.';
+		} else {
+			return '<p>Scouted territories will now be hidden from the map.';
+		}
 	}
 }
 
 // Check for user canceling any trade routes
-function check_for_trade_cancel() {
+function check_for_trade_cancel($current_user) {
 	if (isset($_POST['cancel'])) {
 		$traderoutes = $_POST['traderoute'];
 
@@ -72,13 +109,6 @@ function check_for_trade_cancel() {
 			// Update number of routes in each city
 			update_post_meta($ID, 'traderoutes', get_post_meta($ID, 'traderoutes', true) - 1);
 			update_post_meta($traderoute, 'traderoutes', get_post_meta($traderoute, 'traderoutes', true) - 1);
-		}
-		
-		// Display confirmation
-		if (count($traderoutes) == 1) {
-			$trade_update = '<p>1 route successfully canceled.</p>';
-		} else {
-			$trade_update = '<p>'.count($traderoutes).' routes successfully canceled.</p>';
 		}
 
 		// Send a message
@@ -101,45 +131,14 @@ function check_for_trade_cancel() {
 		$from_target_current = get_post_meta($ID, 'target-pop', true);
 		update_post_meta($to_city, 'target-pop', $to_target_current - $from_pop);
 		update_post_meta($from_city, 'target-pop', $from_target_current - $to_pop);
-	}
-}
 
-// Check for user scouting territories
-function check_for_scout($current_user) {
-	if (isset($_POST['scout'])) {
-
-		// Get user cash
-		$cash_current = get_user_meta($current_user->ID, 'cash', true);
-
-		// Costs 350 to scout
-		update_user_meta($current_user->ID, 'cash', $cash_current - 350);
-
-		// And now we're scouting
-		update_user_meta($current_user->ID, 'scouting', 'yes');
-		update_user_meta($current_user->ID, 'scouting_region', $_POST['scout-region']);
-		update_user_meta($current_user->ID, 'scouting_x', $_POST['scout-x']);
-		update_user_meta($current_user->ID, 'scouting_y', $_POST['scout-y']);
-
-		$alert = '<p>Scouts have been sent to the territory.</p>'.
-				 '<p>The scouts will return with a report tomorrow! Be sure to check your messages then.</p>';	
-	}
-}
-
-// Check for showing/hiding scouted territories
-function check_for_show_hide_scout($current_user) {
-	if (isset($_POST['show_scouted'])) {
-		// Get user info
-		$show = $_POST['show_scouted'];
-
-		update_user_meta($current_user->ID, 'show_scouted', $show);
-		if ($show == 'show') {
-			$alert = '<p>Scouted territories will now be highlighted on the map.';
+		// Display confirmation
+		if (count($traderoutes) == 1) {
+			return '<p>1 route successfully canceled.</p>';
 		} else {
-			$alert = '<p>Scouted territories will now be hidden from the map.';
+			return '<p>'.count($traderoutes).' routes successfully canceled.</p>';
 		}
 	}
-
-	$alert = '<p>Showing/hiding scouted territories function called successfully</p>';
 }
 
 ?>

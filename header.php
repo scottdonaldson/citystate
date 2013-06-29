@@ -16,12 +16,8 @@ global $current_user;
 get_currentuserinfo(); 
 
 // Run a bunch of checks
-header_checks();
+$alert = alerts( $current_user );
 
-// Checks only for cities
-if (is_single()) {
-	city_checks( $current_user );
-}
 ?>
 
 <html <?php language_attributes(); ?>>

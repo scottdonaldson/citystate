@@ -1,15 +1,19 @@
 <?php
 
 // Check for a structure update.
-function check_for_structure($current_user, $ID) {
+function check_for_structure( $args ) {
+
+	$current_user = $args['current_user'];
+	$ID = $args['ID'];
+
 	if (isset($_POST['update']) && is_single()) { 
 		$type = $_GET['structure'];
 
 		// If building a 2x2 structure
 		if (isset($_POST['build-x-3']) && isset($_POST['build-y-3'])) {
-			do_structure($current_user, $type, $_POST['build-structure'], $ID, min($_POST['build-x'], $_POST['build-x-1'], $_POST['build-x-2'], $_POST['build-x-3']), min($_POST['build-y'], $_POST['build-y-1'], $_POST['build-y-2'], $_POST['build-y-3']));
+			return do_structure($current_user, $type, $_POST['build-structure'], $ID, min($_POST['build-x'], $_POST['build-x-1'], $_POST['build-x-2'], $_POST['build-x-3']), min($_POST['build-y'], $_POST['build-y-1'], $_POST['build-y-2'], $_POST['build-y-3']));
 		} else {
-			do_structure($current_user, $type, $_POST[$type.'-structure'], $ID, $_POST[$type.'-x'], $_POST[$type.'-y'], get_post_meta($ID, $structure.'-level', true));
+			return do_structure($current_user, $type, $_POST[$type.'-structure'], $ID, $_POST[$type.'-x'], $_POST[$type.'-y'], get_post_meta($ID, $structure.'-level', true));
 		}
 	} 
 }
@@ -17,8 +21,9 @@ function check_for_structure($current_user, $ID) {
 /* Master function for doing something with structures.
 
    Requires as parameters:
-   - What we're doing (building, demolishing, upgrading)
    - The $user object
+   - What we're doing (building, demolishing, upgrading)
+   - the $structure (slug)
    - The $ID of the post
    - The $x location
    - The $y location
@@ -32,20 +37,22 @@ function do_structure($user, $what, $structure, $ID, $x, $y, $level) {
 	// $cost is defined in $structures array if building or upgrading,
 	// is always 50 if demolishing.
 	$cost = $what == 'demolish' ? 50 : $structure['cost'];
-	no_bankrupt(get_user_meta($user->ID, 'cash', true) - $cost);
 
-	// If we're good, proceed. First take the cash, then do stuff specific to each.
-	update_user_meta($user->ID, 'cash', get_user_meta($user->ID, 'cash', true) - $cost);
-	switch ($what) {
-		case 'build':
-			build($user, $structure, $ID, $x, $y);
-			break;
-		case 'demolish':
-			demolish($user, $structure, $ID, $x, $y);
-			break;
-		case 'upgrade':
-			upgrade($user, $structure, $ID, $x, $y, $level);
-			break;
+	// If we're good, proceed.
+	if (no_bankrupt(get_user_meta($user->ID, 'cash', true), $cost)) {
+
+		// First take the cash, then do stuff specific to each.
+		update_user_meta($user->ID, 'cash', get_user_meta($user->ID, 'cash', true) - $cost);
+		switch ($what) {
+			case 'build':
+				return build($user, $structure, $ID, $x, $y);
+			case 'demolish':
+				return demolish($user, $structure, $ID, $x, $y);
+			case 'upgrade':
+				return upgrade($user, $structure, $ID, $x, $y, $level);
+		}
+	} else {
+		return bankrupt_message();
 	}
 }
 
@@ -162,41 +169,32 @@ function build($user, $structure, $ID, $x, $y) {
 
 function demolish($user, $structure, $ID, $x, $y) {
 
-	$id = $_POST['demo-id'];
-
-	// Helper variables
-	$cost = 50; // Flat cost of 50
-
 	if ($x == 10) { $x = 0; }
-
-	// Take cash from user
-	update_user_meta($user->ID, 'cash', $cash_current - $cost);
 	
 	// For non-repeating structures, just remove (set location back to (0,0))
 	if ($structure['max'] == 1) {
-		update_post_meta($ID, $structure['slug'].'-x', 0);
-		update_post_meta($ID, $structure['slug'].'-y', 0);
+		delete_post_meta($ID, $structure['slug'].'-x');
+		delete_post_meta($ID, $structure['slug'].'-y');
 
-		$level = get_post_meta($ID, $structure['slug'].'-level', true) + 1;
-
-		// Reset level and funding to 0
-		update_post_meta($ID, $structure['slug'].'-level', 0);
+		// Reset funding to 0
 		update_post_meta($ID, 'funding-'.$structure['slug'], 0);
 		update_post_meta($ID, $structure['slug'].'-funding', 0);
 
 	// For repeating structures...
 	} else {
-		$num = get_post_meta($ID, $structure.'-number', true);
+		$num = get_post_meta($ID, $structure['slug'].'-number', true);
+		$new = $num - 1;
+		$id = $_POST['demolish-id'];
 
-		$level = get_post_meta($ID, $structure.'-'.$id.'-level', true) + 1; 
+		$level = get_post_meta($ID, $structure['slug'].'-'.$id.'-level', true) + 1; 
 			// Plus one so that meta level of 0 becomes 1, 1 becomes 2, etc. (for target pop multipliers)
 
 		// Update total number
-		update_post_meta($ID, $structure['slug'].'-number', $num - 1);
+		update_post_meta($ID, $structure['slug'].'-number', $num);
 
 		// Remove from meta and reset level to 0 (may change based on shifting in next step)
-		delete_post_meta($ID, $structure['slug'].'-'.$id.'-x');
-		delete_post_meta($ID, $structure['slug'].'-'.$id.'-y');
+		update_post_meta($ID, $structure['slug'].'-'.$id.'-x', 0);
+		update_post_meta($ID, $structure['slug'].'-'.$id.'-y', 0);
 		update_post_meta($ID, $structure['slug'].'-'.$id.'-level', 0);
 
 		// Shift all greater than $id down by 1
@@ -259,6 +257,9 @@ function upgrade($user, $structure, $ID, $x, $y, $level) {
 		$level = get_post_meta($ID, $structure['slug'].'-'.$id.'-level', true);
 		
 		// Upgrading neighborhoods requires food and/or fish
+		/*
+		TODO: neighborhood resource shit
+
 		if ($structure == 'neighborhood') {
 			switch($level) {
 				// If we're upgrading a fresh neighborhood, randomly pick food or fish and take 1
@@ -306,6 +307,7 @@ function upgrade($user, $structure, $ID, $x, $y, $level) {
 					break;
 			}
 		}
+		*/
 
 		// Increase level by 1
 		update_post_meta($ID, $structure['slug'].'-'.$id.'-level', $level + 1);

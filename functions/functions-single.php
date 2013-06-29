@@ -1,12 +1,5 @@
 <?php
 
-// If it's the first time visiting their city
-function check_for_welcome() {
-	if (isset($_GET['visit']) && $_GET['visit'] == 'first') {
-		$alert = '<h2>Welcome to your new city!</h2>';
-	}
-}
-
 // Function to display the map
 function show_city_map($ID) {
 	foreach ( range(1,100) as $tile ) { 
@@ -162,10 +155,10 @@ function show_extra_forms() { ?>
 		<input class="button" type="submit" value="Upgrade" name="update" />
 	</form>
 	<form method="post" action="<?= get_permalink().'?structure=demolish'; ?>">
-		<input type="hidden" id="demo-structure" name="demo-structure" />
-		<input id="demo-x" name="demo-x" type="hidden" />
-		<input id="demo-y" name="demo-y" type="hidden" />
-		<input id="demo-id" name="demo-id" type="hidden" />
+		<input type="hidden" id="demolish-structure" name="demolish-structure" />
+		<input id="demolish-x" name="demolish-x" type="hidden" />
+		<input id="demolish-y" name="demolish-y" type="hidden" />
+		<input id="demolish-id" name="demolish-id" type="hidden" />
 		<p class="helper"></p>
 		<input class="button" type="submit" value="Demolish (50)" name="update" />
 	</form>
