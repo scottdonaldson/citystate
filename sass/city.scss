@@ -440,107 +440,14 @@ a.map {
 		border: 1px dashed #333;
 	}
 
+
+
 	.tile {
 		background-size: contain;
-
-		&.park {
-			background-image: url(../images/park.png);
-		}
-
-		&.neighborhood {
-			background-image: url(../images/neighborhood.png);
-			@for $i from 1 through 2 {
-				&[data-level="#{$i}"] {
-					background-image: url(../images/neighborhood-#{$i}.png);
-				}
-			}
-		}
-
-		&.library {
-			background-image: url(../images/library.png);
-		}
-
-		&.farm,
-		&.pasture {
-			background-image: url(../images/farm.svg);
-			height: 120px;
-			margin: 0 -60px -60px 0;
-			position: relative;
-			width: 120px;
-			z-index: 100;
-		}
-		&.pasture { background-image: url(../images/pasture.svg); }
-
-		&.fishery {
-			background-image: url(../images/fishery.svg);
-		}
-
-		&.lumberyard {
-			background-image: url(../images/lumberyard.svg);
-		}
-
-		&.cinema {
-			background-image: url('../images/cinema.png');
-		}
-
-		&.factory {
-			background-image: url(../images/factory.svg);
-		}
-
-		&.gold_mine {
-			background-image: url(../images/gold-mine.svg);
-		}
-		&.coal_mine {
-			background-image: url(../images/coal-mine.svg);
-		}
-		&.iron_mine {
-			background-image: url(../images/iron-mine.svg);
-		}
-		&.uranium_mine {
-			background-image: url(../images/uranium-mine.svg);
-		}
-
-		/* for ports built on the corners, they take the east- and west-facing
-		   structure layout - thus the !important on the first two port declarations */
-		   
-		&.port[data-x="0"] {
-			background: url(../images/port-e.png) !important;
-			height: 60px !important;
-			margin: 0 -120px 0 0 !important;
-			width: 180px !important;
-		}
-		&.port[data-x="1"] {
-			background: url(../images/port-w.png) !important;
-			height: 60px !important;
-			margin: 0 0 0 -120px !important;
-			width: 180px !important;
-		}
-		&.port[data-y="1"] {
-			background: url(../images/port-n.png);
-			height: 180px;
-			margin: -120px 0 0 0;
-		}
-		&.port[data-y="10"] {
-			background: url(../images/port-s.png);
-			height: 180px;
-			margin: 0 0 -120px 0;
-		}
-
-		&.university {
-			background-image: url(../images/university.svg);
-		}
-
-		&.stadium {
-			background-image: url('../images/stadium.png');
-			height: 120px;
-			margin: 0 -60px -60px 0;
-			position: relative;
-			width: 120px;
-			z-index: 100;
-		}
 	}
 
 	.terrain {
+		display: none; // TODO: fix positioning
 		height: 601px;
 		margin: 0 -601px -601px 0;
 		position: absolute;
@@ -581,6 +488,103 @@ a.map {
 			top: 601px;
 		}
 	}
+}
+
+// Structures
+[data-structure="park"] {
+	background-image: url(../images/park.png);
+}
+
+[data-structure="neighborhood"] {
+	background-image: url(../images/neighborhood.png);
+	@for $i from 1 through 2 {
+		&[data-level="#{$i}"] {
+			background-image: url(../images/neighborhood-#{$i}.png);
+		}
+	}
+}
+
+[data-structure="library"] {
+	background-image: url(../images/library.png);
+}
+
+[data-structure="farm"],
+[data-structure="pasture"] {
+	background-image: url(../images/farm.svg);
+	height: 120px;
+	margin: 0 -60px -60px 0;
+	position: relative;
+	width: 120px;
+	z-index: 100;
+}
+[data-structure="pasture"] { background-image: url(../images/pasture.svg); }
+
+[data-structure="fishery"] {
+	background-image: url(../images/fishery.svg);
+}
+
+[data-structure="lumberyard"] {
+	background-image: url(../images/lumberyard.svg);
+}
+
+[data-structure="cinema"] {
+	background-image: url('../images/cinema.png');
+}
+
+[data-structure="factory"] {
+	background-image: url(../images/factory.svg);
+}
+
+[data-structure="gold_mine"] {
+	background-image: url(../images/gold-mine.svg);
+}
+[data-structure="coal_mine"] {
+	background-image: url(../images/coal-mine.svg);
+}
+[data-structure="iron_mine"] {
+	background-image: url(../images/iron-mine.svg);
+}
+[data-structure="uranium_mine"] {
+	background-image: url(../images/uranium-mine.svg);
+}
+
+/* for ports built on the corners, they take the east- and west-facing
+   structure layout - thus the !important on the first two port declarations */
+   
+[data-structure="port"][data-x="0"] {
+	background: url(../images/port-e.png) !important;
+	height: 60px !important;
+	margin: 0 -120px 0 0 !important;
+	width: 180px !important;
+}
+[data-structure="port"][data-x="1"] {
+	background: url(../images/port-w.png) !important;
+	height: 60px !important;
+	margin: 0 0 0 -120px !important;
+	width: 180px !important;
+}
+[data-structure="port"][data-y="1"] {
+	background: url(../images/port-n.png);
+	height: 180px;
+	margin: -120px 0 0 0;
+}
+[data-structure="port"][data-y="10"] {
+	background: url(../images/port-s.png);
+	height: 180px;
+	margin: 0 0 -120px 0;
+}
+
+[data-structure="university"] {
+	background-image: url(../images/university.svg);
+}
+
+[data-structure="stadium"] {
+	background-image: url('../images/stadium.png');
+	height: 120px;
+	margin: 0 -60px -60px 0;
+	position: relative;
+	width: 120px;
+	z-index: 100;
 }
 
 .infobox {

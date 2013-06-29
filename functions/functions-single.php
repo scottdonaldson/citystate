@@ -30,64 +30,61 @@ function show_city_map($ID) {
 	}
 }
 
-// Function for resetting the tile data
-function reset_tile_data() {
-	$resets = array(
-		$tile_class, 
-		$tile_data_structure, 
-		$tile_data_cost, 
-		$tile_data_upgrade,
-		$tile_data_id
-	);
-	foreach ($resets as $reset) { $reset = ''; }
-}
-
 // Function for setting the tile data
-function set_tile_data($structure, $ID, $x, $y) {
+function get_tile_data($structure, $ID, $x, $y) {
+
+	$tile_data = array();
+
 	// Non-repeating 
 	if ($structure['max'] == 1) {
-		if (meta($structure.'-x') == $x && meta($structure.'-y') == $y) {
-			$tile_class = $structure.' structure no-build';
-			$tile_data_structure = $structure;
+		if (get_post_meta($ID, $structure['slug'].'-x', true) == $x && 
+			get_post_meta($ID, $structure['slug'].'-y', true) == $y) {
+
+			$tile_data['class'] = $structure['slug'].' structure no-build';
+			$tile_data['structure'] = $structure['slug'];
 			
 			// If upgradeable
-			if ($structure['upgrade'] && meta($structure.'-level') < $structure['upgrade']) {
-				$tile_data_cost = $structure['cost'];
-				$tile_data_upgrade = true;
-				$tile_data_level = meta($structure.'-level');
+			if ($structure['upgrade'] && get_post_meta($ID, $structure['slug'].'-level', true) < $structure['upgrade']) {
+				$tile_data['cost'] = $structure['cost'];
+				$tile_data['upgrade'] = true;
+				$tile_data['level'] = get_post_meta($ID, $structure['slug'].'-level', true);
 			}
-			break;
+
+			return $tile_data;
 		}
 	// Repeating
 	} else {
-		for ($i = 1; $i <= $total = meta($structure.'s'); $i++) {
-			if (meta($structure.'-'.$i.'-x') == $x && meta($structure.'-'.$i.'-y') == $y) {
-				$tile_class = $structure.' structure no-build';
-				$tile_data_structure = $structure;
-				$tile_data_id = $i;
+		for ($i = 1; $i <= get_post_meta($ID, $structure['slug'].'-number', true); $i++) {
+
+			if (get_post_meta($ID, $structure['slug'].'-'.$i.'-x', true) == $x && 
+				get_post_meta($ID, $structure['slug'].'-'.$i.'-y', true) == $y) {
+
+				$tile_data['class'] = $structure['slug'].' structure no-build';
+				$tile_data['structure'] = $structure['slug'];
+				$tile_data['id'] = $i;
 				
 				// If upgradeable
-				if ($structure['upgrade'] && meta($structure.'-'.$i.'-level') < $structure['upgrade']) {
-					$tile_data_cost = $structure['cost'];
-					$tile_data_upgrade = true;
-					$tile_data_level = meta($structure.'-'.$i.'-level');
+				if ($structure['upgrade'] && get_post_meta($ID, $structure['slug'].'-'.$i.'-level', true) < $structure['upgrade']) {
+					$tile_data['cost'] = $structure['cost'];
+					$tile_data['upgrade'] = true;
+					$tile_data['level'] = get_post_meta($ID, $structure['slug'].'-'.$i.'-level', true);
 				} 
-				break;
+				return $tile_data;
 			}
 		}
-	}	
+	}
 }
 
 // Function to display city tile (called 100 times in show_city_map())
 function show_city_tile($ID, $x, $y) {
 
 	// Is there a structure here?
-	foreach($structures as $structure) {
-		reset_tile_data();
-		set_tile_data($structure, $ID, $x, $y);
+	foreach (get_structures() as $structure) {
+		$tile_data = get_tile_data($structure, $ID, $x, $y);
+		if ($tile_data) { break; }
 	} ?>
 
-		<div data-x="<?= $x; ?>" data-y="<?= $y; ?>" class="<?= $tile_class; ?>" data-structure="<?= $tile_data_structure; ?>" data-cost="<?= $tile_data_cost; ?>" data-upgrade="<?= $tile_data_upgrade; ?>" data-level="<?= $tile_data_level; ?>" data-id="<?= $i; ?>"></div>
+	<div data-x="<?= $x; ?>" data-y="<?= $y; ?>" class="tile <?= $tile_data['class']; ?>" data-structure="<?= $tile_data['structure']; ?>" data-cost="<?= $tile_data['cost']; ?>" data-upgrade="<?= $tile_data['upgrade']; ?>" data-level="<?= $tile_data['level']; ?>" data-id="<?= $tile_data['id']; ?>"></div>
 
 	<?php
 }
@@ -102,21 +99,20 @@ function show_city_neighbors($geo, $ID) {
 }
 
 function show_build_form() { ?>
-	<form action="<?= get_permalink().'?structure=build'; ?>">
+	<form action="<?= get_permalink().'?structure=build'; ?>" method="POST">
 		<?php 
-		
 		// Open the list
 		echo '<ul>';
-		foreach ($structures as $structure => $values) { 
+		foreach (get_structures() as $structure) { 
 
-			$list_item = '<li id="'.$structure.'">'.ucwords($structure['name']).' ('.th($structure['cost'].')'.'</li>';
+			$list_item = '<li id="'.$structure['slug'].'">'.ucwords($structure['name']).' ('.th($structure['cost']).')</li>';
 
 			// Non-repeating structures
 			if ($structure['max'] == 1) {	
 
 				// Only show build option if structure is not yet built
 				// and if has passed 1/2 of population at which it is desired
-				if (meta($structure.'-y') == '0' && $pop >= 0.5 * $structure['desired']) { 
+				if (!get_post_meta(get_the_ID(), $structure['slug'].'-y', true) && get_post_meta(get_the_ID(), 'population', true) >= 0.5 * $structure['desired']) { 
 					echo $list_item;
 				}
 				

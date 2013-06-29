@@ -20,7 +20,7 @@ header_checks();
 
 // Checks only for cities
 if (is_single()) {
-	city_checks();
+	city_checks( $current_user );
 }
 ?>
 

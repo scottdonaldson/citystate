@@ -13,9 +13,9 @@ function header_checks() {
 }
 
 // City checks
-function city_checks() {
+function city_checks( $current_user ) {
 	check_for_welcome();
-	check_for_structure( $current_user );
+	check_for_structure( $current_user, get_the_ID() );
 }
 
 ?>

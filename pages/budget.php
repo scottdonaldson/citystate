@@ -31,27 +31,16 @@ if (count_user_posts($current_user->ID) == 0) {
 					<?php
 					$cities = get_user_cities($current_user);
 
-					while ($cities->have_posts()) : $cities->the_post(); ?>
+					while ($cities->have_posts()) : $cities->the_post();
 
-					
-					<?php
+						show_budget_module($current_user, get_the_ID());
+
 					$state_income += $income_[$ID];
 					$state_expenses += $expenses_[$ID];
 					endwhile;
 					wp_reset_postdata();
-					?>
-
-					<div class="state">
-						<h3>State</h3>
-						<input type="checkbox" id="budget_warning" name="budget_warning" <?php if (get_user_meta($current_user->ID, 'budget_warning', true) == 1) { echo 'checked'; } ?> /><label class="grey" for="budget_warning"><small>Always warn me if state expenses are greater than state income.</small></label>
-						<div class="income">Total Income: <span><?php echo th($state_income); ?></span></div>
-
-						<div class="original hidden" data-original="<?php echo $state_expenses; ?>"></div>
-						<div class="expense">Total Expenses: <span><?php echo th($state_expenses); ?></span></div>
-
-						<div class="net"><strong>Total Net: <span><?php echo th($state_income - $state_expenses); ?></span></strong></div>
-
-					</div>
+					
+					show_state_module(); ?>
 						
 					<input method="POST" type="submit" id="submit" name="submit" value="Submit for review" class="button" />
 				
@@ -74,7 +63,6 @@ if (isset($_POST['submit'])) {
 		$link = get_permalink();
 		$pop = get_post_meta($ID, 'population', true);
 
-		include ( MAIN . 'structures.php');
 		foreach ($structures as $structure) {
 			update_post_meta($ID, $structure.'-funding', get_funding_level($ID, $structure));
 		}
@@ -89,28 +77,10 @@ if (isset($_POST['submit'])) {
 
 } ?>
 
-<div class="container">
-	<div class="module">
-		<h2 class="header"><?php echo $current_user->display_name; ?> - Budget Review</h2>
-		<div class="content clearfix">
-			<?php 
-			$state_income = 0;
-			$state_expenses = 0;
-			?>
-
-			<h3>Cities</h3>
-			<form class="budget" method="post" action="<?php echo site_url(); ?>/budget">
-				
-			</form>	
-		</div>
-	</div>
-</div>
-
 <!-- load JS for the budget -->
-<script src="<?= template_url(); ?>/js/budget.js"></script>
+<script src="<?= bloginfo('template_url'); ?>/js/budget.js"></script>
 
 <?php 
-} // end does user have cities
 
 // if user is not logged in
 } else { ?>

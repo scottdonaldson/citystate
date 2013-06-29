@@ -4,6 +4,7 @@
 define('MAIN', dirname(__FILE__) . '/');
 include ( MAIN . 'functions/header-checks.php');
 include ( MAIN . 'functions/structures.php');
+include( MAIN . 'functions/functions-budget.php');
 include( MAIN . 'functions/register.php');
 include( MAIN . 'functions/strip-category.php');
 
@@ -38,12 +39,11 @@ function get_user_cities($current_user) {
 function no_bankrupt($cash) {
 	if ($cash < 0) {
 		$alert = '<p>You can&#39;t do that &mdash; you&#39;d go bankrupt!</p>';
-		return;
 	}
 }
 
 // Happiness values
-get_happiness($happiness) {
+function get_happiness($happiness) {
 	$happy = array();
 	if ($happiness < 5) {
 		$happy['class'] = 'fleeing';

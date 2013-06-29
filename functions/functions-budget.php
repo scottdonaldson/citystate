@@ -2,19 +2,21 @@
 
 function get_funding_level($ID, $structure) {
 
+	$pop = get_post_meta($ID, 'population', true);
+
 	// Determined differently for structures there are multiples of
 	$multiples = array('park', 'farm', 'fishery', 'lumberyard', 'port');
 
 	if ($structure['max'] == 1) {
-		if (meta('population') >= $structure['desired']) {
-			$need_funding = round(0.02 * $structure['cost'] * (1 + 0.1 * (meta('population') - $structure['desired']) / 1000) ));
+		if ($pop >= $structure['desired']) {
+			$need_funding = round(0.02 * $structure['cost'] * (1 + 0.1 * ($pop - $structure['desired']) / 1000) );
 		} else {
 			$need_funding = 0.02 * $structure['cost'];
 		}
 	} elseif (in_array($structure, $multiples)) { 
 		$count = meta($structure.'s');
 
-		$need_funding = $count * round(0.02 * $structure['cost'] * (1 + 0.1 * ((meta('population') - $structure['desired']) / 1000) ));
+		$need_funding = $count * round(0.02 * $structure['cost'] * (1 + 0.1 * (($pop - $structure['desired']) / 1000) ));
 	}
 	// Based on the ratio of the new funding to the needed funding,
 	// return a qualitative value for funding
@@ -44,27 +46,27 @@ function update_funding($ID, $structure, $basename) {
 function show_budget_module($current_user, $ID) {
 
 	$link = get_permalink($ID);
-	$pop = meta('population'); 
+	$pop = meta('population') ? meta('population') : 0; 
 	$city = get_the_title($ID);
 	?>
 
-	<div id="city-<?= $ID(); ?>" class="board">
+	<div id="city-<?= $ID; ?>" class="board">
 		<h3><a class="snapshot" href="<?= $link; ?>"><?= $city; ?></a> <small>(Pop: <?= $pop; ?>)</small></h3>
 		
 		<?php 
 		// Show happiness face
-		$happy = get_happiness(meta('happiness')); ?>
+		$happy = get_happiness(get_post_meta($ID, 'happiness', true)); ?>
 		<small class="face <?= $happy['class']; ?>"><?= $happy['message']; ?></small>
 		
 		<div class="structures clearfix">
 		<?php 
-		foreach ($structures as $structure) {
+		foreach (get_structures() as $structure) {
 
 			get_funding_level($ID, $structure);
 
 			// Determine placeholder value. If funding is set, then that funding,
 			// otherwise the minimum of .02 times the cost to build
-			if (meta('funding-'.$structure) {
+			if (meta('funding-'.$structure)) {
 				$placeholder = get_post_meta($ID, 'funding-'.$structure, true);
 			} else {
 				// Nonrepeating
@@ -108,7 +110,7 @@ function show_budget_module($current_user, $ID) {
 
 			// Some structures require funding but can build multiple
 			$multiples = array('park', 'farm', 'fishery', 'lumberyard', 'port');
-			} elseif (in_array($structure, $multiples)) { 
+			} elseif (in_array($structure['slug'], $multiples)) { 
 				$count = get_post_meta($ID, $structure.'s', true);
 				if ($count > 0) {
 					$at_least_one_[$ID] = true; 
@@ -147,18 +149,18 @@ function show_budget_module($current_user, $ID) {
 
 			<p class="alignleft">City Expenses: <?php
 				$expenses_[$ID] = 0;
-				foreach ($structures as $structure=>$values) {
-					include ( MAIN . 'structures/values.php');
+				foreach (get_structures() as $structure) {
 					
 					if ($max == 1) {
 						if (get_post_meta($ID, $structure.'-y', true) != 0) { 
 							$expenses_[$ID] += $placeholder_[$structure];
 						}
-					} elseif (in_array($structure, $multiples)) {
+					} /* TODO:
+					elseif (in_array($structure, $multiples)) {
 						if (get_post_meta($ID, $structure.'s', true) > 0) {
 							$expenses_[$ID] += $placeholder_[$structure];
 						}
-					}
+					} */
 				}
 			?></p>
 			<p class="alignright expense"><?php echo th($expenses_[$ID]); ?></p>
@@ -170,6 +172,29 @@ function show_budget_module($current_user, $ID) {
 		<div class="original hidden" data-original="<?php echo $expenses_[$ID]; ?>"></div>
 	</div>
 	<?php
+}
+
+function show_state_module() { 
+	if (get_user_meta($current_user->ID, 'budget_warning', true) == 1) { 
+		$checked = 'checked'; 
+	}
+	?>
+	<div class="state">
+		<h3>State</h3>
+		<input type="checkbox" id="budget_warning" name="budget_warning" <?= $checked ?> />
+		<label class="grey" for="budget_warning">
+			<small>Always warn me if state expenses are greater than state income.</small>
+		</label>
+
+		<div class="income">Total Income: <span><?= th($state_income); ?></span></div>
+
+		<div class="original hidden" data-original="<?= $state_expenses; ?>"></div>
+		<div class="expense">Total Expenses: <span><?= th($state_expenses); ?></span></div>
+
+		<div class="net"><strong>Total Net: <span><?= th($state_income - $state_expenses); ?></span></strong></div>
+
+	</div>
+<?php
 }
 
 ?>
