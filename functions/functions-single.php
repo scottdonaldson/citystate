@@ -35,15 +35,13 @@ function get_tile_data($structure, $ID, $x, $y) {
 
 			$tile_data['class'] = $structure['slug'].' structure no-build';
 			$tile_data['structure'] = $structure['slug'];
+			$tile_data['level'] = get_post_meta($ID, $structure['slug'].'-level', true);
 			
 			// If upgradeable
 			if ($structure['upgrade'] && get_post_meta($ID, $structure['slug'].'-level', true) < $structure['upgrade']) {
 				$tile_data['cost'] = $structure['cost'];
 				$tile_data['upgrade'] = true;
-				$tile_data['level'] = get_post_meta($ID, $structure['slug'].'-level', true);
 			}
-
-			return $tile_data;
 		}
 	// Repeating
 	} else {
@@ -55,17 +53,17 @@ function get_tile_data($structure, $ID, $x, $y) {
 				$tile_data['class'] = $structure['slug'].' structure no-build';
 				$tile_data['structure'] = $structure['slug'];
 				$tile_data['id'] = $i;
+				$tile_data['level'] = get_post_meta($ID, $structure['slug'].'-'.$i.'-level', true);
 				
 				// If upgradeable
 				if ($structure['upgrade'] && get_post_meta($ID, $structure['slug'].'-'.$i.'-level', true) < $structure['upgrade']) {
 					$tile_data['cost'] = $structure['cost'];
 					$tile_data['upgrade'] = true;
-					$tile_data['level'] = get_post_meta($ID, $structure['slug'].'-'.$i.'-level', true);
 				} 
-				return $tile_data;
 			}
 		}
 	}
+	return $tile_data;
 }
 
 // Function to display city tile (called 100 times in show_city_map())
@@ -84,7 +82,7 @@ function show_city_tile($ID, $x, $y) {
 
 function show_city_neighbors($geo, $ID) {
 	foreach ($geo as $cardinal) { 
-		$terrain = meta('map-'.$cardinal); ?>
+		$terrain = get_post_meta($ID, 'map-'.$cardinal, true); ?>
 		
 		<div id="<?php echo $cardinal; ?>" class="terrain <?php echo $terrain; ?>"></div>
 		<?php
