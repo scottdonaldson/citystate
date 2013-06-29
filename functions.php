@@ -7,6 +7,7 @@ include ( MAIN . 'functions/structures.php');
 include( MAIN . 'functions/functions-budget.php');
 include( MAIN . 'functions/register.php');
 include( MAIN . 'functions/strip-category.php');
+include( MAIN . 'functions/functions-footer.php');
 
 // Includes
 include ( MAIN . 'includes/geo.php');
