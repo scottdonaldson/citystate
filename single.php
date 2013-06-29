@@ -31,14 +31,14 @@ $is_user_city = is_user_logged_in() && $current_user->ID == get_the_author_meta(
 
 	<?php 
 	show_city_map($ID);
+
+	// show the city's geographic neighbors
+	show_city_neighbors($geo, $ID);
 	?>
 	
 </div><!-- #map -->
 
 	<?php
-	// show the city's geographic neighbors
-	show_city_neighbors($geo, $ID);
-
 	// Make sure the user is logged in
 	// and built this city to be able to modify
 	if (is_user_logged_in() && ($current_user->ID == get_the_author_meta('ID'))) { 
