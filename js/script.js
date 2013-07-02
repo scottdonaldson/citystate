@@ -69,7 +69,8 @@ jQuery(document).ready(function($){
 	extra.append('<div class="close-box">[ESC]</div>');
 	var alert = $('#alert');
 	alert.append('<div class="close-box">[ESC]</div>');
-	var close = function(){
+	
+	function close() {
 		// Close infobox or alert
 		$('.infobox').removeClass('active').find('ul li').removeClass('chosen');
 		$('#build-structure').val('');

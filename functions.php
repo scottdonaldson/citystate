@@ -13,9 +13,11 @@ include( MAIN . 'functions/functions-footer.php');
 include ( MAIN . 'includes/geo.php');
 include ( MAIN . 'includes/structures.php');
 include ( MAIN . 'includes/resources.php');
+include ( MAIN . 'includes/terrain.php');
 
-// City-specific
+// Region- and city-specific
 include ( MAIN . 'functions/functions-single.php');
+include ( MAIN . 'functions/functions-region.php');
 
 // All the checks
 include ( MAIN . 'functions/checks.php');
@@ -153,10 +155,26 @@ add_filter('login_headertitle', 'change_title_on_logo');
 
 add_action( 'init', 'create_post_type' );
 function create_post_type() {
+	register_post_type( 'region',
+		array(
+			'labels' => array(
+				'name' => __( 'Regions' ),
+				'singular_name' => __( 'Region' )
+			),
+			'public' => true,
+			'has_archive' => true,
+			'menu_position=' => 5,
+			'rewrite' => false,
+			'with_front' => false,
+			'supports' => array(
+				'title', 'custom-fields'
+			),
+		)
+	);
 	register_post_type( 'activity',
 		array(
 			'labels' => array(
-				'name' => __( 'Activity' ),
+				'name' => __( 'Activities' ),
 				'singular_name' => __( 'Activity' )
 			),
 			'public' => true,

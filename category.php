@@ -1,12 +1,15 @@
 <?php 
+// Include JS for validating city names
 add_action('wp_footer', 'cityname_validate');
 function cityname_validate() {
 	$url = get_bloginfo('template_url');
     echo '<script src="'.$url.'/plugins/validation/cityname.js"></script>'; ?>
 <?php }
-get_header(); 
 
-// If logged in, get current user info
+get_header(); 
+the_post();
+
+// Get user info
 global $current_user;
 get_currentuserinfo();
 
@@ -14,17 +17,12 @@ get_currentuserinfo();
 $region = get_query_var('category_name');
 
 // Retrieve cities in this region.
-$city_query = new WP_Query(array(
-	'category_name' => $region,
-	'posts_per_page' => -1,
-	'order' => 'ASC'
-	)
-);
+$region_cities = get_region_cities();
 
 $cities = array(); // empty array to hold cities
 $trade_partners = array(); // empty array to hold ALL user trade partners
 
-while ($city_query->have_posts()) : $city_query->the_post();
+while ($region_cities->have_posts()) : $region_cities->the_post();
 	$ID = get_the_ID();
 	$x = get_post_meta($ID, 'location-x', true);
 	$y = get_post_meta($ID, 'location-y', true);
@@ -53,6 +51,9 @@ $scouted_here = false;
 <div id="map" class="clearfix">
 
 	<?php 
+
+	show_region_map($region);
+
 	include( MAIN .'maps/'.$region.'.php'); 
 	foreach ($map as $row => $tiles) {
 		$x = 0; 

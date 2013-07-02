@@ -194,10 +194,66 @@ li.button {
 
 /* ------- MAIN PAGE -------- */
 
-.category { 
+.category,
+.single-region { 
 	#main {
-		height: 820px;
+		// height: 820px;
 		overflow: hidden;
+	}
+}
+
+#overlay {
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 3; // must be higher than #map, which is in turn higher than #neighbors
+
+	.element {
+		height: 60px;
+		position: absolute;
+		width: 60px;
+
+		// Position
+		@for $x from 1 through 10 {
+			&[data-x="#{$x}"] {
+				left: #{60 * ($x - 1)}px;
+			}
+		}
+		@for $y from 1 through 10 {
+			&[data-y="#{$y}"] {
+				top: #{60 * ($y - 1)}px;
+			}
+		}
+
+		// Image
+		@for $r from 0 through 4 {
+			&.r0#{$r} {
+				background-image: url(../images/city/0#{$r}-00.png);
+			}
+
+			@for $n from 1 through 4 {
+				&.r0#{$r}.n0#{$n}{
+					background-image: url(../images/city/0#{$r}-0#{$n}.png);
+				}
+			}
+		}
+	}
+}
+
+$resources: fish arable_land sheep lumber coal iron oil uranium stone gold;
+
+@each $resource in $resources {
+	[data-overlay="#{$resource}"] {
+		.tile {
+			background-color: #000;
+			background-image: none !important;
+		}
+		@for $i from 1 through 10 {
+			[data-#{$resource}="#{$i}"] {
+				background-color: rgb(100 + 15*$i, 100 + 15*$i, 100 + 15*$i);
+				background-image: none;
+			}
+		}
 	}
 }
 
@@ -270,13 +326,37 @@ a.map {
 	}
 }
 
+.tile {
+	&[data-terrain="sand"] {
+		background-image: url(../images/terrain/sand.png);
+	}
+
+	&[data-terrain="water"] {
+		background-color: transparent !important;
+	}
+	&[data-terrain="hills"] {
+		background-image: url(../images/terrain/sand.png),
+						  url(../images/terrain/hills.svg);
+	}
+	&[data-terrain="grass"] {
+		background-image: url(../images/terrain/grass.png);
+	}
+	&[data-terrain="mountains"] {
+		background-image: url(../images/terrain/rocks.png),
+						  url(../images/terrain/mountains.svg);
+	}
+	&[data-terrain="forest"] {
+		background-image: url(../images/terrain/forest.png);
+	}
+}
+
 .home,
-.category {
+.category,
+.single-region {
 	background-image: url(../images/terrain/water.png);
 	width: 100%;
 
 	.tile {
-		background-color: $sand;
 		&.scouted { 
 			background-color: $yellow; 
 			&.city {
@@ -285,28 +365,6 @@ a.map {
 		}
 		&.highlighted {
 			border: 1px solid $yellow;
-		}
-
-		&.sand {
-			background-image: url(../images/terrain/sand.png);
-		}
-
-		&.water {
-			background-color: transparent;
-		}
-		&.hills {
-			background-image: url(../images/terrain/sand.png),
-							  url(../images/terrain/hills.svg);
-		}
-		&.grass {
-			background-image: url(../images/terrain/grass.png);
-		}
-		&.mountains {
-			background-image: url(../images/terrain/rocks.png),
-							  url(../images/terrain/mountains.svg);
-		}
-		&.forest {
-			background-image: url(../images/terrain/forest.png);
 		}
 		
 		.city {
@@ -390,7 +448,7 @@ a.map {
 }
 
 .tile {
-	background: $sand;
+	background-color: $sand;
 	height: 60px;
 	float: left;
 	position: relative;
@@ -400,7 +458,7 @@ a.map {
 		background-color: desaturate(darken($sand, 5%), 20%);
 	}
 	&.footprint {
-		background: desaturate(darken($sand, 8%), 20%);
+		background-color: desaturate(darken($sand, 8%), 20%);
 	}
 	&.water:hover {
 		background: none transparent;

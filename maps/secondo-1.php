@@ -1,4 +1,16 @@
 <?php
+/*
+Template Name: Secondo 1 bulk upload
+*/
+?>
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Secondo 1 bulk upload</title>
+
+
+<?php
 
 $map = array(
 	1 => array(
@@ -122,15 +134,25 @@ $map = array(
 		  	array('water', ''), 
 		),
 );
-$neighbors = array(
-	'nw' => 0,
-	'n'  => 0,
-	'ne' => 0,
-	'w'  => 'originalia',
-	'e'  => 'secondo-2',
-	'sw' => 0,
-	's'  => 'secondo-3',
-	'se' => 'secondo-4',
-);
+	$ID = get_page_by_title('Secondo 1', OBJECT, 'region');
+	$ID = $ID->ID;
+	foreach ($map as $y => $row) {
+		foreach ($row as $x => $tile) {
+			if ($x == 10) { $x = 0; }
+			update_post_meta($ID, $x.','.$y.'-terrain', $tile[0]);
 
+			foreach ($tile[1] as $resource => $value) {
+				update_post_meta($ID, $x.','.$y.'-'.$resource, $value);
+			}
+		}
+	}
+	update_post_meta($ID, 'POS-x', '2');
+	update_post_meta($ID, 'POS-y', '1');
 ?>
+
+</head>
+<body>
+	<p>Secondo 1 updated.</p>
+	<a href="<?= home_url(); ?>?region=secondo-1">Back to Secondo 1</a>
+</body>
+</html>
