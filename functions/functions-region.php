@@ -26,7 +26,7 @@ function show_region_map($ID, $resources, $terrain) {
 
 			// Show the tile, with extra stuff if it's on single-region.php
 			// (meaning it's an admin editing the region)
-			if (is_single()) {
+			if (current_user_can('switch_themes') && $_GET['edit'] == 'true') {
 				show_admin_region_tile($ID, $x, $y, $resources, $terrain);
 			} else {
 				show_region_tile($ID, $x, $y, $resources, $terrain);
@@ -84,6 +84,17 @@ function show_admin_region_tile($ID, $x, $y, $resources, $terrain) {
 	</div>
 <?php }
 
+function show_region_overlays($resources) { ?>
+	<h2>Data overlays:</h2>
+	<ul id="overlays">
+		<?php
+		foreach ($resources as $resource => $values) { ?>
+			<li data-overlay="<?= $resource; ?>"><?= ucfirst($resource); ?></li>
+		<?php } ?>
+		<li data-overlay="remove">Remove overlay</li>
+	</ul>
+<?php }
+
 function show_region_tile($ID, $x, $y, $resources, $terrain) { 
 	$tile_terrain = get_post_meta($ID, $x.','.$y.'-terrain', true);
 	?>
@@ -96,6 +107,87 @@ function build_region($ID) {
 			update_post_meta($ID, $key, $value);
 		}
 	}
+}
+
+function show_region_neighbors($geo, $ID, $resources, $terrain) {
+	$x = get_post_meta($ID, 'POS-x', true);
+	$y = get_post_meta($ID, 'POS-y', true);
+
+	$neighbor_query = new WP_Query(array(
+		'post_type' => 'region',
+		'meta_query' => array(
+			array(
+				'key' => 'POS-x',
+				'value' => array($x - 1, $x, $x + 1),
+				'compare' => 'IN'
+			),
+			array(
+				'key' => 'POS-y',
+				'value' => array($y - 1, $y, $y + 1),
+				'compare' => 'IN'
+			)
+		),
+		'posts_per_page' => -1,
+		'post__not_in' => array($ID) // exclude the region we're looking at
+		)
+	);
+	while ($neighbor_query->have_posts()) : $neighbor_query->the_post(); 
+		$N_ID = get_the_ID();
+		// WEST (and NW and SW)
+		if (get_post_meta($N_ID, 'POS-x', true) == $x - 1) {
+			if (get_post_meta($N_ID, 'POS-y', true) == $y - 1) {
+				$cardinal = 'nw';
+			} elseif (get_post_meta($N_ID, 'POS-y', true) == $y + 1) {
+				$cardinal = 'sw';
+			} else {
+				$cardinal = 'w';
+			}
+		// NORTH OR SOUTH
+		} elseif (get_post_meta($N_ID, 'POS-x', true) == $x) {
+			if (get_post_meta($N_ID, 'POS-y', true) == $y - 1) {
+				$cardinal = 'n';
+			} else {
+				$cardinal = 's';
+			}
+		// EAST (and NE and SE)
+		} else {
+			if (get_post_meta($N_ID, 'POS-y', true) == $y - 1) {
+				$cardinal = 'ne';
+			} elseif (get_post_meta($N_ID, 'POS-y', true) == $y + 1) {
+				$cardinal = 'se';
+			} else {
+				$cardinal = 'e';
+			}
+		}
+			?>
+			<a id="<?= $cardinal; ?>" class="neighbor map" href="<?php the_permalink(); ?>">
+				<?php show_region_map($N_ID, $resources, $terrain); ?>
+			</a>
+		<?php
+		// }
+	?>
+	<?php
+	endwhile;
+	wp_reset_postdata();
+
+	foreach ($geo as $cardinal) { 
+		switch ($cardinal) {
+			case 'nw': $x--; $y--; break;
+			case 'n': $y--; 	   break;
+			case 'ne': $x++; $y--; break;
+			case 'w': $x--; 	   break;
+			case 'e': $x++; 	   break;
+			case 'sw': $x--; $y++; break;
+			case 's': $y++; 	   break;
+			case 'se': $x++; $y++; break;
+		}	
+	}	
+}
+
+// Show region admin function -- note that this is different from the "admin"
+// above, as this is for any user who is logged in, to allow them to build
+function show_region_admin($user, $ID) {
+	
 }
 
 ?>

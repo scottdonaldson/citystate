@@ -240,23 +240,6 @@ li.button {
 	}
 }
 
-$resources: fish arable_land sheep lumber coal iron oil uranium stone gold;
-
-@each $resource in $resources {
-	[data-overlay="#{$resource}"] {
-		.tile {
-			background-color: #000;
-			background-image: none !important;
-		}
-		@for $i from 1 through 10 {
-			[data-#{$resource}="#{$i}"] {
-				background-color: rgb(100 + 15*$i, 100 + 15*$i, 100 + 15*$i);
-				background-image: none;
-			}
-		}
-	}
-}
-
 #map,
 .map {
 	@include box-sizing(content-box);
@@ -271,7 +254,7 @@ $resources: fish arable_land sheep lumber coal iron oil uranium stone gold;
 }
 
 // Neighbors
-a.map { 
+a.neighbor { 
 	@include opacity(0.85);
 	position: absolute; 
 	&:active,

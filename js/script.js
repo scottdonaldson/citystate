@@ -4,7 +4,7 @@ jQuery(document).ready(function($){
 
 	// ----- BUDGET
 	// Alert if total expenses are greater than total income
-	$.ajax({
+	/* $.ajax({
 		url: 'budget',
 		success: function(data){
 			var data = $(data),
@@ -34,6 +34,7 @@ jQuery(document).ready(function($){
 			$('.close-box').on('click', close);	
 		}
 	});
+	*/
 
 	/* ------------- SNAPSHOT LINKS -------- */
 

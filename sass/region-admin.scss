@@ -1,0 +1,49 @@
+label {
+	display: block;
+}
+
+.fields {
+	background-color: #fff;
+	display: none;
+	padding: 20px;
+	position: absolute;
+	top: 30px;
+	left: 30px;
+	width: 360px;
+	z-index: 9999;
+
+	input[type="radio"],
+	input[type="checkbox"] {
+		margin-right: 5px;
+	}
+
+	input[type="number"] {
+		float: right;
+		width: 40px;
+	}
+
+	& > div {
+		width: 45%;
+	}
+}
+
+.tile:hover .fields {
+	display: block
+}
+
+$resources: fish arable_land sheep lumber coal iron oil uranium stone gold;
+
+@each $resource in $resources {
+	[data-overlay="#{$resource}"] {
+		.tile {
+			background-color: #000;
+			background-image: none !important;
+		}
+		@for $i from 1 through 10 {
+			[data-#{$resource}="#{$i}"] {
+				background-color: rgb(100 + 15*$i, 100 + 15*$i, 100 + 15*$i);
+				background-image: none;
+			}
+		}
+	}
+}

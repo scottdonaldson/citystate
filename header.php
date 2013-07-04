@@ -31,7 +31,10 @@ $alert = alerts( $current_user );
 	<link rel="stylesheet" href="<?php echo bloginfo('template_url'); ?>/style.css" />
 	<link rel="stylesheet" href="<?php echo bloginfo('template_url'); ?>/css/city.css" />
 
-<?php wp_head(); ?>
+<?php 
+wp_enqueue_script('jquery');
+wp_head(); 
+?>
 </head>
 
 <body <?php body_class(); ?>>
