@@ -10,8 +10,7 @@ get_currentuserinfo();
 $ID = get_the_ID();
 
 // Set initial resource costs equal to 0
-include ( MAIN . 'resources.php');
-foreach ($resources as $key=>$resource) {
+foreach (get_resources() as $resource => $values) {
 	$name = substr($resource[0], 0, -6); // remove '_stock'
 	$r_cost[$name] = 0;
 }
@@ -21,7 +20,7 @@ foreach ($resources as $key=>$resource) {
 <?php 
 // TODO: figure this out better
 // The snapshot (used in AJAX calls)
-include( MAIN . 'single/snapshot.php'); 
+// include( MAIN . 'single/snapshot.php'); 
 
 // Variable for if this is the user's city or not
 $is_user_city = is_user_logged_in() && $current_user->ID == get_the_author_meta('ID') ? 'user-city' : 'not-user-city';
@@ -33,7 +32,7 @@ $is_user_city = is_user_logged_in() && $current_user->ID == get_the_author_meta(
 	show_city_map($ID);
 
 	// show the city's geographic neighbors
-	show_city_neighbors($geo, $ID);
+	show_city_neighbors($ID);
 	?>
 	
 </div><!-- #map -->
@@ -42,7 +41,7 @@ $is_user_city = is_user_logged_in() && $current_user->ID == get_the_author_meta(
 	// Make sure the user is logged in
 	// and built this city to be able to modify
 	if (is_user_logged_in() && ($current_user->ID == get_the_author_meta('ID'))) { 
-		show_city_admin($current_user, $ID);
+		show_city_admin($current_user, $ID, $resources);
 	} ?>
 
 <?php

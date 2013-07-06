@@ -4,6 +4,9 @@
 get_header(); ?>
 
 <div id="map">
+	<?php 
+	// TODO: this
+	show_world_map(); ?>
 	<a href="<?php echo home_url(); ?>/originalia" title="Originalia">
 		<img src="<?php echo bloginfo('template_url'); ?>/images/maps/originalia.png" />
 	</a>

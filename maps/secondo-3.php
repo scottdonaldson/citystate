@@ -137,7 +137,6 @@ $ID = get_page_by_title('Secondo 3', OBJECT, 'region');
 	$ID = $ID->ID;
 	foreach ($map as $y => $row) {
 		foreach ($row as $x => $tile) {
-			if ($x == 10) { $x = 0; }
 			update_post_meta($ID, $x.','.$y.'-terrain', $tile[0]);
 
 			foreach ($tile[1] as $resource => $value) {

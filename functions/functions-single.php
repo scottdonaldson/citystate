@@ -80,8 +80,8 @@ function show_city_tile($ID, $x, $y) {
 	<?php
 }
 
-function show_city_neighbors($geo, $ID) {
-	foreach ($geo as $cardinal) { 
+function show_city_neighbors($ID) {
+	foreach (get_geo() as $cardinal) { 
 		$terrain = get_post_meta($ID, 'map-'.$cardinal, true); ?>
 		
 		<div id="<?php echo $cardinal; ?>" class="terrain <?php echo $terrain; ?>"></div>
@@ -89,7 +89,9 @@ function show_city_neighbors($geo, $ID) {
 	}
 }
 
-function show_build_form() { ?>
+function show_build_form($ID) { 
+	$pop = get_post_meta($ID, 'population', true);
+	?>
 	<form action="<?= get_permalink().'?structure=build'; ?>" method="POST">
 		<?php 
 		// Open the list
@@ -103,31 +105,28 @@ function show_build_form() { ?>
 
 				// Only show build option if structure is not yet built
 				// and if has passed 1/2 of population at which it is desired
-				if (!get_post_meta(get_the_ID(), $structure['slug'].'-y', true) && get_post_meta(get_the_ID(), 'population', true) >= 0.5 * $structure['desired']) { 
+				if (!get_post_meta($ID, $structure['slug'].'-y', true) 
+					&& $pop >= 0.5 * $structure['desired']) { 
 					echo $list_item;
 				}
 				
 			// Repeating structures
 			} else { 
-				// Create an empty resource structures array to populate with both
-				// structures and (preceding them) the corresponding keys. Use this later.
-				$resource_structures = array();
-				foreach ($resources as $key => $resource) {
-					$resource_structures[$key] = $resource[1];
-				}
 				
 				// Only show if max is 0 (can build as many as desired)
 				// or if the count is less than the maximum allowed
 				// AND if has passed 1/2 of population at which it is desired
-				if (($structure['max'] == 0 || meta($structure.'s') < $structure['max']) && $pop >= 0.5*$desired) { 
-					// Resource-related structures. Now we use the above $resource_structures array.
-					if (in_array($structure['name'], $resource_structures)) {
-						// Complicated, but this is how we test if there is resource present in city
-						if (meta($resource_structures[array_search($structure['name'], $resource_structures) - 1]) > 0 && $pop >= 1000) { 
-							
+				if (($structure['max'] == 0 || get_post_meta($ID, $structure.'-number', true) < $structure['max']) && 
+					$pop >= 0.5 * $desired) { 
+					// Resource-related structures.
+					if ($structure['resource'] != false) {
+						// For resource structures, the resource must be present in the city
+						// and the population greater than 1000
+						if (get_post_meta($ID, $structure['resource'], true) > 0 && 
+							$pop >= 1000) { 
 							echo $list_item;
 						}
-					} else { 
+					} else {
 						echo $list_item;
 					}
 				}
@@ -163,7 +162,7 @@ function show_extra_forms() { ?>
 <?php
 }
 
-function show_city_admin($current_user, $ID) { 
+function show_city_admin($current_user, $ID, $resources) { 
 	// .name-structure, .x, and .y are populated via JS
 	$build_message = 'Build a structure at (<span class="x"></span>,&nbsp;<span class="y"></span>):';
 	$extra_message = '<span class="name-structure"></span> at (<span class="x"></span>,&nbsp;<span class="y"></span>):';
@@ -172,7 +171,7 @@ function show_city_admin($current_user, $ID) {
 	<div>
 		<div id="build" class="infobox">
 			<p><?= $build_message; ?></p>
-			<?php show_build_form(); ?>
+			<?php show_build_form($ID, $resources); ?>
 		</div>
 
 		<div id="extra" class="infobox">

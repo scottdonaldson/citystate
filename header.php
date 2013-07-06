@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-
-<!--
-
-	Designed and developed by Scott Donaldson
-
--->
-
 <?php 
 
 // Define paths
@@ -19,6 +11,14 @@ get_currentuserinfo();
 $alert = alerts( $current_user );
 
 ?>
+
+<!DOCTYPE html>
+
+<!--
+
+	Designed and developed by Scott Donaldson
+
+-->
 
 <html <?php language_attributes(); ?>>
 <head>

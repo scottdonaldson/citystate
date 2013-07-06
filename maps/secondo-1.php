@@ -138,7 +138,6 @@ $map = array(
 	$ID = $ID->ID;
 	foreach ($map as $y => $row) {
 		foreach ($row as $x => $tile) {
-			if ($x == 10) { $x = 0; }
 			update_post_meta($ID, $x.','.$y.'-terrain', $tile[0]);
 
 			foreach ($tile[1] as $resource => $value) {

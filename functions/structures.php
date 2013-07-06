@@ -3,17 +3,17 @@
 // Check for a structure update.
 function check_for_structure( $args ) {
 
-	$current_user = $args['current_user'];
+	$user = $args['current_user'];
 	$ID = $args['ID'];
 
-	if (isset($_POST['update']) && is_single()) { 
+	if (isset($_POST['update']) && is_singular('post')) { 
 		$type = $_GET['structure'];
 
 		// If building a 2x2 structure
 		if (isset($_POST['build-x-3']) && isset($_POST['build-y-3'])) {
-			return do_structure($current_user, $type, $_POST['build-structure'], $ID, min($_POST['build-x'], $_POST['build-x-1'], $_POST['build-x-2'], $_POST['build-x-3']), min($_POST['build-y'], $_POST['build-y-1'], $_POST['build-y-2'], $_POST['build-y-3']));
+			return do_structure($user, $type, $_POST['build-structure'], $ID, min($_POST['build-x'], $_POST['build-x-1'], $_POST['build-x-2'], $_POST['build-x-3']), min($_POST['build-y'], $_POST['build-y-1'], $_POST['build-y-2'], $_POST['build-y-3']));
 		} else {
-			return do_structure($current_user, $type, $_POST[$type.'-structure'], $ID, $_POST[$type.'-x'], $_POST[$type.'-y'], get_post_meta($ID, $structure.'-level', true));
+			return do_structure($user, $type, $_POST[$type.'-structure'], $ID, $_POST[$type.'-x'], $_POST[$type.'-y'], get_post_meta($ID, $structure.'-level', true));
 		}
 	} 
 }
@@ -57,7 +57,7 @@ function do_structure($user, $what, $structure, $ID, $x, $y, $level) {
 }
 
 // Function for updating the activity log depending on what we're doing.
-function update_activity_log($user, $what, $structure) {
+function log_structure($user, $what, $structure) {
 	switch ($what) {
 		case 'build':
 			$verb = 'built';
@@ -163,7 +163,7 @@ function build($user, $structure, $ID, $x, $y) {
 	// Update funding
 	update_post_meta($ID, $structure['slug'].'-funding', get_funding_level($ID, $structure));
 
-	update_activity_log($user, 'build', $structure);
+	log_structure($user, 'build', $structure);
 
 }
 
@@ -234,7 +234,7 @@ function demolish($user, $structure, $ID, $x, $y) {
 	$edu = get_post_meta($ID, 'education', true);
 	update_post_meta($ID, 'education', round(100 * ( ($edu - $structure['edu']) / (100 - $structure['edu']) ), 3));
 
-	update_activity_log($user, 'demolish', $structure);
+	log_structure($user, 'demolish', $structure);
 }
 
 function upgrade($user, $structure, $ID, $x, $y, $level) {
@@ -332,7 +332,7 @@ function upgrade($user, $structure, $ID, $x, $y, $level) {
 	$edu = get_post_meta($ID, 'education', true);
 	update_post_meta($ID, 'education', $edu + round($edu_increase - $edu_increase * $edu/100, 3));	
 
-	update_activity_log($user, 'upgrade', $structure);
+	log_structure($user, 'upgrade', $structure);
 }
 
 ?>

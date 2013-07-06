@@ -1,14 +1,14 @@
 <?php
 
-function breadcrumbs() {
+function breadcrumbs($ID) {
 	echo '<div class="clearfix return">';
 	// Show back to world map
 	// or back to region map if we're in a city
-	if (is_category()) { ?>
+	if (is_singular('region')) { ?>
 		<a href="<?php echo home_url(); ?>">World Map &raquo;</a>
-	<?php } elseif (is_single() && get_post_type($post->ID) == 'post') { 
-		$region = get_the_category(); ?>
-		<a href="<?php echo get_category_link($region[0]->term_id); ?>">Back to <?php echo $region[0]->cat_name; ?> &raquo;</a>
+	<?php } elseif (is_singular('post')) { 
+		$region = get_post(get_post_meta($ID, 'region', true)); ?>
+		<a href="<?= $region->guid; ?>">Back to <?= $region->post_title; ?> &raquo;</a>
 		<a href="<?php echo home_url(); ?>">World Map &raquo;</a>
 	<?php } elseif (!is_home()) { ?>
 		<a href="<?php echo home_url(); ?>">World Map &raquo;</a>

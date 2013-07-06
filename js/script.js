@@ -2,6 +2,13 @@ jQuery(document).ready(function($){
 
 	var body = $('body');
 
+	// Ability to remove alert
+	var alert = $('#alert');
+	function closeAlert() {
+		$('#alert').hide();
+	}
+	body.on('click', '.close-box', closeAlert);
+
 	// ----- BUDGET
 	// Alert if total expenses are greater than total income
 	/* $.ajax({
@@ -59,7 +66,13 @@ jQuery(document).ready(function($){
 
 	/* ---------------- BUILD -------------- */
 
-	var tile = $('.tile'),
+	var tile = $('.tile').not('.city').filter(function(){ 
+			$this = $(this);
+			// Don't count tiles in neighbor maps
+			return $this.closest('.neighbor').length === 0 &&
+				   // Or tiles with cities in them
+				   $this.find('a').length === 0;
+		}),
 		build = $('#build'),
 		buildCity = $('.home #build'),
 		structure = $('.structure'),

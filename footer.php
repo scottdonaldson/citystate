@@ -9,7 +9,7 @@ get_currentuserinfo();
 	<?php 
 	// breadcrumbs navigation (literally)
 	// for links to world/region maps
-	breadcrumbs(); 
+	breadcrumbs($post->ID); 
 	
 	if (is_user_logged_in()) { 
 		show_user_module($current_user); 

@@ -10,6 +10,7 @@ function alerts($current_user) {
 		'check_for_profile_update' => '',
 		'check_for_scout' => $current_user,
 		'check_for_show_hide_scout' => $current_user,
+		'check_for_build_city' => array( 'current_user' => $current_user, 'ID' => get_the_ID()),
 		'check_for_structure' => array('current_user' => $current_user, 'ID' => get_the_ID()),
 		'check_for_trade_cancel' => $current_user
 		);

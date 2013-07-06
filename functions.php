@@ -1,13 +1,5 @@
 <?php
-
-// Load functions
 define('MAIN', dirname(__FILE__) . '/');
-include ( MAIN . 'functions/alerts.php');
-include ( MAIN . 'functions/structures.php');
-include( MAIN . 'functions/functions-budget.php');
-include( MAIN . 'functions/register.php');
-include( MAIN . 'functions/strip-category.php');
-include( MAIN . 'functions/functions-footer.php');
 
 // Includes
 include ( MAIN . 'includes/geo.php');
@@ -15,9 +7,18 @@ include ( MAIN . 'includes/structures.php');
 include ( MAIN . 'includes/resources.php');
 include ( MAIN . 'includes/terrain.php');
 
-// Region- and city-specific
-include ( MAIN . 'functions/functions-single.php');
+// Load functions
+include ( MAIN . 'functions/alerts.php');
+include ( MAIN . 'functions/structures.php');
+include( MAIN . 'functions/functions-budget.php');
+include( MAIN . 'functions/register.php');
+include( MAIN . 'functions/strip-category.php');
+include( MAIN . 'functions/functions-footer.php');
+
+// World-, region-, and city-specific
+include ( MAIN . 'functions/functions-world.php');
 include ( MAIN . 'functions/functions-region.php');
+include ( MAIN . 'functions/functions-single.php');
 
 // All the checks
 include ( MAIN . 'functions/checks.php');
@@ -164,8 +165,7 @@ function create_post_type() {
 			'public' => true,
 			'has_archive' => true,
 			'menu_position=' => 5,
-			'rewrite' => false,
-			'with_front' => false,
+			'rewrite' => array('slug' => 'region'),
 			'supports' => array(
 				'title', 'custom-fields'
 			),
@@ -220,7 +220,7 @@ function create_slug($string){
 
 // Add commas after thousands in numbers
 function th($number) {
-	return number_format($number);
+	return number_format(intval($number));
 }
 
 ?>

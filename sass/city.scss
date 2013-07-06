@@ -351,14 +351,10 @@ a.neighbor {
 		}
 		
 		.city {
+			display: block;
 			height: 60px;
+			width: 60px;
 			z-index: 999;
-
-			.marker {
-				display: block;
-				height: 60px;
-				width: 60px;
-			}
 
 			&.user-city {
 				border-bottom: 4px solid #fff;
@@ -369,14 +365,8 @@ a.neighbor {
 			}
 
 			@for $r from 0 through 4 {
-				&.r0#{$r} .marker {
-					background: url(../images/city/0#{$r}-00.png);
-				}
-
-				@for $n from 1 through 4 {
-					&.r0#{$r}.n0#{$n} .marker {
-						background: url(../images/city/0#{$r}-0#{$n}.png);
-					}
+				&.pop-0#{$r} {
+					background: url(../images/city/0#{$r}.png);
 				}
 			}
 		}
