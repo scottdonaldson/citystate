@@ -27,7 +27,7 @@ if (count_user_posts($current_user->ID) == 0) {
 			<?php } else { ?>
 	
 				<h3>Cities</h3>
-				<form class="budget" method="post" action="<?= get_permalink(); ?>">
+				<form class="budget" method="POST">
 					<?php
 					$cities = get_user_cities($current_user);
 
@@ -42,13 +42,13 @@ if (count_user_posts($current_user->ID) == 0) {
 					
 					show_state_module(); ?>
 						
-					<input method="POST" type="submit" id="submit" name="submit" value="Submit for review" class="button" />
+					<input type="submit" id="submit" name="submit" value="Submit for review" class="button">
 				
 				</form>
 				<?php
 			} ?>	
 		</div>
-	</div>
+	</div> 
 </div>
 
 <?php 
@@ -57,14 +57,14 @@ if (count_user_posts($current_user->ID) == 0) {
 
 if (isset($_POST['submit'])) { 
 
-	while ($user_query->have_posts()) : $user_query->the_post();
+	while ($cities->have_posts()) : $cities->the_post();
 
 		$ID = get_the_ID();
 		$link = get_permalink();
 		$pop = get_post_meta($ID, 'population', true);
 
 		foreach ($structures as $structure) {
-			update_post_meta($ID, $structure.'-funding', get_funding_level($ID, $structure));
+			update_post_meta($ID, $structure.'-funding', get_funding($ID, $structure));
 		}
 	endwhile;
 	rewind_posts();

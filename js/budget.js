@@ -1,62 +1,59 @@
-jQuery(document).ready(function($){
+// JS for helping with the budget UI
+
+(function($){
+
+	// Get all number inputs (for funding),
+	// and some other variables
 	var input = $('input[type="number"]'),
 		origStateExpense = parseInt($('.state .original').data('original')),
 		stateExpense = $('.state .expense span');
 
-	(function($){
-		$.fn.extend({
-	        updateTotal: function() {
+	function updateTotal() {
 
-	        	$('.warning').remove();
-	        	
-	        	$this = $(this);
-	        	
-	        	var cityIncome = parseInt(noCommas($this.closest('.board').find('.income').text())),
-		        	cityExpense = $this.closest('.board').find('.expense'),
-	        		origCityExpense = parseInt($this.closest('.board').find('.original').data('original')),
-		        	oldCityExpense = parseInt(noCommas(cityExpense.text())),
-		        	cityNet = $this.closest('.board').find('.net'),
-        			oldStateExpense = parseInt(noCommas($('.state .expense span').text())),
-        			stateIncome = parseInt(noCommas($('.state .income span').text())),
-        			stateNet = $('.state .net span'),
-	        		original = parseInt(noCommas($this.attr('placeholder')));
+    	$('.warning').remove();
+    	$this = $(this);
+    	
+    	var cityIncome = parseInt(noCommas($this.closest('.board').find('.income').text())),
+        	cityExpense = $this.closest('.board').find('.expense'),
+    		origCityExpense = parseInt($this.closest('.board').find('.original').data('original')),
+        	oldCityExpense = parseInt(noCommas(cityExpense.text())),
+        	cityNet = $this.closest('.board').find('.net'),
+			oldStateExpense = parseInt(noCommas($('.state .expense span').text())),
+			stateIncome = parseInt(noCommas($('.state .income span').text())),
+			stateNet = $('.state .net span'),
+    		original = parseInt(noCommas($this.attr('placeholder')));
 
-	        	console.log(cityExpense);	
+    	console.log(cityExpense);	
 
-	        	if ($this.hasClass('f')) {
-	        		oldCityExpense = origCityExpense;
-	        		oldStateExpense = origStateExpense;
-	        	}	
+    	if ($this.hasClass('f')) {
+    		oldCityExpense = origCityExpense;
+    		oldStateExpense = origStateExpense;
+    	}	
 
-	        	var keepAtIt = setInterval(function(){
-	        		var newValue = $this.attr('value');
-	        		if (newValue.length == 0) { 
-						newValue = original; 
-					} else { 
-						newValue = parseInt(newValue);
-					}
+    	var keepAtIt = setInterval(function(){
+    		var newValue = $this.attr('value');
+    		newValue = newValue.length == 0 ? original : parseInt(newValue); 
 
-					var	newCityValue = oldCityExpense + newValue - original;
-					var	newStateValue = oldStateExpense + newValue - original;
+			var	newCityValue = oldCityExpense + newValue - original;
+			var	newStateValue = oldStateExpense + newValue - original;
 
-					// update city expense
-					cityExpense.text(addCommas(newCityValue));
-					// update city net
-					cityNet.text(addCommas(cityIncome - newCityValue));
-					// update state expense
-					stateExpense.text(addCommas(newStateValue));
-					// update state net
-					stateNet.text(addCommas(stateIncome - newStateValue));
-	        	}, 100);
+			// update city expense
+			cityExpense.text(addCommas(newCityValue));
+			// update city net
+			cityNet.text(addCommas(cityIncome - newCityValue));
+			// update state expense
+			stateExpense.text(addCommas(newStateValue));
+			// update state net
+			stateNet.text(addCommas(stateIncome - newStateValue));
+    	}, 100);
 
-	        	// stop updating when the input loses focus
-	        	$this.blur(function(){
-	        		clearInterval(keepAtIt);
-	        	});
-	        }
-	    });
+    	$this.addClass('f');
 
-	})(jQuery);
+    	// stop updating when the input loses focus
+    	$this.blur(function(){
+    		clearInterval(keepAtIt);
+    	});
+    }
 
 	$('#submit').click(function(){
 		var cash = parseInt(noCommas($('#user-cash').text())),
@@ -69,9 +66,5 @@ jQuery(document).ready(function($){
 		}
 	});
 
-	input.focus(function(){
-		$this = $(this);
-		$this.updateTotal();
-		$this.addClass('f');
-	});
-});
+	input.focus(updateTotal);
+})(jQuery);

@@ -1,5 +1,7 @@
 <?php 
-
+if (isset($_GET['snapshot']) && $_GET['snapshot'] === 'true') {
+	include ( MAIN . 'snapshots/region.php');
+} else {
 // If an admin is editing the region, include some special CSS and JS
 if (current_user_can('switch_themes') && $_GET['edit'] == 'true') {
 
@@ -59,4 +61,5 @@ if (is_user_logged_in()) {
 	show_region_admin($current_user, $ID);
 }
 
-get_footer(); ?>
+get_footer(); 
+} ?>

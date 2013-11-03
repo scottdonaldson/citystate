@@ -1,31 +1,18 @@
 <?php 
 // The main map.
-
+function get_world_map() { 
+	$regions = new WP_Query(array(
+		'post_type' => 'region'
+		)
+	);
+	?>
+	<script>var regions = <?= json_encode($regions->posts); ?>;</script>
+	<script src="<?= bloginfo('template_url'); ?>/js/worldmap.js"></script>
+<?php } add_action('wp_head', 'get_world_map');
 get_header(); ?>
 
-<div id="map">
-	<?php 
-	// TODO: this
-	show_world_map(); ?>
-	<a href="<?php echo home_url(); ?>/originalia" title="Originalia">
-		<img src="<?php echo bloginfo('template_url'); ?>/images/maps/originalia.png" />
-	</a>
+<div id="map"></div><!-- #map -->
 
-	<a href="<?php echo home_url(); ?>/secondo-1" title="Secondo">
-		<img src="<?php echo bloginfo('template_url'); ?>/images/maps/secondo-1.png" />
-	</a>
-
-	<a href="<?php echo home_url(); ?>/secondo-2" title="Secondo">
-		<img src="<?php echo bloginfo('template_url'); ?>/images/maps/secondo-2.png" />
-	</a>
-
-	<a style="clear: left; margin-left: 60px;" href="<?php echo home_url(); ?>/secondo-3" title="Secondo">
-		<img src="<?php echo bloginfo('template_url'); ?>/images/maps/secondo-3.png" />
-	</a>
-
-	<a href="<?php echo home_url(); ?>/secondo-4" title="Secondo">
-		<img src="<?php echo bloginfo('template_url'); ?>/images/maps/secondo-4.png" />
-	</a>
-</div><!-- #map -->
+<script>show_world_map();</script>
 
 <?php get_footer(); ?>

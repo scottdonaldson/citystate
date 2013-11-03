@@ -1132,8 +1132,9 @@ a.neighbor {
   .page-template-pagesbudget-php .board label {
     float: left;
     margin-right: 5%;
+    text-transform: capitalize;
     width: 70%; }
-  /* line 994, ../sass/city.scss */
+  /* line 995, ../sass/city.scss */
   .page-template-pagesbudget-php .board input {
     border: 0 none;
     border-bottom: 1px solid #777777;
@@ -1141,80 +1142,80 @@ a.neighbor {
     padding: 2px;
     text-align: right;
     width: 25%; }
-  /* line 1003, ../sass/city.scss */
+  /* line 1004, ../sass/city.scss */
   .page-template-pagesbudget-php .board .alignleft {
     clear: left; }
-/* line 1008, ../sass/city.scss */
+/* line 1009, ../sass/city.scss */
 .page-template-pagesbudget-php input[type="checkbox"] {
   margin-right: 8px; }
-/* line 1009, ../sass/city.scss */
+/* line 1010, ../sass/city.scss */
 .page-template-pagesbudget-php input[type="submit"] {
   text-align: center; }
-/* line 1011, ../sass/city.scss */
+/* line 1012, ../sass/city.scss */
 .page-template-pagesbudget-php section {
   border-top: 1px solid #ccc;
   margin-top: 10px;
   padding-top: 5px; }
-/* line 1017, ../sass/city.scss */
+/* line 1018, ../sass/city.scss */
 .page-template-pagesbudget-php .state {
   border: 1px solid #ccc;
   clear: both;
   font-size: 120%;
   padding: 15px 30%; }
   @media screen and (max-width: 800px) {
-    /* line 1017, ../sass/city.scss */
+    /* line 1018, ../sass/city.scss */
     .page-template-pagesbudget-php .state {
       padding: 15px 40px; } }
   @media screen and (max-width: 480px) {
-    /* line 1017, ../sass/city.scss */
+    /* line 1018, ../sass/city.scss */
     .page-template-pagesbudget-php .state {
       padding: 10px 15px; } }
-  /* line 1029, ../sass/city.scss */
+  /* line 1030, ../sass/city.scss */
   .page-template-pagesbudget-php .state h3 {
     margin: 0.5em 0; }
-  /* line 1033, ../sass/city.scss */
+  /* line 1034, ../sass/city.scss */
   .page-template-pagesbudget-php .state .income {
     margin-top: 20px; }
-  /* line 1037, ../sass/city.scss */
+  /* line 1038, ../sass/city.scss */
   .page-template-pagesbudget-php .state .net {
     border-top: 1px solid #ccc;
     margin-top: 0.2em;
     padding-top: 0.2em; }
-  /* line 1043, ../sass/city.scss */
+  /* line 1044, ../sass/city.scss */
   .page-template-pagesbudget-php .state span {
     float: right; }
-/* line 1050, ../sass/city.scss */
+/* line 1051, ../sass/city.scss */
 .page-template-pagesbudget-php .again:hover {
   background: #fff; }
-/* line 1055, ../sass/city.scss */
+/* line 1056, ../sass/city.scss */
 .page-template-pagesbudget-php .button {
   display: block;
   margin: 20px auto 0; }
 
-/* line 1061, ../sass/city.scss */
+/* line 1062, ../sass/city.scss */
 .funding-bad {
   background: #f49996; }
 
 /*
 	Base green for fair thru excellent: #49b315
 */
-/* line 1065, ../sass/city.scss */
+/* line 1066, ../sass/city.scss */
 .funding-fair {
   background: #c9dec5; }
 
-/* line 1066, ../sass/city.scss */
+/* line 1067, ../sass/city.scss */
 .funding-good {
   background: #a2c69a; }
 
-/* line 1067, ../sass/city.scss */
+/* line 1068, ../sass/city.scss */
 .funding-excellent {
   background: #7eb073; }
 
-/* line 1072, ../sass/city.scss */
+/* line 1073, ../sass/city.scss */
 .menu-messages-menu-container ul {
   height: 30px;
   padding-left: 0; }
-/* line 1076, ../sass/city.scss */
+/* line 1077, ../sass/city.scss */
 .menu-messages-menu-container li {
   float: left;
   font-size: 14px;
@@ -1222,78 +1223,78 @@ a.neighbor {
   margin-right: 10px;
   text-transform: uppercase; }
 
-/* line 1086, ../sass/city.scss */
+/* line 1087, ../sass/city.scss */
 .messages {
   list-style: none;
   overflow: hidden;
   padding-left: 0; }
 
-/* line 1091, ../sass/city.scss */
+/* line 1092, ../sass/city.scss */
 .message {
   list-style-type: none;
   margin-bottom: 5px;
   position: relative; }
-  /* line 1095, ../sass/city.scss */
+  /* line 1096, ../sass/city.scss */
   .message.first {
     border-bottom: 1px solid #ccc;
     margin-bottom: 10px;
     padding-bottom: 5px; }
 
-/* line 1101, ../sass/city.scss */
+/* line 1102, ../sass/city.scss */
 .unread {
   font-weight: bold; }
 
-/* line 1104, ../sass/city.scss */
+/* line 1105, ../sass/city.scss */
 .name {
   clear: left;
   float: left;
   padding-right: 10px;
   width: 25%; }
 
-/* line 1110, ../sass/city.scss */
+/* line 1111, ../sass/city.scss */
 .subject {
   float: left;
   padding-right: 10px;
   width: 60%; }
 
-/* line 1115, ../sass/city.scss */
+/* line 1116, ../sass/city.scss */
 .date {
   float: left;
   text-align: right;
   width: 15%; }
 
-/* line 1122, ../sass/city.scss */
+/* line 1123, ../sass/city.scss */
 .write-to {
   margin: 10px 0 20px; }
 
-/* line 1125, ../sass/city.scss */
+/* line 1126, ../sass/city.scss */
 #write-subject {
   margin-bottom: 20px; }
 
-/* line 1128, ../sass/city.scss */
+/* line 1129, ../sass/city.scss */
 .wp-editor-tools {
   display: none; }
 
-/* line 1129, ../sass/city.scss */
+/* line 1130, ../sass/city.scss */
 #wp-write-wrap * {
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box; }
 
-/* line 1132, ../sass/city.scss */
+/* line 1133, ../sass/city.scss */
 .message-content {
   clear: both;
   margin-top: 20px; }
 
-/* line 1137, ../sass/city.scss */
+/* line 1138, ../sass/city.scss */
 .trade input[type="radio"] {
   margin-right: 8px; }
-/* line 1140, ../sass/city.scss */
+/* line 1141, ../sass/city.scss */
 .trade .button {
   margin-top: 15px; }
 
 /* ------ TOOLBAR ------------ */
-/* line 1147, ../sass/city.scss */
+/* line 1148, ../sass/city.scss */
 #toolbar {
   background: #ddd;
   border-top: 1px solid #ccc;
@@ -1307,30 +1308,30 @@ a.neighbor {
   width: 100%;
   z-index: 9998; }
   @media screen and (max-width: 960px) {
-    /* line 1147, ../sass/city.scss */
+    /* line 1148, ../sass/city.scss */
     #toolbar {
       height: auto;
       position: relative; } }
-  /* line 1162, ../sass/city.scss */
+  /* line 1163, ../sass/city.scss */
   #toolbar .return {
     float: left;
     min-height: 2px;
     width: 160px; }
-    /* line 1166, ../sass/city.scss */
+    /* line 1167, ../sass/city.scss */
     #toolbar .return a {
       float: left;
       clear: left;
       margin: 2px 0; }
     @media screen and (max-width: 960px) {
-      /* line 1162, ../sass/city.scss */
+      /* line 1163, ../sass/city.scss */
       #toolbar .return {
         height: auto;
         width: 100%; }
-        /* line 1174, ../sass/city.scss */
+        /* line 1175, ../sass/city.scss */
         #toolbar .return a {
           clear: none;
           margin-right: 20px; } }
-  /* line 1181, ../sass/city.scss */
+  /* line 1182, ../sass/city.scss */
   #toolbar .module {
     background: #f2f2f2;
     border: 1px solid #ccc;
@@ -1341,13 +1342,13 @@ a.neighbor {
     padding: 5px 8px;
     position: relative;
     top: -30px; }
-    /* line 1192, ../sass/city.scss */
+    /* line 1193, ../sass/city.scss */
     #toolbar .module p {
       margin: 0; }
-    /* line 1196, ../sass/city.scss */
+    /* line 1197, ../sass/city.scss */
     #toolbar .module.keys {
       width: 240px; }
-    /* line 1199, ../sass/city.scss */
+    /* line 1200, ../sass/city.scss */
     #toolbar .module .key {
       border: 1px solid #333;
       clear: left;
@@ -1355,21 +1356,21 @@ a.neighbor {
       height: 20px;
       margin: 0 6px 4px 0;
       width: 20px; }
-      /* line 1207, ../sass/city.scss */
+      /* line 1208, ../sass/city.scss */
       #toolbar .module .key.user-city {
         background-color: #fff; }
-      /* line 1210, ../sass/city.scss */
+      /* line 1211, ../sass/city.scss */
       #toolbar .module .key.trade-partner {
         background-color: #4d5989; }
-      /* line 1213, ../sass/city.scss */
+      /* line 1214, ../sass/city.scss */
       #toolbar .module .key.scout {
         background-color: #ffe34d; }
-      /* line 1216, ../sass/city.scss */
+      /* line 1217, ../sass/city.scss */
       #toolbar .module .key .button {
         float: left;
         font-size: 12px; }
     @media screen and (max-width: 960px) {
-      /* line 1181, ../sass/city.scss */
+      /* line 1182, ../sass/city.scss */
       #toolbar .module {
         background: none transparent;
         border: 0 none;
@@ -1378,40 +1379,40 @@ a.neighbor {
         padding: 0;
         top: 0;
         width: 100%; } }
-  /* line 1233, ../sass/city.scss */
+  /* line 1234, ../sass/city.scss */
   #toolbar #loginform {
     width: 330px; }
-    /* line 1236, ../sass/city.scss */
+    /* line 1237, ../sass/city.scss */
     #toolbar #loginform .login-remember {
       float: left;
       width: 130px; }
-      /* line 1239, ../sass/city.scss */
+      /* line 1240, ../sass/city.scss */
       #toolbar #loginform .login-remember input {
         margin-top: 4px; }
-    /* line 1244, ../sass/city.scss */
+    /* line 1245, ../sass/city.scss */
     #toolbar #loginform input {
       font-size: 13px;
       float: right;
       margin-bottom: 3px; }
-    /* line 1250, ../sass/city.scss */
+    /* line 1251, ../sass/city.scss */
     #toolbar #loginform p {
       clear: both; }
-    /* line 1254, ../sass/city.scss */
+    /* line 1255, ../sass/city.scss */
     #toolbar #loginform .forgetmenot {
       clear: left;
       float: left;
       width: 130px; }
-      /* line 1258, ../sass/city.scss */
+      /* line 1259, ../sass/city.scss */
       #toolbar #loginform .forgetmenot label {
         float: left; }
-      /* line 1261, ../sass/city.scss */
+      /* line 1262, ../sass/city.scss */
       #toolbar #loginform .forgetmenot input {
         float: none; }
-    /* line 1266, ../sass/city.scss */
+    /* line 1267, ../sass/city.scss */
     #toolbar #loginform .login-submit {
       clear: none;
       float: right; }
-    /* line 1271, ../sass/city.scss */
+    /* line 1272, ../sass/city.scss */
     #toolbar #loginform input[type="submit"] {
       background: #7eb073;
       border: 0 none;
@@ -1427,10 +1428,10 @@ a.neighbor {
       padding: 5px 10px;
       text-align: center;
       text-transform: uppercase; }
-      /* line 1284, ../sass/city.scss */
+      /* line 1285, ../sass/city.scss */
       #toolbar #loginform input[type="submit"]:active, #toolbar #loginform input[type="submit"]:hover {
         background: #9cc294; }
-  /* line 1290, ../sass/city.scss */
+  /* line 1291, ../sass/city.scss */
   #toolbar .create {
     background: #fff;
     -webkit-border-radius: 0 10px 10px 0;
@@ -1443,34 +1444,34 @@ a.neighbor {
     padding: 10px;
     position: absolute;
     top: -80px; }
-  /* line 1300, ../sass/city.scss */
+  /* line 1301, ../sass/city.scss */
   #toolbar .nav {
     float: right;
     width: 250px; }
-    /* line 1304, ../sass/city.scss */
+    /* line 1305, ../sass/city.scss */
     #toolbar .nav ul {
       margin: 0;
       padding: 0; }
-      /* line 1306, ../sass/city.scss */
+      /* line 1307, ../sass/city.scss */
       #toolbar .nav ul li {
         float: left;
         margin: 0 4% 10px 0;
         list-style-type: none;
         width: 48%; }
-        /* line 1311, ../sass/city.scss */
+        /* line 1312, ../sass/city.scss */
         #toolbar .nav ul li:nth-child(2n+2) {
           margin-right: 0; }
     @media screen and (max-width: 960px) {
-      /* line 1300, ../sass/city.scss */
+      /* line 1301, ../sass/city.scss */
       #toolbar .nav {
         float: left;
         text-align: left; } }
 
-/* line 1324, ../sass/city.scss */
+/* line 1325, ../sass/city.scss */
 #version {
   position: fixed;
   right: 5px;
   top: 5px; }
-  /* line 1328, ../sass/city.scss */
+  /* line 1329, ../sass/city.scss */
   .admin-bar #version {
     top: 33px; }

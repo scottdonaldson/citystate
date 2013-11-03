@@ -31,8 +31,10 @@ $alert = alerts( $current_user );
 	<link rel="stylesheet" href="<?php echo bloginfo('template_url'); ?>/style.css" />
 	<link rel="stylesheet" href="<?php echo bloginfo('template_url'); ?>/css/city.css" />
 
+	<script src="<?= bloginfo('template_url'); ?>/js/vendor/snap.js"></script>
+
 <?php 
-wp_enqueue_script('jquery');
+
 wp_head(); 
 ?>
 </head>

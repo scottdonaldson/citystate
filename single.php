@@ -1,4 +1,7 @@
 <?php 
+if (isset($_GET['snapshot']) && $_GET['snapshot'] === 'true') {
+	include ( MAIN . 'snapshots/city.php');
+} else {
 get_header(); 
 the_post(); 
 
@@ -18,10 +21,6 @@ foreach (get_resources() as $resource => $values) {
 ?>
 
 <?php 
-// TODO: figure this out better
-// The snapshot (used in AJAX calls)
-// include( MAIN . 'single/snapshot.php'); 
-
 // Variable for if this is the user's city or not
 $is_user_city = is_user_logged_in() && $current_user->ID == get_the_author_meta('ID') ? 'user-city' : 'not-user-city';
 ?>
@@ -50,4 +49,7 @@ $is_user_city = is_user_logged_in() && $current_user->ID == get_the_author_meta(
 if (isset($_GET['view'])) { include( MAIN . 'single/view.php'); }
 ?>
 
-<?php get_footer(); ?>
+<?php 
+get_footer(); 
+} 
+?>

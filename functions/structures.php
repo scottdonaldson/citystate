@@ -161,7 +161,7 @@ function build($user, $structure, $ID, $x, $y) {
 	update_post_meta($ID, 'education', $edu + round($edu_increase - $structure['edu'] * $edu/100, 3));	
 
 	// Update funding
-	update_post_meta($ID, $structure['slug'].'-funding', get_funding_level($ID, $structure));
+	update_post_meta($ID, $structure['slug'].'-funding', get_funding($ID, $structure));
 
 	log_structure($user, 'build', $structure);
 
