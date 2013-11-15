@@ -1,4 +1,7 @@
 <?php 
+if (isset($_GET['snapshot']) && $_GET['snapshot'] === 'true') {
+	include ( MAIN . 'snapshots/message.php');
+} else {
 // Refresh if this is a confirmed or denied trade proposal
 if (isset($_POST['submit'])) {
 	header( 'Location:'.get_permalink() );
@@ -82,4 +85,7 @@ get_currentuserinfo();
 
 </div><!-- .container -->
 
-<?php get_footer(); ?>
+<?php 
+get_footer(); 
+} 
+?>
