@@ -7,7 +7,7 @@ window.log = function f(){ log.history = log.history || []; log.history.push(arg
 (function(){try{console.log();return window.console;}catch(a){return (window.console={});}}());
 
 
-// place any jQuery/helper plugins in here, instead of separate, slower script files.
+// place any helper plugins in here, instead of separate, slower script files.
 
 function addCommas(nStr) {
 	nStr += '';
