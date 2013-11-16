@@ -36,25 +36,14 @@ function show_region_map($user, $ID) {
 
 		$city = $cities[$x.','.$y];
 
-		// If at the beginning of a row, open the row
-		if ($x == 1) { ?>
-			<div class="row row-<?= $y; ?> clearfix">
-		<?php 
+		// Show the tile, with extra stuff if it's on single-region.php
+		// (meaning it's an admin editing the region)
+		if (current_user_can('switch_themes') && $_GET['edit'] == 'true') {
+			show_admin_region_tile($ID, $x, $y);
+		} else {
+			show_region_tile($user, $ID, $x, $y, $city);
 		}
 
-			// Show the tile, with extra stuff if it's on single-region.php
-			// (meaning it's an admin editing the region)
-			if (current_user_can('switch_themes') && $_GET['edit'] == 'true') {
-				show_admin_region_tile($ID, $x, $y);
-			} else {
-				show_region_tile($user, $ID, $x, $y, $city);
-			}
-
-		// If at the end of a row, close the row
-		if ($x == 10) { ?>
-			</div><!-- .row -->
-		<?php 
-		}
 	}
 }
 
@@ -70,35 +59,18 @@ function show_admin_region_tile($ID, $x, $y) {
 	?>
 	<div data-x="<?= $x; ?>" data-y="<?= $y; ?>" class="tile" data-terrain="<?= $tile_terrain; ?>" <?php foreach ($tile_resources as $output) { echo $output; } ?>>
 		<div class="fields">
-			<div class="alignleft">
-				<?php
-				foreach (get_terrain() as $terrain) { 
-					$checked = $tile_terrain == $terrain ? 'checked' : '';
-					?>
-					<label>
-						<input type="radio" name="<?= $key; ?>-terrain" value="<?= $terrain; ?>" <?= $checked; ?>>
-						<?= ucfirst($terrain); ?>
-					</label><?php
-				}
+
+			<?php
+			foreach (get_terrain() as $terrain) { 
+				$checked = $tile_terrain == $terrain ? 'checked' : '';
 				?>
-			</div>
-			<div class="alignright">
-				<?php
-				foreach (get_resources() as $resource => $values) { 
-					$has_resource = get_post_meta($ID, $key.'-'.$resource, true) ? true : false; ?>
-					<div class="clearfix">
-						<?php if ($has_resource) { ?>
-							<input type="checkbox" id="<?= $key.'-'.$resource; ?>" checked><?= ucfirst($resource); ?>
-							<input type="number" name="<?= $key.'-'.$resource; ?>" value="<?= get_post_meta($ID, $key.'-'.$resource, true); ?>">
-						<?php } else { ?>
-							<input type="checkbox" id="<?= $key.'-'.$resource; ?>"><?= ucfirst($resource); ?>
-						<?php } ?>
-					</div><?php
-				}
-				?>
-			</div>
+				<label>
+					<input type="radio" name="<?= $key; ?>-terrain" value="<?= $terrain; ?>" <?= $checked; ?>>
+					<?= ucfirst($terrain); ?>
+				</label><?php
+			}
+			?>
 		</div>
-		<input type="hidden" id="<?= $key.'-terrain'; ?>" name="<?= $key.'-terrain'; ?>" value="<?= $tile_terrain; ?>">
 	</div>
 <?php }
 
@@ -116,14 +88,14 @@ function show_region_overlays() { ?>
 function show_region_tile($user, $ID, $x, $y, $city) { 
 	$terrain = get_post_meta($ID, $x.','.$y.'-terrain', true);
 	?>
-	<div data-x="<?= $x; ?>" data-y="<?= $y; ?>" class="tile" data-terrain="<?= $terrain; ?>">
-		<?php if ($city) { 
+	<svg data-x="<?= $x; ?>" data-y="<?= $y; ?>" data-terrain="<?= $terrain; ?>">
+		<?php /* if ($city) { 
 			$city_pop_class = get_post_meta($city['ID'], 'population', true) <= 5000 ? floor(get_post_meta($city['ID'], 'population', true)/1000) : 5;
 			$city_user_class = $user->ID == $city['user'] ? 'user-city' : 'not-user-city';
 			?>
 			<a href="<?= $city['link']; ?>" class="city <?= 'pop-0'.$city_pop_class.' '.$city_user_class; ?>"></a>
-		<?php } ?>
-	</div>
+		<?php } */ ?>
+	</svg>
 <?php }
 
 function build_region($ID) {

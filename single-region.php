@@ -1,4 +1,10 @@
 <?php 
+// The main map.
+function get_region_map() { ?>
+	<script src="<?= bloginfo('template_url'); ?>/js/map-region.js"></script>
+<?php 
+} add_action('wp_head', 'get_region_map');
+
 if (isset($_GET['snapshot']) && $_GET['snapshot'] === 'true') {
 	include ( MAIN . 'snapshots/region.php');
 } else {
@@ -36,7 +42,6 @@ if (current_user_can('switch_themes') && $_GET['edit'] == 'true') {
 <form id="map" class="clearfix" method="POST">
 
 	<?php 
-	show_region_map($current_user, $ID);
 	show_region_neighbors($current_user, $ID);
 	?>
 
@@ -50,10 +55,10 @@ if (current_user_can('switch_themes') && $_GET['edit'] == 'true') {
 
 <div id="map">
 	<?php 
-	show_region_map($current_user, $ID);
 	show_region_neighbors($current_user, $ID);
 	?>
 </div>
+<script>show_region_map();</script>
 
 <?php }
 

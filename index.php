@@ -11,7 +11,7 @@ function get_world_map() {
 <?php } add_action('wp_head', 'get_world_map');
 get_header(); ?>
 
-<div id="map"></div><!-- #map -->
+<svg id="map"></svg><!-- #map -->
 
 <script>show_world_map();</script>
 

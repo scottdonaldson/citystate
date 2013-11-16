@@ -87,20 +87,18 @@ function get_happiness($happiness) {
 	return $happy;
 }
 
-
-// include jQuery
-function my_jquery_enqueue() {
-    wp_deregister_script('jquery');
-    wp_register_script('jquery', "http" . ($_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js", false, null);
-    wp_enqueue_script('jquery');
-}
-
 // Register nav menus
 register_nav_menus( array(
 		'primary' => 'Primary Menu',
 		'messages' => 'Messages Menu'
 	) 
 );
+
+// No jQuery!
+function remove_scripts() {
+	wp_deregister_script('jquery');
+}
+add_action('wp_print_scripts', 'remove_scripts');
 
 // Admin CSS and JS
 function city_admin_css() {

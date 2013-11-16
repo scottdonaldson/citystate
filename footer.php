@@ -44,7 +44,8 @@ get_currentuserinfo();
 </div>
 
 <script src="<?php echo bloginfo('template_url'); ?>/js/plugins.js"></script>
-<script src="<?php echo bloginfo('template_url'); ?>/js/script.js"></script>
+<script src="<?php echo bloginfo('template_url'); ?>/js/graphics.js"></script>
+<!-- <script src="<?php echo bloginfo('template_url'); ?>/js/script.js"></script> -->
 
 <script type="text/javascript">
   var _gaq = _gaq || [];
