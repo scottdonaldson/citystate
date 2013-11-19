@@ -1,0 +1,31 @@
+@import "base";
+
+$toolbar_width: 240px;
+
+#main {
+	padding-left: $toolbar_width;
+}
+
+#toolbar {
+	background: #eee;
+	left: 0;
+	height: 100%;
+	overflow-y: scroll;
+	position: fixed;
+	top: 0;
+	width: $toolbar_width;
+	.admin-bar & {
+		top: 28px;
+	}
+}
+
+$infobox_width: 400px;
+#infobox {
+	background: #fff;
+	display: none;
+	left: 0;
+	padding: 1em;
+	position: absolute;
+	top: 0;
+	width: $infobox_width;
+}

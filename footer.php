@@ -1,8 +1,9 @@
-<?php 
-global $current_user;
-get_currentuserinfo();
-?>
+	<?php 
+	global $current_user;
+	get_currentuserinfo();
+	?>
 
+	<div id="infobox"></div>
 </div><!-- #main -->
 <div id="toolbar" class="clearfix">
 
@@ -35,17 +36,14 @@ get_currentuserinfo();
 		<?php wp_nav_menu('primary'); ?>
 	</div>
 
-</div>
+	<div id="version">
+		<?= wp_get_theme()->Version; ?>
+	</div>
 
-<div id="version">
-	<?php $theme = wp_get_theme();
-	echo $theme->Version;
-	?>
 </div>
 
 <script src="<?php echo bloginfo('template_url'); ?>/js/plugins.js"></script>
-<script src="<?php echo bloginfo('template_url'); ?>/js/graphics.js"></script>
-<!-- <script src="<?php echo bloginfo('template_url'); ?>/js/script.js"></script> -->
+<script src="<?php echo bloginfo('template_url'); ?>/js/script.js"></script>
 
 <script type="text/javascript">
   var _gaq = _gaq || [];

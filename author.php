@@ -1,4 +1,7 @@
 <?php 
+if (isset($_GET['snapshot']) && $_GET['snapshot'] === 'true') {
+	include ( MAIN . 'snapshots/user.php');
+} else {
 get_header(); 
 
 include ( MAIN . 'structures.php');
@@ -83,4 +86,7 @@ wp_reset_postdata(); ?>
 
 </div><!-- .container -->
 
-<?php get_footer(); ?>
+<?php 
+get_footer(); 
+}
+?>

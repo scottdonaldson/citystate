@@ -2,6 +2,10 @@
 if (isset($_GET['snapshot']) && $_GET['snapshot'] === 'true') {
 	include ( MAIN . 'snapshots/city.php');
 } else {
+// The city map.
+function get_city_map() { ?>
+	<script src="<?= bloginfo('template_url'); ?>/js/citymap.js"></script>
+<?php } add_action('wp_head', 'get_city_map');
 get_header(); 
 the_post(); 
 
@@ -25,16 +29,7 @@ foreach (get_resources() as $resource => $values) {
 $is_user_city = is_user_logged_in() && $current_user->ID == get_the_author_meta('ID') ? 'user-city' : 'not-user-city';
 ?>
 
-<div id="map" class="clearfix <?= $is_user_city; ?>">
-
-	<?php 
-	show_city_map($ID);
-
-	// show the city's geographic neighbors
-	show_city_neighbors($ID);
-	?>
-	
-</div><!-- #map -->
+<svg id="map" class="<?= $is_user_city; ?>" onload="showCityMap()"></svg>
 
 	<?php
 	// Make sure the user is logged in

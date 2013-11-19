@@ -39,7 +39,14 @@ wp_head();
 ?>
 </head>
 
-<body <?php body_class(); ?>>
+<?php
+// Conditional classes for <body>
+$body_class = '';
+if (is_home() || is_single()) {
+	$body_class .= 'ocean ';
+}
+?>
+<body <?php body_class($body_class); ?>>
 
 	<?php // Hidden values help us with js! ?>
 	<div id="template-url" class="hidden"><?= bloginfo('template_url'); ?>/</div>

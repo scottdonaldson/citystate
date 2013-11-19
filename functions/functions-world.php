@@ -225,7 +225,7 @@ function show_region_admin($user, $ID) { ?>
 function check_for_build_city( $args ) {
 
 	$user = $args['current_user'];
-	$ID = $args['ID'];
+	$ID = $args['region_id'];
 
 	if (isset($_POST['buildCity'])) { 
 	
@@ -238,7 +238,7 @@ function check_for_build_city( $args ) {
 			update_user_meta($user->ID, 'cash', get_user_meta($user->ID, 'cash', true) - $cost);
 			
 			// Then build the city
-			build_city($user, $ID, $_POST['x'], $_POST['y'], $resources, $geo);
+			build_city($user, $ID, $_POST['x'], $_POST['y']);
 		} else {
 			return bankrupt_message();
 		}
@@ -246,7 +246,7 @@ function check_for_build_city( $args ) {
 }
 
 // building a new city
-function build_city($user, $ID, $x, $y) {
+function build_city($user, $region_ID, $x, $y) {
 	
 	// Name of the city
 	$title = $_POST['cityName'];
@@ -265,24 +265,17 @@ function build_city($user, $ID, $x, $y) {
 
 	// Set location of city based on what user
 	// selected on main map, set pop. to 0
-	add_post_meta($city_ID, 'region', $ID);
+	add_post_meta($city_ID, 'region', $region_ID);
 	add_post_meta($city_ID, 'location-x', $x);
 	add_post_meta($city_ID, 'location-y', $y);
 	add_post_meta($city_ID, 'target-pop', 1000);
 	add_post_meta($city_ID, 'happiness', 50);
 
-	// Set natural resources based on region info
-	foreach (get_resources() as $resource => $values) {
-		if (get_post_meta($ID, $x.','.$y.'-'.$resource, true)) {
-			add_post_meta($city_ID, $resource, get_post_meta($ID, $x.','.$y.'-'.$resource, true));
-		}
-	}
-
 	// Set geographic characteristics...
 	build_city_neighbors($ID, $x, $y, $city_ID);
 
 	// Update the activity log. 
-	log_city($user, $city_ID, $ID);
+	log_city($user, $city_ID, $region_ID);
 
 	// Redirect
 	header('Location: '.$url.'?visit=first');

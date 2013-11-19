@@ -15,9 +15,8 @@ include( MAIN . 'functions/register.php');
 include( MAIN . 'functions/strip-category.php');
 include( MAIN . 'functions/functions-footer.php');
 
-// World-, region-, and city-specific
+// World- and city-specific
 include ( MAIN . 'functions/functions-world.php');
-include ( MAIN . 'functions/functions-region.php');
 include ( MAIN . 'functions/functions-single.php');
 
 // All the checks
