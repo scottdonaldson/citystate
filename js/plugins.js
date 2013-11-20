@@ -9,7 +9,7 @@ window.log = function f(){ log.history = log.history || []; log.history.push(arg
 
 // place any helper plugins in here, instead of separate, slower script files.
 
-function addCommas(nStr) {
+function commas(nStr) {
 	nStr += '';
 	x = nStr.split('.');
 	x1 = x[0];

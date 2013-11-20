@@ -7,8 +7,8 @@ function breadcrumbs($ID) {
 	if (is_singular('region')) { ?>
 		<a href="<?php echo home_url(); ?>">World Map &raquo;</a>
 	<?php } elseif (is_singular('post')) { 
-		$region = get_post(get_post_meta($ID, 'region', true)); ?>
-		<a href="<?= $region->guid; ?>">Back to <?= $region->post_title; ?> &raquo;</a>
+		// $region = get_post(get_post_meta($ID, 'region', true)); ?>
+		<!-- <a href="<?= $region->guid; ?>">Back to <?= $region->post_title; ?> &raquo;</a> -->
 		<a href="<?php echo home_url(); ?>">World Map &raquo;</a>
 	<?php } elseif (!is_home()) { ?>
 		<a href="<?php echo home_url(); ?>">World Map &raquo;</a>
