@@ -1,4 +1,6 @@
-var tileWidth = 40;
+// If we're on the main map, we def
+// want an oceanic background (maybe put this somewhere else?)
+document.body.classList.add('ocean');
 
 function buildCityForm(terrain) {
 	var output = '';
@@ -13,8 +15,15 @@ function buildCityForm(terrain) {
 	return output;
 }
 
-function showStructure(i, j, map) {
-	return map.path('M ' + (tileWidth * (cities[i].x - 1) + 4 * (cities[i].structures[j].x - 1) + 1) + ' ' + (tileWidth * (cities[i].y - 1) + 4 * (cities[i].structures[j].y - 1) + 1) + ' h2 v2 h-2 Z')
+// At the moment, structures in cities on the main map show up
+// as a 2px x 2px square... eventually will make this
+// more detailed (color, density, etc.)
+function showStructure(city, structure, map) {
+	return map.rect(
+		TILE_WIDTH * (city.x - 1) + 4 * (structure.x - 1) + 1, 
+		TILE_WIDTH * (city.y - 1) + 4 * (structure.y - 1) + 1,
+		2,
+		2)
 		.attr({ fill: '#444' });
 }
 
@@ -23,51 +32,80 @@ function showCityInfo(info) {
 }
 
 function goToCity(info) {
-	window.location = window.location.href + info.data('city-slug');
+	window.location = BASE + '/city/#/' + info.data('city-slug');
 }
 
 function showWorldMap() {
-	// Use the global world and cities objects and create the map
-	var map = Snap('#map');
-	for (var x = 0; x < world.tiles.length; x++) {
-		for (var y = 0; y < world.tiles[x].length; y++) {
-			if (world.tiles[x][y] !== 'water') {
-				var tile = map.path('M' + (tileWidth * x) + ' ' + (tileWidth * y) + ' h '+tileWidth+' v '+tileWidth+' h -'+tileWidth+' Z')
-					.attr({ 
-						'class': 'tile ' + world.tiles[x][y]
-					})
-					.data('terrain', world.tiles[x][y])
-					.data('has-city', false);
+	
+	// Snap the map,
+	// and get ready for map tiles and cities
+	var map = Snap('#map'),
+		tiles,
+		cities;
+	
+	// Once the data is ready...
+	DATA.once('value', function(data){
 
-				// Check to see if there's a city at this tile
-				for (var i = 0; i < cities.length; i++) {
-					if (cities[i].x === x + 1 && cities[i].y === y + 1) {
-						for (var j = 0; j < cities[i].structures.length; j++) {
-							showStructure(i, j, map);
+		// Create an empty array that we will fill with cities (unique by slug)
+		// after they've been shown
+		var shownCities = [];
+
+		// Set tiles and cities.
+		// FOR NOW, we are only using the 'argyle-island' region...
+		// eventually will expand
+		tiles = data.child('regions').child('argyle-island').child('tiles').val();
+		cities = data.child('cities').val();
+	
+		// Loop through the tiles' x and y values
+		for (var x = 0; x < tiles.length; x++) {
+			for (var y = 0; y < tiles[x].length; y++) {
+				if (tiles[x][y] !== 'water') {
+					var tile = map.rect( TILE_WIDTH * x, TILE_WIDTH * y, TILE_WIDTH, TILE_WIDTH)
+						.attr({ 
+							'class': 'tile ' + tiles[x][y]
+						})
+						.data('terrain', tiles[x][y])
+						.data('has-city', false);
+
+					// Check to see if there's a city at this tile
+					for (var city in cities) {
+
+						// If the city has not been shown, 
+						// and it is at this tile location,
+						// add it to the shownCities array
+						if (shownCities.indexOf(city) === -1 && cities[city].x === x + 1 && cities[city].y === y + 1) {
+							shownCities.push(city);
+
+							for (var structure in cities[city].structures) {
+								showStructure(cities[city], cities[city].structures[structure], map);
+							}
+							tile.data('has-city', true);
+							var facade = tile.clone().attr({'class': 'tile', 'fill': 'transparent'});
+
+							facade.data('city-name', cities[city].name);
+							facade.data('city-slug', city);
+							facade.data('city-population', cities[city].population);
+
+							facade.hover(function(e){
+									showInfobox(e, showCityInfo(this));
+								}, hideInfobox)
+								.click(function(){
+									goToCity(this);
+								});
+							break;
 						}
-						tile.data('has-city', true);
-						var facade = tile.clone().attr({'class': 'tile', 'fill': 'transparent'});
-
-						facade.data('city-name', cities[i].name);
-						facade.data('city-slug', cities[i].slug);
-						facade.data('city-population', cities[i].population);
-
-						facade.hover(function(e){
-								showInfobox(e, showCityInfo(this));
-							}, hideInfobox)
-							.click(function(){
-								goToCity(this);
-							});
-						break;
 					}
-				}
-				// If no city, click to prompt building one
-				if (!tile.data('has-city')) {
-					tile.click(function(e){
-						showInfobox(e, buildCityForm(this.data('terrain'), world));
-					});
+					// If no city, click to prompt building one
+					if (!tile.data('has-city')) {
+						tile.click(function(e){
+							showInfobox(e, buildCityForm(this.data('terrain'), world));
+						});
+					}
 				}
 			}
 		}
-	}
+
+		// Reset the shownCities array
+		shownCities = [];
+	});
 }
