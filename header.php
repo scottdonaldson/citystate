@@ -3,10 +3,6 @@
 // Define paths
 define('MAIN', dirname(__FILE__) . '/');
 
-// Get user info
-global $current_user;
-get_currentuserinfo(); 
-
 // Run a bunch of checks
 $alert = alerts( $current_user );
 
@@ -31,6 +27,7 @@ $alert = alerts( $current_user );
 	<link rel="stylesheet" href="<?php echo bloginfo('template_url'); ?>/style.css" />
 	<link rel="stylesheet" href="<?php echo bloginfo('template_url'); ?>/css/city.css" />
 
+	<script src='https://cdn.firebase.com/v0/firebase.js'></script>
 	<script src="<?= bloginfo('template_url'); ?>/js/vendor/snap.js"></script>
 
 <?php 

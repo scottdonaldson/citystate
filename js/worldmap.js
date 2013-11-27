@@ -19,17 +19,16 @@ function showStructure(i, j, map) {
 }
 
 function showCityInfo(info) {
-	return '<strong>' + info.name + '</strong><br>Pop: ' + commas(info.population);
+	return '<strong>' + info.data('city-name') + '</strong><br>Pop: ' + commas(info.data('city-population'));
 }
 
 function goToCity(info) {
-	window.location = window.location.href + info.slug;
+	window.location = window.location.href + info.data('city-slug');
 }
 
 function showWorldMap() {
 	// Use the global world and cities objects and create the map
 	var map = Snap('#map');
-	var latestCity = 0;
 	for (var x = 0; x < world.tiles.length; x++) {
 		for (var y = 0; y < world.tiles[x].length; y++) {
 			if (world.tiles[x][y] !== 'water') {
@@ -41,24 +40,23 @@ function showWorldMap() {
 					.data('has-city', false);
 
 				// Check to see if there's a city at this tile
-				for (var i = latestCity; i < cities.length; i++) {
+				for (var i = 0; i < cities.length; i++) {
 					if (cities[i].x === x + 1 && cities[i].y === y + 1) {
 						for (var j = 0; j < cities[i].structures.length; j++) {
 							showStructure(i, j, map);
 						}
 						tile.data('has-city', true);
-						latestCity = cities[i + 1];
 						var facade = tile.clone().attr({'class': 'tile', 'fill': 'transparent'});
-						var cityInfo = {
-							name: cities[i].name,
-							slug: cities[i].slug,
-							population: cities[i].population
-						};
+
+						facade.data('city-name', cities[i].name);
+						facade.data('city-slug', cities[i].slug);
+						facade.data('city-population', cities[i].population);
+
 						facade.hover(function(e){
-								showInfobox(e, showCityInfo(cityInfo));
+								showInfobox(e, showCityInfo(this));
 							}, hideInfobox)
 							.click(function(){
-								goToCity(cityInfo);
+								goToCity(this);
 							});
 						break;
 					}

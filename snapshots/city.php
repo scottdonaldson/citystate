@@ -6,7 +6,6 @@ $snapshot = array(
 	// Name
 	'name' => get_the_title(),
 	// Location
-	'region' => intval(get_post_meta($ID, 'region', true)),
 	'x' => intval(get_post_meta($ID, 'location-x', true)),
 	'y' => intval(get_post_meta($ID, 'location-y', true)),
 
@@ -16,17 +15,25 @@ $snapshot = array(
 	'culture' => intval(get_post_meta($ID, 'culture', true)),
 
 	// Structures
-	'structures' => array()
+	'structures' => array(),
+
+	// Tiles (for which have structures)
+	'tiles' => array()
 );
 
 foreach (get_structures() as $slug => $structure) {
 	if (get_post_meta($ID, $slug.'-number', true)) {
-		$snapshot['structures'][$structure['plural']] = array();
+		$snapshot['structures'][$structure['slug']] = array();
 		for ($i = 1; $i <= get_post_meta($ID, $slug.'-number', true); $i++) {
-			array_push($snapshot['structures'][$structure['plural']], array(
+			array_push($snapshot['structures'][$structure['slug']], array(
 				'x' => intval(get_post_meta($ID, $slug.'-'.$i.'-x', true)),
-				'y' => intval(get_post_meta($ID, $slug.'-'.$i.'-y', true))
+				'y' => intval(get_post_meta($ID, $slug.'-'.$i.'-y', true)),
+				'level' => intval(get_post_meta($ID, $slug.'-'.$i.'-level', true))
 				)
+			);
+			array_push(
+				$snapshot['tiles'], 
+				get_post_meta($ID, $slug.'-'.$i.'-x', true) . ', ' . get_post_meta($ID, $slug.'-'.$i.'-y', true)
 			);
 		}
 	}
