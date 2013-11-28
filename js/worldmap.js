@@ -73,7 +73,10 @@ function showWorldMap() {
 						// If the city has not been shown, 
 						// and it is at this tile location,
 						// add it to the shownCities array
-						if (shownCities.indexOf(city) === -1 && cities[city].x === x + 1 && cities[city].y === y + 1) {
+						if (shownCities.indexOf(city) === -1 && 
+							cities[city].x === x && 
+							cities[city].y === y) {
+							
 							shownCities.push(city);
 
 							for (var structure in cities[city].structures) {

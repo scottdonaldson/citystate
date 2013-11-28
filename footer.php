@@ -11,17 +11,21 @@
 		-City module
 		-Not logged in module
 	-->
+	<div id="breadcrumbs"></div>
+
+	<div id="user"></div>
+	<div id="log-in-out"></div>
 	
 	<div class="nav"></div>
 
 	<div id="version">
 		<script>document.write(VERSION);</script>
 	</div>
-	<button onclick="auth.login('facebook');">Log in with FB</button>
+	
+	
 
 </div>
 
-<script src="<?php echo bloginfo('template_url'); ?>/js/plugins.js"></script>
 <script src="<?php echo bloginfo('template_url'); ?>/js/script.js"></script>
 
 <script>

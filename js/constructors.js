@@ -1,7 +1,7 @@
 var tileWidth = 40;
 
 function setTransform(d) {
-	return new Snap.Matrix().translate(tileWidth * (d.x - 1) + d.translateX, tileWidth * (d.y - 1) + d.translateY);
+	return new Snap.Matrix().translate(tileWidth * d.x + d.translateX, tileWidth * d.y + d.translateY);
 }
 
 /* ----- Landscape ----- */
@@ -63,7 +63,7 @@ function buildStructure(which, level, x, y, map) {
 	};
 	switch (which) {
 		case 'neighborhood':
-			if (level <= 1) {
+			if (level < 1) {
 				d.translateX = 4;
 				d.translateY = 8;
 				d.fill = '#999';
