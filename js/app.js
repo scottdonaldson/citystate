@@ -8,6 +8,8 @@
  *	DATA		: Reference to the Firebase data
  *  LOGGED_IN	: pull from localStorage or false if not present
  *	USER		: returns user ID from local Storage, or false if not present
+ *  SLUG		: populated based on what city/region user is viewing
+ *  STRUCTURES  : populate this as needed
  *	VERSION 	: Release version
  *
  *	TILE_WIDTH	: size of tiles on map
@@ -20,6 +22,8 @@ var BASE 		= window.location.origin,
 	DATA		= new Firebase(FB_URL),
 	LOGGED_IN 	= localStorage.getItem('LOGGED_IN') || false,
 	USER		= localStorage.getItem('USER') || false,
+	SLUG		= '',
+	STRUCTURES  = {},
 	VERSION 	= '0.0.7',
 
 	TILE_WIDTH = 40;
