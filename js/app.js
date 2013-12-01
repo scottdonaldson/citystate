@@ -24,6 +24,7 @@ var BASE 		= window.location.origin,
 	USER		= localStorage.getItem('USER') || false,
 	SLUG		= '',
 	STRUCTURES  = {},
+	X, Y,
 	VERSION 	= '0.0.7',
 
 	TILE_WIDTH = 40;

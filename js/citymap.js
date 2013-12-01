@@ -6,24 +6,61 @@ document.body.classList.add('ocean');
 
 function returnStructures() {
 	var output = '';
-	output += '<select><option value=""></option>';
+	output += '<select onchange="showBuildStructure(this.options[this.selectedIndex].value);">';
+	output += '<option value=""></option>';
 	for (var structure in STRUCTURES) {
-		output += '<option value="' + structure + '">' + STRUCTURES[structure].name + '</option>';
+		// Only show the option if the user has enough cash
+		// to build the structure
+		if (+localStorage.getItem('USER.cash') >= STRUCTURES[structure].cost) {
+			output += '<option value="' + structure + '">' + STRUCTURES[structure].name.charAt(0).toUpperCase() + STRUCTURES[structure].name.slice(1) + ' (' + STRUCTURES[structure].cost + ')</option>';
+		}
 	}
 	output += '</select>';
 	return output;
 }
 
-function buildStructureForm(tile) {
+function showBuildStructure(structure) {
+	if (structure) {
+		document.getElementById('build-structure-submit').innerHTML = 'Build (' + STRUCTURES[structure].cost + ')';
+		document.getElementById('build-structure-submit').style.display = 'block';
+	} else {
+		document.getElementById('build-structure-submit').style.display = 'none';
+	}
+}
 
+function buildStructureForm(e, tile) {
 	var output = '';
-	output += '<form>' + 
-			  '<label>Build a structure?</label><br>' + 
+	output += '<label>Build a structure?</label><br>' + 
 			  returnStructures() +
-			  // '<input type="submit" name="buildCity" value="Build">' + 
-			  '</form>';
+			  '<button id="build-structure-submit" name="build-structure-submit" onclick="buildNewStructure(this.parentNode);" style="display: none;">Build</button>';
 	return output;
 }
+
+// Add a new structure to the city
+function buildNewStructure(infobox) {
+	// Find the selected structure
+	// Push it to the structures array of this city with level 0
+	for (var i = 0; i < infobox.children.length; i++) {
+		if (infobox.children[i].tagName === 'SELECT') {
+			// Add to the structures array in this city
+			DATA.child('cities').child(SLUG).child('structures').push({
+				level: 0,
+				name: infobox.children[i].value,
+				x: X,
+				y: Y
+			});
+			break;
+		}
+	}
+	// Subtract cash from user
+	console.log((+localStorage.getItem('USER.cash')) - STRUCTURES[infobox.children[i].value].cost);
+	DATA.child('users').child(USER).update({ 
+		cash: (+localStorage.getItem('USER.cash')) - STRUCTURES[infobox.children[i].value].cost
+	});
+
+	hideInfobox();
+}
+
 
 function showStructure(x, y) {
 
@@ -47,7 +84,7 @@ function showCityTiles(data, cityUser, map) {
 					+USER === cityUser) {
 
 					tile.click(function(e){
-						showInfobox(e, buildStructureForm(tile));
+						showInfobox(e, buildStructureForm(e, tile));
 					});
 				}
 
@@ -84,13 +121,17 @@ function showCityMap() {
 	}
 
 	DATA.once('value', function(data){
-		// Set var for the user of this city (will check against current user)
-		var cityUser = data.child('cities').child(SLUG).child('user').val();
-
 		// Update the global STRUCTURES object
 		for (var structure in data.child('structures').val()){
 			STRUCTURES[structure] = data.child('structures').val()[structure];
 		}
+	});
+	DATA.on('value', function(data){
+		// Set var for the user of this city (will check against current user)
+		var cityUser = data.child('cities').child(SLUG).child('user').val();
+
+		// Update user cash in localStorage
+		localStorage.setItem('USER.cash', data.child('users').child(USER).child('cash').val());
 
 		// Show the city tiles
 		showCityTiles(data.child('cities').val()[SLUG], cityUser, Snap('#map'));

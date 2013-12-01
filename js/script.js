@@ -14,6 +14,10 @@ function showInfobox(e, content) {
 	infobox.style.display = 'block';
 	infobox.style.left = e.x + 480 < window.outerWidth ? (e.x + 20) + 'px' : (e.x - 420) + 'px';
 	infobox.style.top = ( e.y + window.scrollY - infobox.clientHeight / 2 ) + 'px';
+
+	// Set global X and Y coordinates based on mouse click
+	X = Math.floor(e.offsetX / TILE_WIDTH);
+	Y = Math.floor(e.offsetY / TILE_WIDTH);
 }
 
 function hideInfobox() {
