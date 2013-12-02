@@ -1,7 +1,5 @@
-var tileWidth = 40;
-
 function setTransform(d) {
-	return new Snap.Matrix().translate(tileWidth * d.x + d.translateX, tileWidth * d.y + d.translateY);
+	return new Snap.Matrix().translate(TILE_WIDTH * d.x + d.translateX, TILE_WIDTH * d.y + d.translateY);
 }
 
 /* ----- Landscape ----- */

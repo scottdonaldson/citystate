@@ -1,6 +1,5 @@
 // If user is not logged in, set up ability to do so
 if (!LOGGED_IN || LOGGED_IN === 'false') {
-	console.log('logged out');
 
 	function logIn(error, user) {
 
@@ -37,6 +36,7 @@ if (!LOGGED_IN || LOGGED_IN === 'false') {
 // If user is logged in, give option to log out
 // and show user module
 } else {
+
 	var logButton = document.createElement('button');
 	logButton.innerHTML = 'Log out';
 	logButton.onclick = function() {
@@ -49,7 +49,7 @@ if (!LOGGED_IN || LOGGED_IN === 'false') {
 	};
 
 	DATA.once('value', function(data){
-		document.getElementById('user').innerHTML = 'Logged in as ' + data.child('users').child(USER).child('name').val();
+		document.getElementById('user').innerHTML = 'Logged in as <a href="/user">' + data.child('users').child(USER).child('name').val() + '</a>';
 	});
 }
 

@@ -53,7 +53,6 @@ function buildNewStructure(infobox) {
 		}
 	}
 	// Subtract cash from user
-	console.log((+localStorage.getItem('USER.cash')) - STRUCTURES[infobox.children[i].value].cost);
 	DATA.child('users').child(USER).update({ 
 		cash: (+localStorage.getItem('USER.cash')) - STRUCTURES[infobox.children[i].value].cost
 	});
