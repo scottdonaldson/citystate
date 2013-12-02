@@ -131,7 +131,9 @@ function showCityMap() {
 		var cityUser = data.child('cities').child(SLUG).child('user').val();
 
 		// Update user cash in localStorage
-		localStorage.setItem('USER.cash', data.child('users').child(USER).child('cash').val());
+		if (!!USER) {
+			localStorage.setItem('USER.cash', data.child('users').child(USER).child('cash').val());
+		}
 
 		// Show the city tiles
 		showCityTiles(data.child('cities').val()[SLUG], cityUser, Snap('#map'));
