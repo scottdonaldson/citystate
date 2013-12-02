@@ -20,8 +20,8 @@ function buildCityForm(terrain) {
 // more detailed (color, density, etc.)
 function showStructure(city, structure, map) {
 	return map.rect(
-		TILE_WIDTH * (city.x - 1) + 4 * (structure.x - 1) + 1, 
-		TILE_WIDTH * (city.y - 1) + 4 * (structure.y - 1) + 1,
+		TILE_WIDTH * city.x + 4 * structure.x + 1, 
+		TILE_WIDTH * city.y + 4 * structure.y + 1,
 		2,
 		2)
 		.attr({ fill: '#444' });
@@ -76,7 +76,7 @@ function showWorldMap() {
 						if (shownCities.indexOf(city) === -1 && 
 							cities[city].x === x && 
 							cities[city].y === y) {
-							
+
 							shownCities.push(city);
 
 							for (var structure in cities[city].structures) {
@@ -101,7 +101,7 @@ function showWorldMap() {
 					// If no city, click to prompt building one
 					if (!tile.data('has-city')) {
 						tile.click(function(e){
-							showInfobox(e, buildCityForm(this.data('terrain'), world));
+							showInfobox(e, buildCityForm(this.data('terrain')));
 						});
 					}
 				}
