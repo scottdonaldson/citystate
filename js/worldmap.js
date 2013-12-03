@@ -12,6 +12,8 @@ function buildCityForm(terrain) {
 			  '<input type="text" name="cityName" placeholder="Name your city">' + 
 			  '<input type="submit" name="buildCity" value="Build">' + 
 			  '</form>';
+
+			  // TODO: submit the form... don't forget to add to the user's cities as well as top-level cities!
 	return output;
 }
 
