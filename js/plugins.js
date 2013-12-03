@@ -36,7 +36,3 @@ function commas(nStr) {
 	}
 	return x1 + x2; 
 }
-
-function noCommas(nStr) {
-	return nStr.replace(/\,/g,'');
-}
