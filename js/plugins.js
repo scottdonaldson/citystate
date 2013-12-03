@@ -7,6 +7,22 @@ window.log = function f(){ log.history = log.history || []; log.history.push(arg
 (function(){try{console.log();return window.console;}catch(a){return (window.console={});}}());
 
 
+// Parse the window slug
+function parseSlug(segment) {
+	// Split by the segment and hash and choose the last in the resulting array
+	var slug = window.location.href.split(BASE + '/' + segment + '/#/');
+	slug = slug[slug.length - 1];
+
+	// Remove any modifiers that might have snuck in from the segment
+	var modifiers = ['?', '&', '.'];
+	for (var i = 0; i < modifiers.length; i++) {
+		if (slug.indexOf(modifiers[i]) > -1) {
+			slug = slug.slice(0, slug.indexOf(modifiers[i]));
+		}
+	}
+	return slug;
+}
+
 // place any helper plugins in here, instead of separate, slower script files.
 
 function commas(nStr) {

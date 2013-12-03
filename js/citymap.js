@@ -108,16 +108,7 @@ function showCityTiles(data, cityUser, map) {
 
 function showCityMap() {
 	// Split the window URL by the hash and choose the last segment
-	SLUG = window.location.href.split(BASE + '/city/#/');
-	SLUG = SLUG[SLUG.length - 1];
-
-	// Remove any modifiers that might have snuck in from the segment
-	var modifiers = ['?', '&', '.'];
-	for (var i = 0; i < modifiers.length; i++) {
-		if (SLUG.indexOf(modifiers[i]) > -1) {
-			SLUG = SLUG.slice(0, slug.indexOf(modifiers[i]));
-		}
-	}
+	SLUG = parseSlug('city');
 
 	DATA.once('value', function(data){
 		// Update the global STRUCTURES object
