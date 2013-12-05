@@ -9,7 +9,7 @@ function closeAlert() {
 /* ----- Show info box ------ */
 
 function showInfobox(e, content) {
-	var infobox = document.getElementById('infobox');
+	var infobox = $('#infobox');
 	infobox.innerHTML = content;
 	infobox.style.display = 'block';
 	infobox.style.left = e.x + 480 < window.outerWidth ? (e.x + 20) + 'px' : (e.x - 420) + 'px';
@@ -21,7 +21,7 @@ function showInfobox(e, content) {
 }
 
 function hideInfobox() {
-	var infobox = document.getElementById('infobox');
+	var infobox = $('#infobox');
 	infobox.style.display = 'none';
 }
 window.addEventListener('resize', hideInfobox);

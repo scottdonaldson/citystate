@@ -21,10 +21,10 @@ function returnStructures() {
 
 function showBuildStructure(structure) {
 	if (structure) {
-		document.getElementById('build-structure-submit').innerHTML = 'Build (' + STRUCTURES[structure].cost + ')';
-		document.getElementById('build-structure-submit').style.display = 'block';
+		$('#build-structure-submit').innerHTML = 'Build (' + STRUCTURES[structure].cost + ')';
+		$('#build-structure-submit').style.display = 'block';
 	} else {
-		document.getElementById('build-structure-submit').style.display = 'none';
+		$('#build-structure-submit').style.display = 'none';
 	}
 }
 

@@ -10,11 +10,11 @@
 			DATA.once('value', function(data){
 
 				// Show the user's name
-				document.getElementById('user-name').innerHTML = data.child('users').child(USER).child('name').val();
+				$('#user-name').innerHTML = data.child('users').child(USER).child('name').val();
 
 				// Get all the user's cities and locate container, a <ul>
 				var cities = data.child('users').child(USER).child('cities').val(),
-					citiesContainer = document.getElementById('cities');
+					citiesContainer = $('#cities');
 
 				// Loop through cities and add <li> to the container with link and population	
 				for (var i = 0; i < cities.length; i++) {
