@@ -10,8 +10,8 @@ window.log = function f(){ log.history = log.history || []; log.history.push(arg
 // as an alias for document.querySelectorAll().
 // Or, if a lone ID, document.getElementById().
 function $(selector) {
-	return (selector.split(' ').length === 1 && selector.slice(0) === '#') ? 
-		document.getElementById(selector) : 
+	return (selector.split(' ').length === 1 && selector.slice(0, 1) === '#') ? 
+		document.getElementById(selector.slice(1)) : 
 		document.querySelectorAll(selector);
 }
 
