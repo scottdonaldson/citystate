@@ -97,7 +97,7 @@ CS.showCityTiles = function(data, cityUser, map) {
 						shownStructures.push(structure);
 
 						var s = data.structures[structure];
-						return buildStructure(s.name, s.level, s.x, s.y, map);
+						return CS.buildStructure(s.name, s.level, s.x, s.y, map);
 					}
 				}
 			})();
@@ -122,6 +122,6 @@ CS.showCityMap = function() {
 		}
 
 		// Show the city tiles
-		showCityTiles(data.child('cities').val()[CS.SLUG], cityUser, Snap('#map'));
+		CS.showCityTiles(data.child('cities').val()[CS.SLUG], cityUser, Snap('#map'));
 	});
 }

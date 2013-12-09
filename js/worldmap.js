@@ -103,7 +103,7 @@ CS.showWorldMap = function() {
 							facade.data('city-population', cities[city].population);
 
 							facade.hover(function(e){
-									CS.showInfobox(e, function(){
+									CS.showInfobox(e, function(facade){
 										CS.showCityInfo(facade);
 									});
 								}, function(){
