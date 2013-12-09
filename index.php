@@ -2,6 +2,6 @@
 
 <script src="/js/worldmap.js"></script>
 
-<svg id="map" onload="showWorldMap()"></svg>
+<svg id="map" onload="CS.showWorldMap()"></svg>
 
 <?php include('footer.php'); ?>

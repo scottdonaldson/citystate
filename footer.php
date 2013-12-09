@@ -18,7 +18,7 @@
 	<div class="nav"></div>
 
 	<div id="version">
-		<script>document.write(VERSION);</script>
+		<script>document.write(CS.VERSION);</script>
 	</div>
 
 </div>

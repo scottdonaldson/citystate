@@ -4,46 +4,46 @@ document.body.classList.add('ocean');
 	// We will also want to show the city's neighbors...
 	// Maybe even complete with structures?!
 
-function returnStructures() {
+CS.returnStructures = function() {
 	var output = '';
-	output += '<select onchange="showBuildStructure(this.options[this.selectedIndex].value);">';
+	output += '<select onchange="CS.showBuildStructure(this.options[this.selectedIndex].value);">';
 	output += '<option value=""></option>';
-	for (var structure in STRUCTURES) {
+	for (var structure in CS.STRUCTURES) {
 		// Only show the option if the user has enough cash
 		// to build the structure
-		if (+localStorage.getItem('USER.cash') >= STRUCTURES[structure].cost) {
-			output += '<option value="' + structure + '">' + STRUCTURES[structure].name.charAt(0).toUpperCase() + STRUCTURES[structure].name.slice(1) + ' (' + STRUCTURES[structure].cost + ')</option>';
+		if (+localStorage.getItem('USER.cash') >= CS.STRUCTURES[structure].cost) {
+			output += '<option value="' + structure + '">' + CS.STRUCTURES[structure].name.charAt(0).toUpperCase() + CS.STRUCTURES[structure].name.slice(1) + ' (' + CS.STRUCTURES[structure].cost + ')</option>';
 		}
 	}
 	output += '</select>';
 	return output;
 }
 
-function showBuildStructure(structure) {
+CS.showBuildStructure = function(structure) {
 	if (structure) {
-		$('#build-structure-submit').innerHTML = 'Build (' + STRUCTURES[structure].cost + ')';
-		$('#build-structure-submit').style.display = 'block';
+		CS('#build-structure-submit').innerHTML = 'Build (' + CS.STRUCTURES[structure].cost + ')';
+		CS('#build-structure-submit').style.display = 'block';
 	} else {
-		$('#build-structure-submit').style.display = 'none';
+		CS('#build-structure-submit').style.display = 'none';
 	}
 }
 
-function buildStructureForm(e, tile) {
+CS.buildStructureForm = function(e, tile) {
 	var output = '';
 	output += '<label>Build a structure?</label><br>' + 
-			  returnStructures() +
+			  CS.returnStructures() +
 			  '<button id="build-structure-submit" name="build-structure-submit" onclick="buildNewStructure(this.parentNode);" style="display: none;">Build</button>';
 	return output;
 }
 
 // Add a new structure to the city
-function buildNewStructure(infobox) {
+CS.buildNewStructure = function(infobox) {
 	// Find the selected structure
 	// Push it to the structures array of this city with level 0
 	for (var i = 0; i < infobox.children.length; i++) {
 		if (infobox.children[i].tagName === 'SELECT') {
 			// Add to the structures array in this city
-			DATA.child('cities').child(SLUG).child('structures').push({
+			CS.DATA.child('cities').child(CS.SLUG).child('structures').push({
 				level: 0,
 				name: infobox.children[i].value,
 				x: X,
@@ -53,19 +53,19 @@ function buildNewStructure(infobox) {
 		}
 	}
 	// Subtract cash from user
-	DATA.child('users').child(USER).update({ 
-		cash: (+localStorage.getItem('USER.cash')) - STRUCTURES[infobox.children[i].value].cost
+	CS.DATA.child('users').child(CS.USER).update({ 
+		cash: (+localStorage.getItem('USER.cash')) - CS.STRUCTURES[infobox.children[i].value].cost
 	});
 
-	hideInfobox();
+	CS.hideInfobox();
 }
 
 
-function showStructure(x, y) {
+CS.showStructure = function(x, y) {
 
 }
 
-function showCityTiles(data, cityUser, map) {
+CS.showCityTiles = function(data, cityUser, map) {
 	
 	// Create an empty array that we will fill with structures
 	// after they've been shown, using Firebase's unique key for them
@@ -73,17 +73,19 @@ function showCityTiles(data, cityUser, map) {
 
 	for (var x = 0; x < 10; x++) {
 		for (var y = 0; y < 10; y++) {
-			var tile = map.rect(TILE_WIDTH * x, TILE_WIDTH * y, TILE_WIDTH, TILE_WIDTH)
+			var tile = map.rect(CS.TILE_WIDTH * x, CS.TILE_WIDTH * y, CS.TILE_WIDTH, CS.TILE_WIDTH)
 				.attr({ 
 					'class': 'tile sand'
 				});
-				
-				if (LOGGED_IN && 
-					LOGGED_IN !== "false" &&
-					+USER === cityUser) {
+		
+				// Only allow the logged in builder of this city
+				// to build structures		
+				if (CS.LOGGED_IN && 
+					CS.LOGGED_IN !== "false" &&
+					+CS.USER === cityUser) {
 
 					tile.click(function(e){
-						showInfobox(e, buildStructureForm(e, tile));
+						CS.showInfobox(e, CS.buildStructureForm(e, tile));
 					});
 				}
 
@@ -106,26 +108,20 @@ function showCityTiles(data, cityUser, map) {
 	shownStructures = [];
 }
 
-function showCityMap() {
+CS.showCityMap = function() {
 	// Split the window URL by the hash and choose the last segment
-	SLUG = parseSlug('city');
+	CS.SLUG = CS.parseSlug('city');
 
-	DATA.once('value', function(data){
-		// Update the global STRUCTURES object
-		for (var structure in data.child('structures').val()){
-			STRUCTURES[structure] = data.child('structures').val()[structure];
-		}
-	});
-	DATA.on('value', function(data){
+	CS.DATA.on('value', function(data){
 		// Set var for the user of this city (will check against current user)
-		var cityUser = data.child('cities').child(SLUG).child('user').val();
+		var cityUser = data.child('cities').child(CS.SLUG).child('user').val();
 
 		// Update user cash in localStorage
-		if (!!USER) {
-			localStorage.setItem('USER.cash', data.child('users').child(USER).child('cash').val());
+		if (!!CS.USER) {
+			localStorage.setItem('USER.cash', data.child('users').child(CS.USER).child('cash').val());
 		}
 
 		// Show the city tiles
-		showCityTiles(data.child('cities').val()[SLUG], cityUser, Snap('#map'));
+		showCityTiles(data.child('cities').val()[CS.SLUG], cityUser, Snap('#map'));
 	});
 }

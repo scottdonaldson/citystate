@@ -1,44 +1,65 @@
 // We define a function showLoggedModule() differently
 // depending on whether the user is logged in or not.
+CS.auth = new FirebaseSimpleLogin(CS.DATA, function(error, user) {
+	CS.loginStateChange(error, user);
+});
 
-function showLoggedModule(module) {
+CS.loginStateChange = function(error, user) {
+	if (error) {
+		this.handleError(error, user);
+	} else if (user) {
+		this.loggedIn(user);
+	} else {
+		this.logOut(error);
+	}
+}
+
+CS.handleError = function(error, user) {
+	console.log(error);
+}
+
+CS.loggedIn = function(user) {
+	// Set global variables and localStorage
+	CS.LOGGED_IN = true;
+	localStorage.setItem('LOGGED_IN', true);
+	CS.USER = user.id;
+	localStorage.setItem('USER', user.id);
+
+	// If the user is not already present in our DATA, add them
+	if (!CS.DATA.child('users').child(CS.USER)) {
+		CS.DATA.child('users').child(CS.USER).set({
+			first_name: user.first_name,
+			cash: 1000,
+			name: user.name,
+			logged: true
+		});
+	// otherwise, update their record (in case anything's changed)
+	} else {
+		CS.DATA.child('users').child(CS.USER).update({
+			first_name: user.first_name,
+			name: user.name,
+			logged: true
+		});
+	}	
+}
+
+CS.logOut = function(error) {
+	// Reset globals and localStorage
+	CS.LOGGED_IN = false;
+	localStorage.setItem('LOGGED_IN', LOGGED_IN);
+	CS.USER = false;
+	localStorage.setItem('USER', USER);
+}
+
+CS.showLoggedModule = function(module) {
 	// Here showLoggedModule just needs to show the login button
-	if (!LOGGED_IN || LOGGED_IN === 'false') { 
-
-		// Function to log in that is called when
-		// the user clicks on the forthcoming login button
-		function logIn(error, user) {
-
-			// Overwrite global variables and set localStorage
-			LOGGED_IN = true;
-			localStorage.setItem('LOGGED_IN', true);
-			USER = user.id;
-			localStorage.setItem('USER', user.id);
-
-			// If the user is not already present in our DATA, add them
-			if (!DATA.child('users').child(USER)) {
-				DATA.child('users').child(USER).set({
-					first_name: user.first_name,
-					name: user.name
-				});
-			// otherwise, update their record (in case anything's changed)
-			} else {
-				DATA.child('users').child(USER).update({
-					first_name: user.first_name,
-					name: user.name
-				});
-			}
-
-			// Refresh the page
-			window.location.reload();
-		}
+	if (!CS.LOGGED_IN || CS.LOGGED_IN === 'false') { 
 
 		var logButton = document.createElement('button');
-		logButton.onclick = function(){
-			var auth = new FirebaseSimpleLogin(DATA, logIn);
-			auth.login('facebook');
-		}
 		logButton.innerHTML = 'Log in';
+		logButton.addEventListener('click', function(){
+			CS.auth.login('facebook');
+		});
 
 		module.appendChild(logButton);
 
@@ -48,23 +69,20 @@ function showLoggedModule(module) {
 		
 		var logButton = document.createElement('button');
 		logButton.innerHTML = 'Log out';
-		logButton.onclick = function() {
-			LOGGED_IN = false;
-			localStorage.setItem('LOGGED_IN', LOGGED_IN);
-			USER = false;
-			localStorage.setItem('USER', USER);
+		logButton.addEventListener('click', function() {
+			CS.auth.logout();
 
 			// Refresh the page
-			window.location.reload();
-		};
+			location.reload();
+		});
 
 		// And, once the data on the user is ready, return some information about them:
 		// Name (linking to their user page), cash
-		DATA.once('value', function(data) {
+		CS.DATA.once('value', function(data) {
 			var userInfo = document.createElement('p');
-			userInfo.innerHTML = '<a href="/user">' + data.child('users').child(USER).child('name').val() + '</a>';
+			userInfo.innerHTML = '<a href="/user">' + data.child('users').child(CS.USER).child('name').val() + '</a>';
 			userInfo.innerHTML += '<br>';
-			userInfo.innerHTML += 'Cash: ' + data.child('users').child(USER).child('cash').val();
+			userInfo.innerHTML += 'Cash: ' + CS.commas( data.child('users').child(CS.USER).child('cash').val() );
 
 			module.appendChild(userInfo);
 			module.appendChild(logButton);
@@ -73,5 +91,5 @@ function showLoggedModule(module) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-	showLoggedModule( document.getElementById('logged-module') );
+	CS.showLoggedModule( document.getElementById('logged-module') );
 });

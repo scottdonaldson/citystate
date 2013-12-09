@@ -1,33 +1,35 @@
 /* ----- Remove alert ----- */
 
-function closeAlert() {
-	Snap.select('#alert').remove();
+CS.remove = function(el) {
+	el.parentNode.removeChild(el);
 }
 // Snap.select('.close-box').click(closeAlert);
 
 
 /* ----- Show info box ------ */
 
-function showInfobox(e, content) {
-	var infobox = $('#infobox');
+CS.showInfobox = function(e, content) {
+	var infobox = CS('#infobox');
 	infobox.innerHTML = content;
 	infobox.style.display = 'block';
 	infobox.style.left = e.x + 480 < window.outerWidth ? (e.x + 20) + 'px' : (e.x - 420) + 'px';
 	infobox.style.top = ( e.y + window.scrollY - infobox.clientHeight / 2 ) + 'px';
 
 	// Set global X and Y coordinates based on mouse click
-	X = Math.floor(e.offsetX / TILE_WIDTH);
-	Y = Math.floor(e.offsetY / TILE_WIDTH);
+	X = Math.floor(e.offsetX / CS.TILE_WIDTH);
+	Y = Math.floor(e.offsetY / CS.TILE_WIDTH);
 }
 
-function hideInfobox() {
-	var infobox = $('#infobox');
+CS.hideInfobox = function() {
+	var infobox = CS('#infobox');
 	infobox.style.display = 'none';
 }
-window.addEventListener('resize', hideInfobox);
+window.addEventListener('resize', function(){
+	CS.hideInfobox();
+});
 window.addEventListener('keydown', function(e) {
 	if (e.keyCode === 27) {
-		hideInfobox();
+		CS.hideInfobox();
 	}
 });
 
