@@ -3,8 +3,6 @@ City/State
 
 City/State is a browser game that bridges the gap between empire-building and city-building games.
 
-* __0.0.7__: 12/14/13
-  * Exactly one year after the release of 0.0.6, with countless hours spent refurbishing and restructuring, version 0.0.7 arrives. Functionality? Greatly diminished. Ability to scale? Infinitely superior -- and with this, hopefully a more agile development cycle starting in and continuing throughout 2014.
 * __0.0.6__: 12/14/12
   * New internal messaging system. Trading between cities with ports (in new order of business). UI improvements. Stadium vs. stadium order of business relies on stadium funding.
 * __0.0.5__: 11/27/12
