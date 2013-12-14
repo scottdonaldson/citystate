@@ -5,7 +5,7 @@
  *	If passed a selector, it will return the matched elements
  *	via document.querySelectorAll or document.getElementById.
  *	If these aren't found, just return the string.
- *	If passed an object, it just returns the object.
+ *	If passed anything else, return that thing.
  *
  */
 
@@ -17,7 +17,6 @@ var CS = function(selector) {
 
 		return (returned) ? returned : selector;
 
-	// taken from jQuery's .isNumeric() method -- if a number, return as string
 	} else {
 		return selector;
 	}
@@ -41,16 +40,16 @@ var CS = function(selector) {
  *  STRUCTURES  : all the structures available to build -- updated as the last step in this file 
  */
 
-CS.BASE 		= location.origin,
-CS.IS_PROD 		= CS.BASE.indexOf('.dev') > -1 ? false : true,
-CS.FB_URL 		= CS.IS_PROD ? 'https://citystate.firebaseio.com' : 'https://citystate-dev.firebaseio.com',
-CS.DATA 		= new Firebase(CS.FB_URL),
-CS.LOGGED_IN 	= localStorage.getItem('LOGGED_IN') || false,
-CS.USER 		= localStorage.getItem('USER') || false,
-CS.SLUG 		= '',
-CS.X 			= '', 
-CS.Y 			= '',
-CS.VERSION 	= '0.0.7',
+CS.BASE 		= location.origin;
+CS.IS_PROD 		= CS.BASE.indexOf('.dev') > -1 ? false : true;
+CS.FB_URL 		= CS.IS_PROD ? 'https://citystate.firebaseio.com' : 'https://citystate-dev.firebaseio.com';
+CS.DATA 		= new Firebase(CS.FB_URL);
+CS.LOGGED_IN 	= localStorage.getItem('LOGGED_IN') || false;
+CS.USER 		= localStorage.getItem('USER') || false;
+CS.SLUG 		= '';
+CS.X 			= '';
+CS.Y 			= '';
+CS.VERSION 		= '0.0.7';
 CS.TILE_WIDTH 	= 40;
 
 CS.DATA.once('value', function(data){
