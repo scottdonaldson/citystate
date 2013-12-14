@@ -28,9 +28,9 @@ CS.buildWindow = function(map, x, y) {
 CS.buildHouse = function(map, d) {
 	// Template for a single house
 	var _house = map.rect(0, 0, 20, 10).attr({ fill: d.fill }),
-		_door = CS.buildDoor(map, 3, 2),
-		_roof = map.path('M-2,0 h24 l-12,-6 l-12,6 Z').attr({ fill: '#000' }),
-		_window = CS.buildWindow(map, 12, 2);
+		_door = CS.buildDoor(map, 3, 2).attr({ fill: '#522' }),
+		_roof = map.path('M-2,0 h24 l-12,-6 l-12,6 Z').attr({ fill: '#522' }),
+		_window = CS.buildWindow(map, 12, 2).attr({ fill: '#522' });
 	return map.g(_house, _door, _roof, _window).transform(CS.setTransform(d));
 }
 
@@ -60,11 +60,20 @@ CS.buildStructure = function(which, level, x, y, map) {
 		translateY: 0
 	};
 	switch (which) {
+		case 'park':
+			d.translateX = 8;
+			d.translateY = 40;
+			CS.buildTree(map, d);
+			d.translateX = 26;
+			d.translateY = 30;
+			CS.buildTree(map, d);
+			break;
+
 		case 'neighborhood':
 			if (level < 1) {
 				d.translateX = 4;
 				d.translateY = 8;
-				d.fill = '#999';
+				d.fill = '#f9f2f2';
 				CS.buildHouse(map, d);
 				
 				// At level 1, introduce another house
@@ -93,4 +102,8 @@ CS.buildStructure = function(which, level, x, y, map) {
 			CS.buildLibrary(map, d);
 			break;
 	}
+
+	var facade = map.rect( CS.TILE_WIDTH * x, CS.TILE_WIDTH * y, CS.TILE_WIDTH, CS.TILE_WIDTH ).attr({
+		fill: 'transparent'
+	});
 }
