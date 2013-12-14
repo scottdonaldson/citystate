@@ -4,14 +4,13 @@
 
 <div id="toolbar" class="clearfix">
 
-	<!-- Need:
-
-		-Breadcrumbs
-		-User module
-		-City module
-		-Not logged in module
-	-->
-	<div id="breadcrumbs"></div>
+	<div id="breadcrumbs">
+		<script>
+		if (location.href.indexOf('city/#/') > -1) {
+			document.write('<a href="/">World Map</a>');
+		}
+		</script>
+	</div>
 
 	<div id="logged-module"></div>
 	
