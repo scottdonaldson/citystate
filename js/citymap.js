@@ -32,7 +32,7 @@ CS.buildStructureForm = function(e, tile) {
 	var output = '';
 	output += '<label>Build a structure?</label><br>' + 
 			  CS.returnStructures() +
-			  '<button id="build-structure-submit" name="build-structure-submit" onclick="buildNewStructure(this.parentNode);" style="display: none;">Build</button>';
+			  '<button id="build-structure-submit" name="build-structure-submit" onclick="CS.buildNewStructure(this.parentNode);" style="display: none;">Build</button>';
 	return output;
 }
 
@@ -65,7 +65,7 @@ CS.showStructure = function(x, y) {
 
 }
 
-CS.showCityTiles = function(data, cityUser, map) {
+CS.showCityTiles = function(data, cityUser, terrain, map) {
 	
 	// Create an empty array that we will fill with structures
 	// after they've been shown, using Firebase's unique key for them
@@ -75,7 +75,7 @@ CS.showCityTiles = function(data, cityUser, map) {
 		for (var y = 0; y < 10; y++) {
 			var tile = map.rect(CS.TILE_WIDTH * x, CS.TILE_WIDTH * y, CS.TILE_WIDTH, CS.TILE_WIDTH)
 				.attr({ 
-					'class': 'tile sand'
+					'class': 'tile ' + terrain
 				});
 		
 				// Only allow the logged in builder of this city
@@ -113,15 +113,86 @@ CS.showCityMap = function() {
 	CS.SLUG = CS.parseSlug('city');
 
 	CS.DATA.on('value', function(data){
-		// Set var for the user of this city (will check against current user)
-		var cityUser = data.child('cities').child(CS.SLUG).child('user').val();
 
-		// Update user cash in localStorage
+		// Get a reference to this city
+		var cityRef = data.child('cities').child(CS.SLUG);
+
+		// Set var for the user of this city (will check against current user),
+		// and for the x and y coordinates of the city
+		var cityUser = cityRef.child('user').val(),
+			cityX = cityRef.child('x').val(),
+			cityY = cityRef.child('y').val();
+
+		// Set terrain of the city
+		var terrain = data.child('regions').child('argyle-island').child('tiles').child(cityX).child(cityY).val();
+
+		// Update user cash in localStorage (in case it has changed)
 		if (!!CS.USER) {
 			localStorage.setItem('USER.cash', data.child('users').child(CS.USER).child('cash').val());
 		}
 
 		// Show the city tiles
-		CS.showCityTiles(data.child('cities').val()[CS.SLUG], cityUser, Snap('#map'));
+		CS.showCityTiles(data.child('cities').child(CS.SLUG).val(), cityUser, terrain, Snap('#map'));
+
 	});
+
+	// Only the city's neighbors once, on load (defined below)
+	CS.DATA.once('value', function(data) {
+		CS.showNeighbors(data);
+	});
+}
+
+CS.showNeighbors = function(data) {
+	// Object for cardinal directions relative to map
+	var cardinals = {
+		nww: [-2, -1],
+		nw:  [-1, -1],
+		n:   [ 0, -1],
+		ne:  [ 1, -1],
+		nee: [ 2, -1],
+		ww:  [-2,  0],
+		w:   [-1,  0],
+		e:   [ 1,  0],
+		ee:  [ 2,  0],
+		sww: [-2,  1],
+		sw:  [-1,  1],
+		s:   [ 0,  1],
+		se:  [ 1,  1],
+		see: [ 2,  1]
+	}
+	// Get a reference to this city in order to find the neighbor in the region
+	var cityRef = data.child('cities').child(CS.SLUG),
+		cityX = cityRef.child('x').val(),
+		cityY = cityRef.child('y').val();
+
+	var shownCities = [];
+	for (var cardinal in cardinals) {
+		var neighbor = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+		neighbor.id = cardinal;
+		neighbor.classList.add('map', 'neighbor');
+		CS('#main').insertBefore(neighbor, CS('#infobox'));
+		
+		// Find terrain from the region tiles (or, if not present, call it water)
+		var terrain = data.child('regions').child('argyle-island').child('tiles').child(cityX + cardinals[cardinal][0]).child(cityY + cardinals[cardinal][1]).val() || 'water';
+
+		var neighborData = {};
+
+		// Find the city at this neighbor if there is one
+		for (var city in data.child('cities').val()) {
+
+			var newCityRef = data.child('cities').child(city).val();
+
+			if (newCityRef.x === cityX + cardinals[cardinal][0] &&
+				newCityRef.y === cityY + cardinals[cardinal][1] &&
+				shownCities.indexOf( newCityRef.slug ) === -1) {
+
+				shownCities.push( newCityRef.slug );
+				neighborData = newCityRef;
+				break;
+			}
+		}
+		
+		CS.showCityTiles(neighborData, false, terrain, Snap('#' + cardinal));
+	}
+	shownCities = [];
 }
