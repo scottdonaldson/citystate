@@ -1,8 +1,9 @@
-/* line 5, /Users/scottdonaldson/Desktop/local/citystate/wp-content/themes/citystate/sass/_layout.scss */
+/* line 5, ../sass/_layout.scss */
 #main {
-  padding-left: 240px; }
+  margin-left: 240px;
+  margin-bottom: 150px; }
 
-/* line 9, /Users/scottdonaldson/Desktop/local/citystate/wp-content/themes/citystate/sass/_layout.scss */
+/* line 10, ../sass/_layout.scss */
 #toolbar {
   background: #eee;
   left: 0;
@@ -11,11 +12,11 @@
   position: fixed;
   top: 0;
   width: 240px; }
-  /* line 17, /Users/scottdonaldson/Desktop/local/citystate/wp-content/themes/citystate/sass/_layout.scss */
+  /* line 18, ../sass/_layout.scss */
   .admin-bar #toolbar {
     top: 28px; }
 
-/* line 23, /Users/scottdonaldson/Desktop/local/citystate/wp-content/themes/citystate/sass/_layout.scss */
+/* line 23, ../sass/_layout.scss */
 #infobox {
   background: #fff;
   display: none;
@@ -24,7 +25,7 @@
   position: absolute;
   top: 0; }
 
-/* line 1, /Users/scottdonaldson/Desktop/local/citystate/wp-content/themes/citystate/sass/_forms.scss */
+/* line 1, ../sass/_forms.scss */
 input {
   display: block;
   margin-bottom: 0.5em;
@@ -55,57 +56,104 @@ input {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   position: relative; }
 
 /* line 24, ../sass/city.scss */
+body {
+  overflow-x: hidden; }
+
+/* line 28, ../sass/city.scss */
 ::selection {
   background: #777777; }
 
-/* line 25, ../sass/city.scss */
+/* line 29, ../sass/city.scss */
 ::-moz-selection {
   background: #777777; }
 
-/* line 27, ../sass/city.scss */
+/* line 31, ../sass/city.scss */
 .ocean {
   background: #4d5989; }
 
-/* line 31, ../sass/city.scss */
-#map {
+/* line 35, ../sass/city.scss */
+.map {
   display: block;
-  margin: 150px auto 0;
+  height: 400px;
+  margin: 0 auto;
+  top: 150px;
   width: 400px; }
+  /* line 44, ../sass/city.scss */
+  .map.neighbor {
+    opacity: 0.85;
+    margin-left: -200px;
+    left: 50%;
+    position: absolute; }
 
-/* line 37, ../sass/city.scss */
+/* line 51, ../sass/city.scss */
+#nww, #nw, #n, #ne, #nee {
+  top: -250px; }
+
+/* line 54, ../sass/city.scss */
+#sww, #sw, #s, #se, #see {
+  margin-bottom: -80px;
+  top: 550px; }
+
+/* line 58, ../sass/city.scss */
+#nww, #sww, #ww {
+  margin-left: -1000px; }
+
+/* line 61, ../sass/city.scss */
+#nw, #sw, #w {
+  margin-left: -600px; }
+
+/* line 64, ../sass/city.scss */
+#nee, #see, #ee {
+  margin-left: 600px; }
+
+/* line 67, ../sass/city.scss */
+#ne, #se, #e {
+  margin-left: 200px; }
+
+/* line 71, ../sass/city.scss */
 .tile {
   cursor: pointer; }
-  /* line 40, ../sass/city.scss */
+  /* line 76, ../sass/city.scss */
   .tile.sand {
     fill: #dc8; }
-    /* line 40, ../sass/city.scss */
-    .tile.sand:hover {
+    /* line 76, ../sass/city.scss */
+    .original .tile.sand:hover {
       fill: #d2bb60; }
-  /* line 41, ../sass/city.scss */
+  /* line 77, ../sass/city.scss */
   .tile.hills {
     fill: #ab9; }
-    /* line 41, ../sass/city.scss */
-    .tile.hills:hover {
+    /* line 77, ../sass/city.scss */
+    .original .tile.hills:hover {
       fill: #90a77a; }
-  /* line 42, ../sass/city.scss */
+  /* line 78, ../sass/city.scss */
   .tile.grass {
     fill: #8c7; }
-    /* line 42, ../sass/city.scss */
-    .tile.grass:hover {
+    /* line 78, ../sass/city.scss */
+    .original .tile.grass:hover {
       fill: #68be52; }
-  /* line 43, ../sass/city.scss */
+  /* line 79, ../sass/city.scss */
   .tile.mountains {
     fill: #999; }
-    /* line 43, ../sass/city.scss */
-    .tile.mountains:hover {
+    /* line 79, ../sass/city.scss */
+    .original .tile.mountains:hover {
       fill: gray; }
-  /* line 44, ../sass/city.scss */
+  /* line 80, ../sass/city.scss */
   .tile.forest {
     fill: #5a5; }
-    /* line 44, ../sass/city.scss */
-    .tile.forest:hover {
+    /* line 80, ../sass/city.scss */
+    .original .tile.forest:hover {
       fill: #448844; }
+  /* line 81, ../sass/city.scss */
+  .tile.water {
+    fill: transparent; }
+
+/* line 85, ../sass/city.scss */
+#version {
+  color: #fff;
+  position: fixed;
+  right: 10px;
+  top: 10px; }

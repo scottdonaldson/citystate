@@ -2,6 +2,6 @@
 
 <script src="/js/citymap.js"></script>
 
-<svg id="map" onload="CS.showCityMap();"></svg>
+<svg id="map" class="map original" onload="CS.showCityMap();"></svg>
 
 <?php include('../footer.php'); ?>
