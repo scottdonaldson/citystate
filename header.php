@@ -1,49 +1,36 @@
 <!DOCTYPE html>
-
 <!--
 
 	Designed and developed by Scott Donaldson
 
 -->
-
-<?php 
-
-// Define paths
-define('MAIN', dirname(__FILE__) . '/');
-
-// Check to see if any forms have been submitted
-include('header-checks.php'); ?>
-
-<html <?php language_attributes(); ?>>
+<html lang="en">
 <head>
 
 	<title>City/State</title>
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700' rel='stylesheet' type='text/css'>
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700" rel="stylesheet">
 	
-	<link rel="shortcut icon" href="<?php bloginfo('template_url'); ?>/images/favicon.ico" />
+	<link rel="shortcut icon" href="/images/favicon.ico">
 
-	<link rel="stylesheet" href="<?php echo bloginfo('template_url'); ?>/style.css" />
-	<link rel="stylesheet" href="<?php echo bloginfo('template_url'); ?>/css/city.css" />
-	
-	<script src="<?php echo bloginfo('template_url'); ?>/js/jquery.min.js"></script>
+	<link rel="stylesheet" href="/style.css">
+	<link rel="stylesheet" href="/css/city.css">
 
-	<?php include('colors.php'); ?>
+	<!-- Load Firebase and login from the CDN, local copy of Snap -->
+	<script src="https://cdn.firebase.com/v0/firebase.js"></script>
+	<script src="https://cdn.firebase.com/v0/firebase-simple-login.js"></script>
+	<script src="/js/vendor/snap.js"></script>
 
-<?php wp_head(); ?>
+	<!-- City/State-specific JS -->
+	<script src="/js/app.js"></script>
+	<script src="/js/init.js"></script>
+	<script src="/js/plugins.js"></script>
+	<script src="/js/constructors.js"></script>
+	<script src="/js/script.js"></script>
+
 </head>
 
-<body <?php body_class(); ?>>
+<body>
 
-	<?php // Hidden values help us with js! ?>
-	<div id="template-url" class="hidden"><?php echo bloginfo('template_url'); ?>/</div>
-	<div id="display-name" class="hidden">
-		<?php global $current_user;
-      	get_currentuserinfo(); 
-      	echo $current_user->display_name; ?>
-    </div>
-
-	<?php if (isset($alert)) { ?>
-		<div id="alert"><?php echo $alert; ?></div>
-	<?php } ?>
+	<div id="alert"></div>
 
 	<div id="main" class="clearfix">

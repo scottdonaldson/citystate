@@ -1,25 +1,7 @@
-<?php get_header(); ?>
+<?php include('header.php'); ?>
 
-<div id="map">
-	<a href="<?php echo home_url(); ?>/originalia" title="Originalia">
-		<img src="<?php echo bloginfo('template_url'); ?>/images/maps/originalia.png" />
-	</a>
+<script src="/js/worldmap.js"></script>
 
-	<a href="<?php echo home_url(); ?>/secondo-1" title="Secondo">
-		<img src="<?php echo bloginfo('template_url'); ?>/images/maps/secondo-1.png" />
-	</a>
+<svg id="map" class="map original" onload="CS.showWorldMap()"></svg>
 
-	<a href="<?php echo home_url(); ?>/secondo-2" title="Secondo">
-		<img src="<?php echo bloginfo('template_url'); ?>/images/maps/secondo-2.png" />
-	</a>
-
-	<a style="clear: left; margin-left: 60px;" href="<?php echo home_url(); ?>/secondo-3" title="Secondo">
-		<img src="<?php echo bloginfo('template_url'); ?>/images/maps/secondo-3.png" />
-	</a>
-
-	<a href="<?php echo home_url(); ?>/secondo-4" title="Secondo">
-		<img src="<?php echo bloginfo('template_url'); ?>/images/maps/secondo-4.png" />
-	</a>
-</div><!-- #map -->
-
-<?php get_footer(); ?>
+<?php include('footer.php'); ?>

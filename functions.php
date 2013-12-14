@@ -1,30 +1,89 @@
 <?php
+define('MAIN', dirname(__FILE__) . '/');
+
+// Includes
+include ( MAIN . 'includes/geo.php');
+include ( MAIN . 'includes/structures.php');
+include ( MAIN . 'includes/resources.php');
+include ( MAIN . 'includes/terrain.php');
 
 // Load functions
-define('MAIN', dirname(__FILE__) . '/');
+include ( MAIN . 'functions/alerts.php');
+include ( MAIN . 'functions/structures.php');
+include( MAIN . 'functions/functions-budget.php');
 include( MAIN . 'functions/register.php');
 include( MAIN . 'functions/strip-category.php');
+include( MAIN . 'functions/functions-footer.php');
 
-// Update - THE BIG ONE - unfortunately not so sure about running it via cron yet
-/* 
-add_action('daily_update', 'update_everything');
-function activate_update() {
-	if ( !wp_next_scheduled( 'daily_update' ) ) {
-		wp_schedule_event( time(), 'hourly', 'daily_update');
+// World- and city-specific
+include ( MAIN . 'functions/functions-world.php');
+include ( MAIN . 'functions/functions-single.php');
+
+// All the checks
+include ( MAIN . 'functions/checks.php');
+
+// Important built-in: meta() -- shortcut for get_post_meta()
+function meta($key) {
+    return get_post_meta($post->ID, $key, true);
+}
+
+// Make sure user isn't going bankrupt
+function no_bankrupt($cash, $cost) {
+	if ($cash - $cost < 0) {
+		return false;
+	} else {
+		return true;
 	}
 }
-add_action('wp', 'activate_update');
-function update_everything(){
-	include( MAIN . 'functions/update.php');
-}
-*/
 
-// include jQuery
-// if (!is_admin()) add_action("wp_enqueue_scripts", "my_jquery_enqueue", 11);
-function my_jquery_enqueue() {
-    wp_deregister_script('jquery');
-    wp_register_script('jquery', "http" . ($_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js", false, null);
-    wp_enqueue_script('jquery');
+// Error message for going bankrupt
+function bankrupt_message() {
+	return '<p>You can&#39;t do that &mdash; you&#39;d go bankrupt!</p>';
+}
+
+// Get user's cities
+function get_user_cities($current_user) {
+	$user_args = array(
+		'author' => $current_user->ID,
+		'posts_per_page' => -1,
+		'orderby' => 'title',
+		'order' => 'ASC',
+		);
+	return new WP_query($user_args);
+}
+
+// Happiness values
+function get_happiness($happiness) {
+	$happy = array();
+	if ($happiness < 5) {
+		$happy['class'] = 'fleeing';
+		$happy['message'] = 'People are fleeing the city in anger!';
+	} elseif ($happiness < 10) {
+		$happy['class'] = 'extremely_unhappy';
+		$happy['message'] = 'Extremely unhappy';
+	} elseif ($happiness < 20) {
+		$happy['class'] = 'very_unhappy';
+		$happy['message'] = 'Very unhappy';
+	} elseif ($happiness < 45) {
+		$happy['class'] = 'unhappy';
+		$happy['message'] = 'Unhappy';
+	} elseif ($happiness < 55) {
+		$happy['class'] = 'neutral';
+		$happy['message'] = 'Neither happy nor unhappy';
+	} elseif ($happiness < 80) {
+		$happy['class'] = 'happy';
+		$happy['message'] = 'Happy';
+	} elseif ($happiness < 90) {
+		$happy['class'] = 'very_happy';
+		$happy['message'] = 'Very happy';
+	} elseif ($happiness < 95) {
+		$happy['class'] = 'extremely_happy';
+		$happy['message'] = 'Extremely happy';
+	} else {
+		$happy['class'] = 'flocking';
+		$happy['message'] = 'People from all over flock to this city!';
+	}
+	return $happy;
 }
 
 // Register nav menus
@@ -33,6 +92,12 @@ register_nav_menus( array(
 		'messages' => 'Messages Menu'
 	) 
 );
+
+// No jQuery!
+function remove_scripts() {
+	wp_deregister_script('jquery');
+}
+add_action('wp_print_scripts', 'remove_scripts');
 
 // Admin CSS and JS
 function city_admin_css() {
@@ -88,10 +153,25 @@ add_filter('login_headertitle', 'change_title_on_logo');
 
 add_action( 'init', 'create_post_type' );
 function create_post_type() {
+	register_post_type( 'region',
+		array(
+			'labels' => array(
+				'name' => __( 'Regions' ),
+				'singular_name' => __( 'Region' )
+			),
+			'public' => true,
+			'has_archive' => true,
+			'menu_position=' => 5,
+			'rewrite' => array('slug' => 'region'),
+			'supports' => array(
+				'title', 'custom-fields'
+			),
+		)
+	);
 	register_post_type( 'activity',
 		array(
 			'labels' => array(
-				'name' => __( 'Activity' ),
+				'name' => __( 'Activities' ),
 				'singular_name' => __( 'Activity' )
 			),
 			'public' => true,
@@ -136,9 +216,8 @@ function create_slug($string){
 }
 
 // Add commas after thousands in numbers
-function th($string) {
-	$sep = number_format($string, 0, '', ',');
-	return $sep;
+function th($number) {
+	return number_format(intval($number));
 }
 
 ?>

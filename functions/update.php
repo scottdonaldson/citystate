@@ -46,16 +46,16 @@ foreach ($users as $user) {
 			'<p><a href="'.home_url().'/'.$region.'?x='.$x.'&y='.$y.'">View highlighted territory on the map</a>.</p>';
 
 		
-		$ID = wp_insert_post(array(
+		$message_ID = wp_insert_post(array(
 			'post_type' => 'message',
 			'post_title' => $subject,
 			'post_content' => $content,
 			'post_status' => 'publish'
 			)
 		);
-		add_post_meta($ID, 'to', $to);
-		add_post_meta($ID, 'from', 0);
-		add_post_meta($ID, 'read', 'unread');
+		add_post_meta($message_ID, 'to', $to);
+		add_post_meta($message_ID, 'from', 0);
+		add_post_meta($message_ID, 'read', 'unread');
 
 		// Add to user's list of scouted territories
 		$scouted = get_user_meta($user->ID, 'scouted', true);
@@ -88,21 +88,21 @@ while ($city_query->have_posts()) : $city_query->the_post();
 		if (get_post_meta($ID, $key, true) > 0) { 
 			// see if there are structures mining for this particular resource
 			if (get_post_meta($ID, $resource[1].'s', true) > 0) {
-				$initial_val = get_post_meta($ID, $key, true);
+				$amt = get_post_meta($ID, $key, true);
 				$funding = get_post_meta($ID, $resource[1].'-funding', true);
 				$miners = get_post_meta($ID, $resource[1].'s', true);
 				switch ($funding) {
 					case 'bad':
-						$result = $miners * floor(0.5 * $initial_val);
+						$result = $miners * floor(0.5 * $amt);
 						break;
 					case 'fair':
-						$result = $miners * $initial_val;
+						$result = $miners * $amt;
 						break;
 					case 'good':
-						$result = $miners * floor(1.5 * $initial_val);
+						$result = $miners * floor(1.5 * $amt);
 						break;
 					case 'excellent':
-						$result = $miners * floor(2 * $initial_val);
+						$result = $miners * floor(2 * $amt);
 						break;
 				}
 				update_post_meta($ID, $resource[0], get_post_meta($ID, $resource[0], true) + $result);
@@ -114,17 +114,81 @@ while ($city_query->have_posts()) : $city_query->the_post();
 	for ($i = 1; $i <= $neighborhoods; $i++) {
 		// Only once- or twice-upgraded neighborhoods cost resources
 		if (get_post_meta($ID, 'neighborhood-'.$i.'-level', true) == 1 ) {
-			// Though we technically call it 'random', in actuality even-numbered takes food, odd- takes fish
-			if ($i % 2 == 0) {
-				update_post_meta($ID, 'food_stock', get_post_meta($ID, 'food_stock', true) - 1);
-			} else {
-				update_post_meta($ID, 'fish_stock', get_post_meta($ID, 'fish_stock', true) - 1);
+			// Once-upgraded take one food and one fish
+			$takes = array('food', 'fish');
+			foreach ($takes as $take) {
+				// If we're going bankrupt, stop and downgrade
+				if (get_post_meta($ID, $take.'_stock', true) == 0) {
+					// If we've reached fish, that means there was enough food but not fish,
+					// so we return that food
+					if ($take == 'fish') { 
+						update_post_meta($ID, 'food_stock', get_post_meta($ID, 'food_stock', true) + 1); 
+					}
+					// Downgrade
+					update_post_meta($ID, 'neighborhood-'.$i.'-level', 0);
+					// Set the meta for having downgraded so we can send a message at the end
+					update_post_meta($ID, 'downgrade-n_0', get_post_meta($ID,'downgrade-n_0', true) + 1); 
+				} else {
+					update_post_meta($ID, $take.'_stock', get_post_meta($ID, $take.'_stock', true) - 1);
+				}
 			}
-		// Twice-upgraded take one food AND one fish
+		// Twice-upgraded take one food, one fish, and one wool
 		} elseif (get_post_meta($ID, 'neighborhood-'.$i.'-level', true) == 2 ) {
-			update_post_meta($ID, 'food_stock', get_post_meta($ID, 'food_stock', true) - 1);
-			update_post_meta($ID, 'fish_stock', get_post_meta($ID, 'fish_stock', true) - 1);
+			$takes = array('food', 'fish', 'wool');
+			foreach ($takes as $take) {
+				// If we're going bankrupt, stop and downgrade
+				if (get_post_meta($ID, $take.'_stock', true) == 0) {
+					// If we've reached fish, that means there was enough food but not fish,
+					// so we return that food
+					if ($take == 'fish') { 
+						update_post_meta($ID, 'food_stock', get_post_meta($ID, 'food_stock', true) + 1); 
+					// Same as above, but for wool
+					} elseif ($take == 'wool') {
+						update_post_meta($ID, 'food_stock', get_post_meta($ID, 'food_stock', true) + 1); 
+						update_post_meta($ID, 'fish_stock', get_post_meta($ID, 'fish_stock', true) + 1); 
+					}
+					// Downgrade
+					update_post_meta($ID, 'neighborhood-'.$i.'-level', 1);
+					// Set the meta for having downgraded so we can send a message at the end
+					update_post_meta($ID, 'downgrade-n_1', get_post_meta($ID,'downgrade-n_1', true) + 1); 
+				} else {
+					update_post_meta($ID, $take.'_stock', get_post_meta($ID, $take.'_stock', true) - 1);
+				}
+			}
 		}
+	}
+
+	// Send a message if any structures were downgraded
+	$downgrades = array('n_0', 'n_1');
+	$num = 0;
+	$content = array();
+	$city = get_post($ID)->post_title;
+	$link = get_post($ID)->guid;
+	$subject = 'Infrastructure downgrades in '.$city;
+	foreach ($downgrades as $downgrade) {
+		$num = get_post_meta($ID, 'downgrade-'.$downgrade, true);
+		if ($num > 0) {
+			$to = $user->ID;
+			if ($num == 1) {
+				array_push($content, '1 neighborhood was downgraded to level '.(substr($downgrade, -1) + 1).'. ');
+			} else {
+				array_push($content, $num.' neighborhoods were downgraded to level '.(substr($downgrade, -1) + 1).'. ');
+			}
+			array_push($content, 'The people of <a href="'.$link.'" class="snapshot">'.$city.'</a> are unhappy over these measures. They don&#x27;t ask for much, but they want to know that they live in a stable city, or at least one that can support its own infrastructure. ');
+			$content = implode($content);
+		}
+		$message_ID = wp_insert_post(array(
+			'post_type' => 'message',
+			'post_title' => $subject,
+			'post_content' => $content,
+			'post_status' => 'publish'
+			)
+		);
+		add_post_meta($message_ID, 'to', $to);
+		add_post_meta($message_ID, 'from', 0);
+		add_post_meta($message_ID, 'read', 'unread');
+		// City loses 1/2 point of happiness for each downgrade
+		update_post_meta($ID, 'happiness', get_post_meta($ID, 'happiness', true) - 0.5 * $num);
 	}
 			
 	// Get population, happiness, and target pop values

@@ -11,8 +11,7 @@
       have passed 1/2 the point at which they are desired. If there are, suggest building one of them 
       and give funds (between 5 (not %) and 10% of cost of construction).
    3. If there are no desired structures, get the city's happiness. Just a message if above 55 or between 45 and 54.
-   4. If happiness is under 45, deliver a warning that the citizens are unhappy. If user has
-      already been warned twice in this turn (i.e. third strike), 10% decrease in happiness.
+   4. If happiness is under 45, deliver a warning that the citizens are unhappy.
 */
 
 // Pick a random city
