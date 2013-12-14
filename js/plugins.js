@@ -34,3 +34,7 @@ CS.commas = function(string) {
 	}
 	return x1 + x2; 
 }
+
+CS.slugify = function(string) {
+	return string.replace(/[^a-zA-Z0-9-]/g, '-').toLowerCase().replace(/--+/g, '-')
+}
