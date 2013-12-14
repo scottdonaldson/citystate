@@ -2,30 +2,59 @@
 // want an oceanic background (maybe put this somewhere else?)
 document.body.classList.add('ocean');
 
+// Return the cost to build a city, based on number of
+// cities the user already has
 CS.cityCost = function() {
-	CS.DATA.once('value', function(data){
-		console.log(data.child('users').child(CS.USER).child('cities').val().length)
-		return (data.child('users').child(CS.USER).child('cities').val().length);
-	});
+	return 1500 * ( +localStorage.getItem('USER.cities') ) + 500;
 }
 
 CS.buildCityForm = function(tile, terrain) {
+
 	var output = '';
-	var _cityCost = cityCost();
+
+	// Language helpers
 	var prep = terrain === 'forest' ? 'in' : 'on';
 	var thisOrThese = terrain.slice(-1) === 's' && terrain !== 'grass' ? 'these' : 'this';
 	terrain = terrain === 'grass' ? 'grassland' : terrain;
+
 	output += '<label>Build a city ' + prep + ' ' + thisOrThese + ' uninhabited ' + terrain + '?</label>' + 
-			  '<input type="text" name="cityName" placeholder="Name your city">' + 
-			  '<input type="submit" onclick="CS.buildCity(tile, this.parentNode);" value="Build (' + _cityCost + ')">';
+			  '<input type="text" id="city-name" placeholder="Name your city">' + 
+			  '<input type="submit" onclick="CS.buildCity(this.parentNode);" value="Build (' + CS.commas( CS.cityCost() ) + ')">';
 
 			  // TODO: submit the form... don't forget to add to the user's cities as well as top-level cities!
 	return output;
 }
 
-CS.buildCity = function(tile, infobox) {
-	console.log(tile);
-	console.log(infobox);
+CS.buildCity = function(infobox) {
+	// TODO: Need to make sure the user has enough cash...
+
+	// Slugify the city name
+	var name = CS('#city-name').value,
+		slug = CS.slugify( name );
+
+	CS.DATA.once('value', function(data){
+		// If there's already a city with this slug, add a '-1' to the end of it
+		if ( data.child('cities').child(slug).val() ) {
+			slug += '-1';
+		}
+		// Push to the (global) cities array
+		CS.DATA.child('cities').child(slug).set({
+			name: name,
+			population: 0,
+			'target-pop': 0,
+			user: +CS.USER,
+			x: X,
+			y: Y
+		});
+		// Add the unique slug to the user's cities array
+		var key = data.child('users').child(CS.USER).child('cities').val() ? data.child('users').child(CS.USER).child('cities').val().length : 0;
+		CS.DATA.child('users').child(CS.USER).child('cities').child(key).set(slug);
+
+		// Redirect to the new city
+		location.assign( CS.BASE + '/city/#/' + slug);
+	});
+	CS.hideInfobox();
+
 }
 
 // At the moment, structures in cities on the main map show up
@@ -41,7 +70,8 @@ CS.showStructure = function(city, structure, map) {
 }
 
 CS.showCityInfo = function(info) {
-	return '<strong>' + info.data('city-name') + '</strong><br>Pop: ' + CS.commas(info.data('city-population'));
+	return '<strong>' + info.data('city-name') + '</strong>' +
+			'<br>Pop: ' + CS.commas(info.data('city-population'));
 }
 
 CS.goToCity = function(info) {
@@ -59,6 +89,15 @@ CS.showWorldMap = function() {
 	// Once the data is ready...
 	CS.DATA.once('value', function(data){
 
+		// Set the number of cities the user currently has (if they have any cities!)
+		if ( CS.LOGGED_IN && data.child('users').child(CS.USER).child('cities').val() ) {
+			localStorage.setItem( 'USER.cities', data.child('users').child(CS.USER).child('cities').val().length );
+		
+		// If logged in but no cities yet, set that too
+		} else if ( CS.LOGGED_IN && !data.child('users').child(CS.USER).child('cities').val() ) {
+			localStorage.setItem( 'USER.cities', 0 );
+		}
+
 		// Create an empty array that we will fill with cities (unique by slug)
 		// after they've been shown
 		var shownCities = [];
@@ -73,7 +112,7 @@ CS.showWorldMap = function() {
 		for (var x = 0; x < tiles.length; x++) {
 			for (var y = 0; y < tiles[x].length; y++) {
 				if (tiles[x][y] !== 'water') {
-					var tile = map.rect( CS.TILE_WIDTH * x, CS.TILE_WIDTH * y, CS.TILE_WIDTH, CS.TILE_WIDTH)
+					var tile = map.rect( CS.TILE_WIDTH * x, CS.TILE_WIDTH * y, CS.TILE_WIDTH, CS.TILE_WIDTH )
 						.attr({ 
 							'class': 'tile ' + tiles[x][y]
 						})
@@ -96,30 +135,35 @@ CS.showWorldMap = function() {
 								CS.showStructure(cities[city], cities[city].structures[structure], map);
 							}
 							tile.data('has-city', true);
-							var facade = tile.clone().attr({'class': 'tile', 'fill': 'transparent'});
-
-							facade.data('city-name', cities[city].name);
-							facade.data('city-slug', city);
-							facade.data('city-population', cities[city].population);
-
-							facade.hover(function(e){
-									CS.showInfobox(e, function(facade){
-										CS.showCityInfo(facade);
-									});
-								}, function(){
-									CS.hideInfobox();
-								})
-								.click(function(){
-									CS.goToCity(this);
-								});
 							break;
 						}
 					}
 					// If no city, click to prompt building one
 					if (!tile.data('has-city')) {
 						tile.click(function(e){
-							CS.showInfobox(e, buildCityForm(tile, this.data('terrain')));
+							CS.showInfobox(e, CS.buildCityForm(tile, this.data('terrain')));
 						});
+
+					// Otherwise, we'll create a facade (to cover structures)
+					// and hover and click for city-specific stuff
+					} else {
+						var facade = tile.clone().attr({ 'class': 'tile facade', 'fill': 'transparent' });
+
+						facade.data('city-name', cities[city].name);
+						facade.data('city-slug', city);
+						facade.data('city-population', cities[city].population);
+
+						// Put the facade as last element in the map so there aren't weird hover effects
+						map.append(facade);
+
+						facade.hover(function(e){
+								CS.showInfobox(e, CS.showCityInfo(this));
+							}, function(){
+								CS.hideInfobox();
+							})
+							.click(function(){
+								CS.goToCity(this);
+							});
 					}
 				}
 			}

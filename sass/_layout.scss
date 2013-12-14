@@ -3,7 +3,8 @@
 $toolbar_width: 240px;
 
 #main {
-	padding-left: $toolbar_width;
+	margin-left: $toolbar_width;
+	margin-bottom: 150px;
 }
 
 #toolbar {
@@ -18,7 +19,6 @@ $toolbar_width: 240px;
 		top: 28px;
 	}
 }
-
 
 #infobox {
 	background: #fff;
