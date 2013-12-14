@@ -10,19 +10,19 @@
 			CS.DATA.once('value', function(data){
 
 				// Show the user's name
-				$('#user-name').innerHTML = data.child('users').child(CS.USER).child('name').val();
+				CS('#user-name').innerHTML = data.child('users').child(CS.USER).child('name').val();
 
 				// Get all the user's cities and locate container, a <ul>
 				var cities = data.child('users').child(CS.USER).child('cities').val(),
-					citiesContainer = $('#cities');
+					citiesContainer = CS('#cities');
 
 				// Loop through cities and add <li> to the container with link and population	
 				for (var i = 0; i < cities.length; i++) {
 
 					var li = document.createElement('li'),
-						city = data.child('cities').child(cities[i]).val();
+						city = data.child('cities').child( cities[i] ).val();
 
-					li.innerHTML = '<a href="' + CS.BASE + '/city/#/' + city.slug + '">' + city.name + '</a> (Pop: ' + commas(city.population) + ')';
+					li.innerHTML = '<a href="' + CS.BASE + '/city/#/' + data.child('cities').child( cities[i] ).name() + '">' + city.name + '</a> (Pop: ' + CS.commas(city.population) + ')';
 					citiesContainer.appendChild(li);
 				}
 			});
