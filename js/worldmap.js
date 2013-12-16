@@ -140,9 +140,12 @@ CS.showWorldMap = function() {
 					}
 					// If no city, click to prompt building one
 					if (!tile.data('has-city')) {
-						tile.click(function(e){
-							CS.showInfobox(e, CS.buildCityForm(tile, this.data('terrain')));
-						});
+						// Only, that is, if the user is logged in
+						if ( CS.LOGGED_IN ) {
+							tile.click(function(e){
+								CS.showInfobox(e, CS.buildCityForm(tile, this.data('terrain')));
+							});
+						}
 
 					// Otherwise, we'll create a facade (to cover structures)
 					// and hover and click for city-specific stuff
