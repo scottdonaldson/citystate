@@ -6,7 +6,6 @@ document.body.classList.add('ocean');
 
 CS.returnStructures = function() {
 	var output = '';
-	output += '<select onchange="CS.showBuildStructure(this.options[this.selectedIndex].value);">';
 	output += '<select id="structures-list" onchange="CS.showBuildStructure(this.options[this.selectedIndex].value);">';
 	output += '<option value=""></option>';
 	for (var structure in CS.STRUCTURES) {
@@ -41,21 +40,18 @@ CS.buildStructureForm = function(e, tile) {
 CS.buildNewStructure = function(infobox) {
 	// Find the selected structure
 	// Push it to the structures array of this city with level 0
-	for (var i = 0; i < infobox.children.length; i++) {
-		if (infobox.children[i].tagName === 'SELECT') {
-			// Add to the structures array in this city
-			CS.DATA.child('cities').child(CS.SLUG).child('structures').push({
-				level: 0,
-				name: infobox.children[i].value,
-				x: X,
-				y: Y
-			});
-			break;
-		}
-	}
+
+	// Add to the structures array in this city
+	CS.DATA.child('cities').child(CS.SLUG).child('structures').push({
+		level: 0,
+		name: CS('#structures-list').value,
+		x: X,
+		y: Y
+	});
+
 	// Subtract cash from user
 	CS.DATA.child('users').child(CS.USER).update({ 
-		cash: (+localStorage.getItem('USER.cash')) - CS.STRUCTURES[infobox.children[i].value].cost
+		cash: ( +localStorage.getItem('USER.cash') ) - CS.STRUCTURES[CS('#structures-list').value].cost
 	});
 
 	CS.hideInfobox();
@@ -128,17 +124,15 @@ CS.showCityMap = function() {
 		var terrain = data.child('regions').child('argyle-island').child('tiles').child(cityX).child(cityY).val();
 
 		// Update user cash in localStorage (in case it has changed)
-		if (!!CS.USER) {
+		if ( CS.LOGGED_IN ) {
 			localStorage.setItem('USER.cash', data.child('users').child(CS.USER).child('cash').val());
 		}
 
 		// Show the city tiles
 		CS.showCityTiles(data.child('cities').child(CS.SLUG).val(), cityUser, terrain, Snap('#map'));
 
-	});
 
-	// Only the city's neighbors once, on load (defined below)
-	CS.DATA.once('value', function(data) {
+		// Show the neighbor cities
 		CS.showNeighbors(data);
 	});
 }
