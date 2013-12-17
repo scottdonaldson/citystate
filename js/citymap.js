@@ -1,8 +1,6 @@
 // If we're on the main map, we def
 // want an oceanic background (maybe put this somewhere else?)
 document.body.classList.add('ocean');
-	// We will also want to show the city's neighbors...
-	// Maybe even complete with structures?!
 
 CS.returnStructures = function() {
 	var output = '';
@@ -55,11 +53,6 @@ CS.buildNewStructure = function(infobox) {
 	});
 
 	CS.hideInfobox();
-}
-
-
-CS.showStructure = function(x, y) {
-
 }
 
 CS.showCityTiles = function(data, cityUser, terrain, map) {
