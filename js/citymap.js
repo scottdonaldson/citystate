@@ -7,6 +7,7 @@ document.body.classList.add('ocean');
 CS.returnStructures = function() {
 	var output = '';
 	output += '<select onchange="CS.showBuildStructure(this.options[this.selectedIndex].value);">';
+	output += '<select id="structures-list" onchange="CS.showBuildStructure(this.options[this.selectedIndex].value);">';
 	output += '<option value=""></option>';
 	for (var structure in CS.STRUCTURES) {
 		// Only show the option if the user has enough cash

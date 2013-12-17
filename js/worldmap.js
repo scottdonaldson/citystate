@@ -18,15 +18,19 @@ CS.buildCityForm = function(tile, terrain) {
 	terrain = terrain === 'grass' ? 'grassland' : terrain;
 
 	output += '<label>Build a city ' + prep + ' ' + thisOrThese + ' uninhabited ' + terrain + '?</label>' + 
-			  '<input type="text" id="city-name" placeholder="Name your city">' + 
-			  '<input type="submit" onclick="CS.buildCity(this.parentNode);" value="Build (' + CS.commas( CS.cityCost() ) + ')">';
+			  '<input type="text" id="city-name" placeholder="Name your city">';
+	output += ( +localStorage.getItem('USER.cash') ) >= CS.cityCost() ? '<input type="submit" onclick="CS.buildCity(this.parentNode);" value="Build (' + CS.commas( CS.cityCost() ) + ')">' : '<p>Not enough funds to build a new city!</p>';
 
 			  // TODO: submit the form... don't forget to add to the user's cities as well as top-level cities!
 	return output;
 }
 
 CS.buildCity = function(infobox) {
-	// TODO: Need to make sure the user has enough cash...
+
+	// Subtract cash from user
+	CS.DATA.child('users').child(CS.USER).update({ 
+		cash: ( +localStorage.getItem('USER.cash') ) - CS.cityCost()
+	});
 
 	// Slugify the city name
 	var name = CS('#city-name').value,
@@ -175,4 +179,13 @@ CS.showWorldMap = function() {
 		// Reset the shownCities array
 		shownCities = [];
 	});
+
+	// Every time data changes...
+	CS.DATA.on('value', function(data){
+
+		// Update user cash in localStorage (in case it has changed)
+		if ( CS.LOGGED_IN ) {
+			localStorage.setItem('USER.cash', data.child('users').child(CS.USER).child('cash').val());
+		}
+	})
 }
