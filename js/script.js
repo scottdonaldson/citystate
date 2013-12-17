@@ -12,7 +12,9 @@ CS.showInfobox = function(e, content) {
 	var infobox = CS('#infobox');
 	infobox.innerHTML = content;
 	infobox.style.display = 'block';
-	infobox.style.left = e.x + 480 < window.outerWidth ? (e.x - 200) + 'px' : (e.x - 420) + 'px';
+	infobox.style.left = e.x + 480 < window.outerWidth ? 
+		(e.x + 30) + 'px' : 
+		(e.x - infobox.clientWidth - 30) + 'px';
 	infobox.style.top = ( e.y + window.scrollY - infobox.clientHeight / 2 ) + 'px';
 
 	// Set global X and Y coordinates based on mouse click

@@ -1,5 +1,3 @@
-	<div id="infobox"></div>
-
 </div><!-- #main -->
 
 <div id="toolbar" class="clearfix">
@@ -21,6 +19,8 @@
 	</div>
 
 </div>
+
+<div id="infobox"></div>
 
 <script src="<?php echo bloginfo('template_url'); ?>/js/script.js"></script>
 
