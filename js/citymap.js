@@ -26,7 +26,7 @@ CS.showBuildStructure = function(structure) {
 	}
 }
 
-CS.buildStructureForm = function(e, tile) {
+CS.buildStructureForm = function(e, data, tile) {
 	var output = document.createElement('form');
 	output.innerHTML = 
 		'<label>Build a structure?</label><br>' + 
@@ -37,7 +37,7 @@ CS.buildStructureForm = function(e, tile) {
 		e.preventDefault();
 		// If a value has been selected, build the new structure
 		if ( CS('#structures-list').value ) {
-			CS.buildNewStructure();
+			CS.buildNewStructure( data );
 		}
 	});
 
@@ -45,17 +45,25 @@ CS.buildStructureForm = function(e, tile) {
 }
 
 // Add a new structure to the city
-CS.buildNewStructure = function(infobox) {
-	// Find the selected structure
-	// Push it to the structures array of this city with level 0
+CS.buildNewStructure = function( data ) {
 
-	// Add to the structures array in this city
+	// Set var for the structure slug
+	var structure = CS('#structures-list').value;
+
+	// Push it to the structures array of this city with level 0
 	CS.DATA.child('cities').child(CS.SLUG).child('structures').push({
 		level: 0,
-		name: CS('#structures-list').value,
+		name: structure,
 		x: X,
 		y: Y
 	});
+
+	// Update population in the city if building a neighborhood
+	if ( structure === 'neighborhood' ) {
+		CS.DATA.child('cities').child(CS.SLUG).update({
+			population: data.population + 20
+		});
+	}
 
 	// Subtract cash from user
 	CS.DATA.child('users').child(CS.USER).update({ 
@@ -65,8 +73,8 @@ CS.buildNewStructure = function(infobox) {
 	CS.hideInfobox();
 }
 
-CS.showCityTiles = function(data, cityUser, terrain, map) {
-	
+CS.showCityTiles = function(data, terrain, map) {
+
 	// Create an empty array that we will fill with structures
 	// after they've been shown, using Firebase's unique key for them
 	var shownStructures = [];
@@ -82,10 +90,10 @@ CS.showCityTiles = function(data, cityUser, terrain, map) {
 				// to build structures		
 				if (CS.LOGGED_IN && 
 					CS.LOGGED_IN !== "false" &&
-					+CS.USER === cityUser) {
+					+CS.USER === data.user) {
 
 					tile.click(function(e){
-						CS.showInfobox(e, CS.buildStructureForm(e, tile));
+						CS.showInfobox(e, CS.buildStructureForm(e, data, tile));
 					});
 				}
 
@@ -115,13 +123,11 @@ CS.showCityMap = function() {
 	CS.DATA.on('value', function(data){
 
 		// Get a reference to this city
-		var cityRef = data.child('cities').child(CS.SLUG);
+		var cityRef = data.child('cities').child(CS.SLUG).val();
 
-		// Set var for the user of this city (will check against current user),
-		// and for the x and y coordinates of the city
-		var cityUser = cityRef.child('user').val(),
-			cityX = cityRef.child('x').val(),
-			cityY = cityRef.child('y').val();
+		// Set vars for the x and y coordinates of the city (to find terrain)
+		var cityX = cityRef.x,
+			cityY = cityRef.y;
 
 		// Set terrain of the city
 		var terrain = data.child('regions').child('argyle-island').child('tiles').child(cityX).child(cityY).val();
@@ -132,11 +138,13 @@ CS.showCityMap = function() {
 		}
 
 		// Show the city tiles
-		CS.showCityTiles(data.child('cities').child(CS.SLUG).val(), cityUser, terrain, Snap('#map'));
+		CS.showCityTiles( cityRef, terrain, Snap('#map') );
+	});
 
+	CS.DATA.once('value', function(data) {
 		// Show the neighbor cities
 		CS.showNeighbors(data);
-	});
+	})
 }
 
 CS.showNeighbors = function(data) {
@@ -188,7 +196,7 @@ CS.showNeighbors = function(data) {
 			}
 		}
 		
-		CS.showCityTiles(neighborData, false, terrain, Snap('#' + cardinal));
+		CS.showCityTiles(neighborData, terrain, Snap('#' + cardinal));
 	}
 	shownCities = [];
 }
