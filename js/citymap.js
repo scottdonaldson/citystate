@@ -133,12 +133,10 @@ CS.showCityMap = function() {
 
 		// Show the city tiles
 		CS.showCityTiles(data.child('cities').child(CS.SLUG).val(), cityUser, terrain, Snap('#map'));
-	});
 
-	CS.DATA.once('value', function(data){
 		// Show the neighbor cities
 		CS.showNeighbors(data);
-	})
+	});
 }
 
 CS.showNeighbors = function(data) {
