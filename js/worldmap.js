@@ -10,22 +10,34 @@ CS.cityCost = function() {
 
 CS.buildCityForm = function(tile, terrain) {
 
-	var output = '';
+	// See if user has enough cash, output either a form or div depending on that
+	var hasEnoughCash = ( +localStorage.getItem('USER.cash') ) >= CS.cityCost(),
+		output = hasEnoughCash ? document.createElement('form') : document.createElement('div');
 
 	// Language helpers
-	var prep = terrain === 'forest' ? 'in' : 'on';
-	var thisOrThese = terrain.slice(-1) === 's' && terrain !== 'grass' ? 'these' : 'this';
-	terrain = terrain === 'grass' ? 'grassland' : terrain;
+	var prep = terrain === 'forest' ? 'in' : 'on',
+		thisOrThese = terrain.slice(-1) === 's' && terrain !== 'grass' ? 'these' : 'this';
+		terrain = terrain === 'grass' ? 'grassland' : terrain;
 
-	output += '<label>Build a city ' + prep + ' ' + thisOrThese + ' uninhabited ' + terrain + '?</label>' + 
-			  '<input type="text" id="city-name" placeholder="Name your city">';
-	output += ( +localStorage.getItem('USER.cash') ) >= CS.cityCost() ? '<input type="submit" onclick="CS.buildCity(this.parentNode);" value="Build (' + CS.commas( CS.cityCost() ) + ')">' : '<p>Not enough funds to build a new city!</p>';
+	output.innerHTML += hasEnoughCash ? 
 
-			  // TODO: submit the form... don't forget to add to the user's cities as well as top-level cities!
+		'<label>Build a city ' + prep + ' ' + thisOrThese + ' uninhabited ' + terrain + '?</label>' + 
+		'<input type="text" id="city-name" placeholder="Name your city">' +
+		'<input type="submit" value="Build (' + CS.commas( CS.cityCost() ) + ')">' : 
+
+		'<p>Not enough funds to build a new city!</p>';
+
+	// If outputting a form, make sure to build a city when the user submits it
+	if (output.tagName === 'FORM') {
+		output.addEventListener( 'submit', function(e){
+			e.preventDefault();
+			CS.buildCity();
+		});
+	}
 	return output;
 }
 
-CS.buildCity = function(infobox) {
+CS.buildCity = function() {
 
 	// Subtract cash from user
 	CS.DATA.child('users').child(CS.USER).update({ 
@@ -74,8 +86,10 @@ CS.showStructure = function(city, structure, map) {
 }
 
 CS.showCityInfo = function(info) {
-	return '<strong>' + info.data('city-name') + '</strong>' +
-			'<br>Pop: ' + CS.commas(info.data('city-population'));
+	var output = document.createElement('div');
+	output.innerHTML = '<strong>' + info.data('city-name') + '</strong>' +
+					   '<br>Pop: ' + CS.commas(info.data('city-population'));
+	return output;
 }
 
 CS.goToCity = function(info) {

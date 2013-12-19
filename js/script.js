@@ -8,9 +8,13 @@ CS.remove = function(el) {
 
 /* ----- Show info box ------ */
 
-CS.showInfobox = function(e, content) {
+CS.showInfobox = function(e, elem) {
 	var infobox = CS('#infobox');
-	infobox.innerHTML = content;
+
+	// Append the new element
+	infobox.appendChild(elem);
+
+	// Show and position the infobox
 	infobox.style.display = 'block';
 	infobox.style.left = e.x + 480 < window.outerWidth ? 
 		(e.x + 30) + 'px' : 
@@ -24,7 +28,9 @@ CS.showInfobox = function(e, content) {
 
 CS.hideInfobox = function() {
 	var infobox = CS('#infobox');
+	// Hide and empty the infobox
 	infobox.style.display = 'none';
+	infobox.innerHTML = '';
 }
 window.addEventListener('resize', function(){
 	CS.hideInfobox();

@@ -27,10 +27,20 @@ CS.showBuildStructure = function(structure) {
 }
 
 CS.buildStructureForm = function(e, tile) {
-	var output = '';
-	output += '<label>Build a structure?</label><br>' + 
-			  CS.returnStructures() +
-			  '<button id="build-structure-submit" name="build-structure-submit" onclick="CS.buildNewStructure(this.parentNode);" style="display: none;">Build</button>';
+	var output = document.createElement('form');
+	output.innerHTML = 
+		'<label>Build a structure?</label><br>' + 
+		CS.returnStructures() +
+		'<button id="build-structure-submit" name="build-structure-submit" style="display: none;">Build</button>';
+
+	output.addEventListener('submit', function(e){
+		e.preventDefault();
+		// If a value has been selected, build the new structure
+		if ( CS('#structures-list').value ) {
+			CS.buildNewStructure();
+		}
+	});
+
 	return output;
 }
 
@@ -123,11 +133,12 @@ CS.showCityMap = function() {
 
 		// Show the city tiles
 		CS.showCityTiles(data.child('cities').child(CS.SLUG).val(), cityUser, terrain, Snap('#map'));
+	});
 
-
+	CS.DATA.once('value', function(data){
 		// Show the neighbor cities
 		CS.showNeighbors(data);
-	});
+	})
 }
 
 CS.showNeighbors = function(data) {
@@ -155,19 +166,18 @@ CS.showNeighbors = function(data) {
 
 	var shownCities = [];
 	for (var cardinal in cardinals) {
+		
 		var neighbor = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 		neighbor.id = cardinal;
 		neighbor.classList.add('map', 'neighbor');
-		CS('#main').insertBefore(neighbor, CS('#infobox'));
+		CS('#main').appendChild( neighbor );
 		
 		// Find terrain from the region tiles (or, if not present, call it water)
 		var terrain = data.child('regions').child('argyle-island').child('tiles').child(cityX + cardinals[cardinal][0]).child(cityY + cardinals[cardinal][1]).val() || 'water';
-
 		var neighborData = {};
 
 		// Find the city at this neighbor if there is one
 		for (var city in data.child('cities').val()) {
-
 			var newCityRef = data.child('cities').child(city).val();
 
 			if (newCityRef.x === cityX + cardinals[cardinal][0] &&
