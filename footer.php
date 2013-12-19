@@ -11,6 +11,8 @@
 	</div>
 
 	<div id="logged-module"></div>
+
+	<div id="city-module"></div>
 	
 	<div class="nav"></div>
 

@@ -18,11 +18,12 @@ CS.returnStructures = function() {
 }
 
 CS.showBuildStructure = function(structure) {
+	var submit = CS('#build-structure-submit');
 	if (structure) {
-		CS('#build-structure-submit').innerHTML = 'Build (' + CS.STRUCTURES[structure].cost + ')';
-		CS('#build-structure-submit').style.display = 'block';
+		submit.innerHTML = 'Build (' + CS.STRUCTURES[structure].cost + ')';
+		submit.style.display = 'block';
 	} else {
-		CS('#build-structure-submit').style.display = 'none';
+		submit.style.display = 'none';
 	}
 }
 
@@ -64,10 +65,14 @@ CS.buildNewStructure = function( data ) {
 			population: data.population + 20
 		});
 	}
+	// Update target population in the city based on structure's target increase
+	CS.DATA.child('cities').child(CS.SLUG).update({
+		'target-pop': data['target-pop'] + CS.STRUCTURES[structure].target
+	});
 
 	// Subtract cash from user
 	CS.DATA.child('users').child(CS.USER).update({ 
-		cash: ( +localStorage.getItem('USER.cash') ) - CS.STRUCTURES[CS('#structures-list').value].cost
+		cash: ( +localStorage.getItem('USER.cash') ) - CS.STRUCTURES[structure].cost
 	});
 
 	CS.hideInfobox();
@@ -116,6 +121,14 @@ CS.showCityTiles = function(data, terrain, map) {
 	shownStructures = [];
 }
 
+// Show information about the city in the toolbar
+CS.updateCityModule = function(data) {
+	var cityModule = CS('#city-module');
+
+	cityModule.innerHTML = '<h3>' + data.name + '</h3>';
+	cityModule.innerHTML += '<span>Population: ' + CS.commas( data.population ) + '</span>';
+}
+
 CS.showCityMap = function() {
 	// Split the window URL by the hash and choose the last segment
 	CS.SLUG = CS.parseSlug('city');
@@ -137,6 +150,9 @@ CS.showCityMap = function() {
 			localStorage.setItem('USER.cash', data.child('users').child(CS.USER).child('cash').val());
 		}
 
+		// Update information in the toolbar
+		CS.updateCityModule( cityRef );
+
 		// Show the city tiles
 		CS.showCityTiles( cityRef, terrain, Snap('#map') );
 	});
@@ -144,7 +160,7 @@ CS.showCityMap = function() {
 	CS.DATA.once('value', function(data) {
 		// Show the neighbor cities
 		CS.showNeighbors(data);
-	})
+	});
 }
 
 CS.showNeighbors = function(data) {

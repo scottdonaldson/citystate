@@ -9,14 +9,15 @@
   left: 0;
   height: 100%;
   overflow-y: scroll;
+  padding: 10px;
   position: fixed;
   top: 0;
   width: 240px; }
-  /* line 18, ../sass/_layout.scss */
+  /* line 19, ../sass/_layout.scss */
   .admin-bar #toolbar {
     top: 28px; }
 
-/* line 23, ../sass/_layout.scss */
+/* line 24, ../sass/_layout.scss */
 #infobox {
   background: #fff;
   display: none;
@@ -24,6 +25,15 @@
   padding: 1em;
   position: absolute;
   top: 0; }
+
+/* line 33, ../sass/_layout.scss */
+#city-module {
+  background: #fff;
+  margin-top: 20px;
+  padding: 10px; }
+  /* line 38, ../sass/_layout.scss */
+  #city-module:empty {
+    display: none; }
 
 /* line 1, ../sass/_forms.scss */
 input {
@@ -64,94 +74,98 @@ body {
   overflow-x: hidden; }
 
 /* line 28, ../sass/city.scss */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0; }
+
+/* line 32, ../sass/city.scss */
 ::selection {
   background: #777777; }
 
-/* line 29, ../sass/city.scss */
+/* line 33, ../sass/city.scss */
 ::-moz-selection {
   background: #777777; }
 
-/* line 31, ../sass/city.scss */
+/* line 35, ../sass/city.scss */
 .ocean {
   background: #4d5989; }
 
-/* line 35, ../sass/city.scss */
+/* line 39, ../sass/city.scss */
 .map {
   display: block;
   height: 400px;
   margin: 0 auto;
   top: 150px;
   width: 400px; }
-  /* line 44, ../sass/city.scss */
+  /* line 48, ../sass/city.scss */
   .map.neighbor {
     opacity: 0.85;
     margin-left: -200px;
     left: 50%;
     position: absolute; }
 
-/* line 51, ../sass/city.scss */
+/* line 55, ../sass/city.scss */
 #nww, #nw, #n, #ne, #nee {
   top: -250px; }
 
-/* line 54, ../sass/city.scss */
+/* line 58, ../sass/city.scss */
 #sww, #sw, #s, #se, #see {
   margin-bottom: -80px;
   top: 550px; }
 
-/* line 58, ../sass/city.scss */
+/* line 62, ../sass/city.scss */
 #nww, #sww, #ww {
   margin-left: -1000px; }
 
-/* line 61, ../sass/city.scss */
+/* line 65, ../sass/city.scss */
 #nw, #sw, #w {
   margin-left: -600px; }
 
-/* line 64, ../sass/city.scss */
+/* line 68, ../sass/city.scss */
 #nee, #see, #ee {
   margin-left: 600px; }
 
-/* line 67, ../sass/city.scss */
+/* line 71, ../sass/city.scss */
 #ne, #se, #e {
   margin-left: 200px; }
 
-/* line 71, ../sass/city.scss */
+/* line 75, ../sass/city.scss */
 .tile {
   cursor: pointer; }
-  /* line 76, ../sass/city.scss */
+  /* line 80, ../sass/city.scss */
   .tile.sand {
     fill: #dc8; }
-    /* line 76, ../sass/city.scss */
+    /* line 80, ../sass/city.scss */
     .original .tile.sand:hover {
       fill: #d2bb60; }
-  /* line 77, ../sass/city.scss */
+  /* line 81, ../sass/city.scss */
   .tile.hills {
     fill: #ab9; }
-    /* line 77, ../sass/city.scss */
+    /* line 81, ../sass/city.scss */
     .original .tile.hills:hover {
       fill: #90a77a; }
-  /* line 78, ../sass/city.scss */
+  /* line 82, ../sass/city.scss */
   .tile.grass {
     fill: #8c7; }
-    /* line 78, ../sass/city.scss */
+    /* line 82, ../sass/city.scss */
     .original .tile.grass:hover {
       fill: #68be52; }
-  /* line 79, ../sass/city.scss */
+  /* line 83, ../sass/city.scss */
   .tile.mountains {
     fill: #999; }
-    /* line 79, ../sass/city.scss */
+    /* line 83, ../sass/city.scss */
     .original .tile.mountains:hover {
       fill: gray; }
-  /* line 80, ../sass/city.scss */
+  /* line 84, ../sass/city.scss */
   .tile.forest {
     fill: #5a5; }
-    /* line 80, ../sass/city.scss */
+    /* line 84, ../sass/city.scss */
     .original .tile.forest:hover {
       fill: #448844; }
-  /* line 81, ../sass/city.scss */
+  /* line 85, ../sass/city.scss */
   .tile.water {
     fill: transparent; }
 
-/* line 85, ../sass/city.scss */
+/* line 89, ../sass/city.scss */
 #version {
   color: #fff;
   position: fixed;
