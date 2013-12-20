@@ -24,6 +24,7 @@
 	<script src="/js/app.js"></script>
 	<script src="/js/init.js"></script>
 	<script src="/js/plugins.js"></script>
+	<script src="/js/structures.js"></script>
 	<script src="/js/constructors.js"></script>
 	<script src="/js/script.js"></script>
 

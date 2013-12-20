@@ -37,7 +37,7 @@ var CS = function(selector) {
  *
  *	TILE_WIDTH	: size of tiles on map
  *
- *  STRUCTURES  : all the structures available to build -- updated as the last step in this file 
+ *  STRUCTURES  : all the structures available to build
  */
 
 CS.BASE 		= location.origin;
@@ -52,10 +52,4 @@ CS.Y 			= '';
 CS.VERSION 		= '0.0.7';
 CS.TILE_WIDTH 	= 40;
 
-CS.DATA.once('value', function(data){
-	// Update the global STRUCTURES object
-	CS.STRUCTURES = {};
-	for (var structure in data.child('structures').val()){
-		CS.STRUCTURES[structure] = data.child('structures').val()[structure];
-	}
-});	
+CS.STRUCTURES = {}; // see structures.js

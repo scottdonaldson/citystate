@@ -49,6 +49,14 @@ CS.buildLibrary = function(map, d) {
 	return map.g(_groundfloor, _secondfloor, _door, _roof1, _roof2, _windows).transform(CS.setTransform(d));
 }
 
+CS.buildStadium = function(map, d) {
+	var _plan = map.rect(0, -70, 70, 70, 10, 10).attr({ fill: '#757' }),
+		_field = map.rect(15, -55, 50, 50, 5, 5).attr({ fill: '#8c7' });
+	return map.g(_plan, _field).transform(CS.setTransform(d));
+}
+
+/* ----- Master buildStructure() function ----- */
+
 CS.buildStructure = function(which, level, x, y, map) {
 	// Defaults for each
 	var d = {
@@ -56,36 +64,47 @@ CS.buildStructure = function(which, level, x, y, map) {
 		y: y,
 		fill: '#000',
 		level: level,
+		sizeX: CS.STRUCTURES[which].x,
+		sizeY: CS.STRUCTURES[which].y,
 		translateX: 0,
 		translateY: 0
-	};
+	},
+	parts = [];
 	switch (which) {
 		case 'park':
 			d.translateX = 8;
-			d.translateY = 40;
-			CS.buildTree(map, d);
+			d.translateY = 30;
+			parts.push( CS.buildTree(map, d) );
+
 			d.translateX = 26;
 			d.translateY = 30;
-			CS.buildTree(map, d);
+			parts.push( CS.buildTree(map, d) );
+
+			if (level === 1) {
+				d.translateX = 17;
+				d.translateY = 40;
+				parts.push( CS.buildTree(map, d) );
+			}
+
 			break;
 
 		case 'neighborhood':
-			if (level < 1) {
+			if (level <= 1) {
 				d.translateX = 4;
 				d.translateY = 8;
 				d.fill = '#f9f2f2';
-				CS.buildHouse(map, d);
+				parts.push( CS.buildHouse(map, d) );
 				
 				// At level 1, introduce another house
 				if (level === 1) {
 					d.translateX = 10;
 					d.translateY = 26;
-					CS.buildHouse(map, d);
+					parts.push( CS.buildHouse(map, d) );
 				}
 
 				d.translateX = 28;
 				d.translateY = 40;
-				CS.buildTree(map, d);
+				parts.push( CS.buildTree(map, d) );
 			} else if (level === 2) {
 				// TODO
 			}
@@ -94,16 +113,24 @@ CS.buildStructure = function(which, level, x, y, map) {
 		case 'library':
 			d.translateX = 28;
 			d.translateY = 35;
-			CS.buildTree(map, d);
+			parts.push( CS.buildTree(map, d) );
 
 			d.translateX = 5;
 			d.translateY = 40;
 			d.fill = '#966';
-			CS.buildLibrary(map, d);
+			parts.push( CS.buildLibrary(map, d) );
+			break;
+
+		case 'stadium':
+			d.translateX = 5;
+			d.translateY = 80;
+			parts.push( CS.buildStadium(map, d) );
 			break;
 	}
 
-	var facade = map.rect( CS.TILE_WIDTH * x, CS.TILE_WIDTH * y, CS.TILE_WIDTH, CS.TILE_WIDTH ).attr({
+	var facade = map.rect( CS.TILE_WIDTH * x, CS.TILE_WIDTH * y, CS.TILE_WIDTH * d.sizeX, CS.TILE_WIDTH * d.sizeY ).attr({
 		fill: 'transparent'
 	});
+	parts.push(facade);
+	return map.g.apply(map, parts);
 }

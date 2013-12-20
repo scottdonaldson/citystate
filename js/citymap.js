@@ -10,7 +10,7 @@ CS.returnStructures = function() {
 		// Only show the option if the user has enough cash
 		// to build the structure
 		if (+localStorage.getItem('USER.cash') >= CS.STRUCTURES[structure].cost) {
-			output += '<option value="' + structure + '">' + CS.STRUCTURES[structure].name.charAt(0).toUpperCase() + CS.STRUCTURES[structure].name.slice(1) + ' (' + CS.STRUCTURES[structure].cost + ')</option>';
+			output += '<option value="' + structure + '">' + CS.STRUCTURES[structure].name.charAt(0).toUpperCase() + CS.STRUCTURES[structure].name.slice(1) + '</option>';
 		}
 	}
 	output += '</select>';
@@ -20,7 +20,7 @@ CS.returnStructures = function() {
 CS.showBuildStructure = function(structure) {
 	var submit = CS('#build-structure-submit');
 	if (structure) {
-		submit.innerHTML = 'Build (' + CS.STRUCTURES[structure].cost + ')';
+		submit.innerHTML = 'Build (' + CS.commas( CS.STRUCTURES[structure].cost ) + ')';
 		submit.style.display = 'block';
 	} else {
 		submit.style.display = 'none';
@@ -55,8 +55,8 @@ CS.buildNewStructure = function( data ) {
 	CS.DATA.child('cities').child(CS.SLUG).child('structures').push({
 		level: 0,
 		name: structure,
-		x: X,
-		y: Y
+		x: CS.X,
+		y: CS.Y
 	});
 
 	// Update population in the city if building a neighborhood
@@ -76,6 +76,71 @@ CS.buildNewStructure = function( data ) {
 	});
 
 	CS.hideInfobox();
+}
+
+// Pass a key (for the structure in question in the city)
+// and an object for the structure
+CS.upgradeStructure = function(key, structure) {
+
+	CS.DATA.child('cities').child(CS.SLUG).child('structures').child(key).update({
+		level: structure.level + 1
+	});
+
+	// Subtract cash from user
+	CS.DATA.child('users').child(CS.USER).update({ 
+		cash: ( +localStorage.getItem('USER.cash') ) - CS.STRUCTURES[structure.name].cost
+	});
+
+	CS.hideInfobox();
+}
+
+// Nearly identical to above, but removing the structure from the city
+CS.demolishStructure = function(key, structure) {
+	CS.DATA.child('cities').child(CS.SLUG).child('structures').child(key).remove();
+
+	// Subtract cash from user
+	CS.DATA.child('users').child(CS.USER).update({ 
+		cash: ( +localStorage.getItem('USER.cash') ) - 100
+	});
+
+	CS.hideInfobox();
+}
+
+// Show structure options (upgrade or demolish)
+CS.showStructureOptions = function(e, data, structure) {
+	// TODO
+	var output = document.createElement('div'),
+		key = structure.data('key');
+	structure = structure.data('structure');
+
+	output.innerHTML = structure.name.charAt(0).toUpperCase() + structure.name.slice(1);
+
+	// Upgrade
+	if (structure.level < CS.STRUCTURES[structure.name].levels && 
+		+localStorage.getItem('USER.cash') >= CS.STRUCTURES[structure.name].cost) {
+
+		var upgradeForm = document.createElement('form');
+		upgradeForm.innerHTML = '<input type="submit" value="Upgrade (' + CS.STRUCTURES[structure.name].cost + ')">';
+		upgradeForm.addEventListener('submit', function(e){
+			e.preventDefault();
+			CS.upgradeStructure(key, structure);
+			CS.hideInfobox();
+		});
+		output.appendChild(upgradeForm);
+	}
+
+	// Demolish
+	if (+localStorage.getItem('USER.cash') >= 100) {
+		var demolishForm = document.createElement('form');
+		demolishForm.innerHTML = '<input type="submit" value="Demolish (100)">';
+		demolishForm.addEventListener('submit', function(e){
+			e.preventDefault();
+			CS.demolishStructure(key, structure);
+			CS.hideInfobox();
+		});
+		output.appendChild(demolishForm);
+	}
+	return output;
 }
 
 CS.showCityTiles = function(data, terrain, map) {
@@ -101,23 +166,26 @@ CS.showCityTiles = function(data, terrain, map) {
 						CS.showInfobox(e, CS.buildStructureForm(e, data, tile));
 					});
 				}
-
-			// Is there a structure at this tile?
-			(function(){
-				for (var structure in data.structures) {
-					if (shownStructures.indexOf(structure) === -1 && data.structures[structure].x === x && data.structures[structure].y === y) {
-
-						shownStructures.push(structure);
-
-						var s = data.structures[structure];
-						return CS.buildStructure(s.name, s.level, s.x, s.y, map);
-					}
-				}
-			})();
 		}
 	}
 
-	// Reset the shownStructures array
+	// Is there a structure at this tile?
+	(function(){
+		for (var structure in data.structures) {
+			var s = data.structures[structure];
+			
+			if (shownStructures.indexOf( structure ) === -1) {
+
+				shownStructures.push( structure );
+				CS.buildStructure(s.name, s.level, s.x, s.y, map)
+					.data( 'key', structure )
+					.data( 'structure', data.structures[structure] )
+					.click(function(e){
+						CS.showInfobox(e, CS.showStructureOptions( e, data, this ));
+					});
+			}
+		}
+	})();
 	shownStructures = [];
 }
 

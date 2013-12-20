@@ -11,6 +11,9 @@ CS.remove = function(el) {
 CS.showInfobox = function(e, elem) {
 	var infobox = CS('#infobox');
 
+	// In case there had been anything in it, empty the infobox
+	infobox.innerHTML = '';
+
 	// Append the new element
 	infobox.appendChild(elem);
 
@@ -22,8 +25,8 @@ CS.showInfobox = function(e, elem) {
 	infobox.style.top = ( e.y + window.scrollY - infobox.clientHeight / 2 ) + 'px';
 
 	// Set global X and Y coordinates based on mouse click
-	X = Math.floor(e.offsetX / CS.TILE_WIDTH);
-	Y = Math.floor(e.offsetY / CS.TILE_WIDTH);
+	CS.X = Math.floor(e.offsetX / CS.TILE_WIDTH);
+	CS.Y = Math.floor(e.offsetY / CS.TILE_WIDTH);
 }
 
 CS.hideInfobox = function() {
