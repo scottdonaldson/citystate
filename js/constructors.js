@@ -27,7 +27,7 @@ CS.buildWindow = function(map, x, y) {
 
 CS.buildHouse = function(map, d) {
 	// Template for a single house
-	var _house = map.rect(0, 0, 20, 10).attr({ fill: d.fill }),
+	var _house = map.rect(0, 0, 20, 10).attr({ fill: d.fill || '#f9f2f2' }),
 		_door = CS.buildDoor(map, 3, 2).attr({ fill: '#522' }),
 		_roof = map.path('M-2,0 h24 l-12,-6 l-12,6 Z').attr({ fill: '#522' }),
 		_window = CS.buildWindow(map, 12, 2).attr({ fill: '#522' });
@@ -35,8 +35,8 @@ CS.buildHouse = function(map, d) {
 }
 
 CS.buildLibrary = function(map, d) {
-	var _groundfloor = map.rect(0, -10, 30, 10).attr({ fill: d.fill }),
-		_secondfloor = map.rect(0, -20, 20, 10).attr({ fill: d.fill }),
+	var _groundfloor = map.rect(0, -10, 30, 10).attr({ fill: d.fill || '#966' }),
+		_secondfloor = map.rect(0, -20, 20, 10).attr({ fill: d.fill || '#966' }),
 		_door = CS.buildDoor(map, 3, -8),
 		_roof1 = map.rect(20, -13, 11, 3).attr({ fill: '#000' }),
 		_roof2 = map.rect(-1, -23, 22, 3).attr({ fill: '#000' }),
@@ -62,7 +62,7 @@ CS.buildStructure = function(which, level, x, y, map) {
 	var d = {
 		x: x,
 		y: y,
-		fill: '#000',
+		fill: false,
 		level: level,
 		sizeX: CS.STRUCTURES[which].x,
 		sizeY: CS.STRUCTURES[which].y,
@@ -106,7 +106,21 @@ CS.buildStructure = function(which, level, x, y, map) {
 				d.translateY = 40;
 				parts.push( CS.buildTree(map, d) );
 			} else if (level === 2) {
-				// TODO
+				d.translateX = 4;
+				d.translateY = 8;
+				d.fill = '#f9f2f2';
+				parts.push( CS.buildHouse(map, d) );
+				
+				// At level 1, introduce another house
+				if (level === 1) {
+					d.translateX = 10;
+					d.translateY = 26;
+					parts.push( CS.buildHouse(map, d) );
+				}
+
+				d.translateX = 28;
+				d.translateY = 40;
+				parts.push( CS.buildTree(map, d) );
 			}
 			break;
 

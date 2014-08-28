@@ -46,17 +46,17 @@ window.addEventListener('keydown', function(e) {
 
 /* ----- Snapshot links ----- */
 
-var snapshots = Snap.selectAll('.snapshot');
+var snapshots = CS('.snapshot');
 function retrieveSnapshot(e) {
 	e.preventDefault();
 
 	// Hide any alerts that are out there
 	closeAlert();
 
-	Snap.ajax(this.getAttribute('href'), function(data) {
+	Snap.ajax(this.href, function(data) {
 		console.log(JSON.parse(data.response));
 	});
 }
 for (var i = 0; i < snapshots.length; i++) {
-	snapshots[i].click(retrieveSnapshot);
+	snapshots[i].addEventListener('click', retrieveSnapshot);
 }

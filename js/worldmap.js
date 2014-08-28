@@ -49,18 +49,30 @@ CS.buildCity = function() {
 		slug = CS.slugify( name );
 
 	CS.DATA.once('value', function(data){
-		// If there's already a city with this slug, add a '-1' to the end of it
-		if ( data.child('cities').child(slug).val() ) {
-			slug += '-1';
+		// If there's already a city with this slug, 
+		// add a '-1' to the end of it or increment the '-' suffix
+		// (up to 9, then we go another round with '-1' etc.)
+		function incrementSlug(slug, i) {
+			if ( data.child('cities').child(slug).val() ) {
+				if (i === 0) {
+					slug += '-1';
+				} else {
+					slug += '-' + ( +slug.slice( slug.lastIndexOf('-') + 1 ) + 1 );
+				}
+				incrementSlug(slug, i + 1);
+			} else {
+				return slug;
+			}
 		}
+		var slug = incrementSlug(slug, 0);
 		// Push to the (global) cities array
 		CS.DATA.child('cities').child(slug).set({
 			name: name,
 			population: 0,
 			'target-pop': 0,
 			user: +CS.USER,
-			x: X,
-			y: Y
+			x: CS.X,
+			y: CS.Y
 		});
 		// Add the unique slug to the user's cities array
 		var key = data.child('users').child(CS.USER).child('cities').val() ? data.child('users').child(CS.USER).child('cities').val().length : 0;

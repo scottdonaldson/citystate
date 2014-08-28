@@ -191,6 +191,7 @@ CS.showCityTiles = function(data, terrain, map) {
 
 // Show information about the city in the toolbar
 CS.updateCityModule = function(data) {
+	
 	var cityModule = CS('#city-module');
 
 	cityModule.innerHTML = '<h3>' + data.name + '</h3>';
