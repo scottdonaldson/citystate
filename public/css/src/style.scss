@@ -1,26 +1,26 @@
+@import "vars";
 @import "layout";
 @import "forms";
 
 // ----- Colors
 
-$sand: #da7;
-$sea-blue: #4d5989; .sea-blue { color: $sea-blue; }
-$grey: #777; .grey { color: $grey; }
-$green: #7eb073; .green { color: $green; }
-$red: #e03840; .red { color: $red; }
-$yellow: lighten(gold, 15%); .yellow { color: $yellow; }
+.sand { color: $sand; }
+.sea-blue { color: $sea-blue; }
+.grey { color: $grey; }
+.green { color: $green; }
+.red { color: $red; }
+.yellow { color: $yellow; }
 
 // ----- General styles and structure
 
 * {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	font-family: "Open Sans", sans-serif;
 	position: relative;
 }
 
 body {
+	color: #666;
 	overflow-x: hidden;
 }
 
@@ -90,4 +90,39 @@ h1, h2, h3, h4, h5, h6 {
 	position: fixed;
 	right: 10px;
 	top: 10px;
+}
+
+#alert {
+	background: #fff;
+	border-top: 5px solid $red;
+	box-shadow: 0 0 10px #333;
+	left: 20%;
+	padding: 20px;
+	position: absolute;
+	top: 100px;
+	width: 60%;
+	z-index: 9999;
+
+	a {
+		border-bottom: 1px dotted;
+	}
+
+	.close-box {
+		cursor: pointer;
+		font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		font-weight: lighter;
+		font-size: 12px;
+		letter-spacing: 1px;
+		position: absolute;
+		right: 3px;
+		top: 5px;
+		&:hover {
+			color: #555;
+		}
+	}
+
+	@media screen and (max-width: 960px) {
+		left: 10%;
+		width: 80%;
+	}
 }

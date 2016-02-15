@@ -3,11 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "css": "node-sass --output-style compressed -o public/css/dist public/css/src/style.scss",
-    "postcss": "postcss -u autoprefixer -r public/css/dist/*",
-    "build": "npm run css && npm run postcss",
-    "watch:all": "echo 'test'",
-    "start:dev": "npm run build && parallelshell 'npm run watch:all' 'node ./bin www'",
+    "css": "node-sass --source-map public/css/dist --output-style compressed -o public/css/dist public/css/src/style.scss",
+    "build:css": "npm run css",
+    "build:all": "npm run build:css",
+    "watch:css": "onchange 'public/css/src/**/*.scss' -- npm run build:css",
+    "watch:all": "parallelshell 'npm run watch:css'",
+    "dev": "npm run build:all && parallelshell 'npm run watch:all' 'node ./bin/www'",
     "start": "node ./bin/www"
   },
   "dependencies": {
@@ -16,15 +17,19 @@
     "cookie-parser": "~1.3.5",
     "debug": "~2.2.0",
     "express": "~4.13.1",
+    "express-session": "^1.13.0",
     "jade": "~1.11.0",
+    "lodash": "^4.3.0",
     "morgan": "~1.6.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.3",
     "node-sass": "^3.4.2",
+    "onchange": "^2.0.0",
     "parallelshell": "^2.0.0",
-    "postcss": "^5.0.16",
     "postcss-cli": "^2.5.1"
   }
 }

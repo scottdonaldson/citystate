@@ -1,7 +1,18 @@
 doctype html
 html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
+	head
+		title= title
+		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700')
+		link(rel='stylesheet', href='/css/dist/style.css')
+
+	body(class= bodyClass)
+
+		if alert
+			div#alert= alert
+
+		div#main
+			block content
+
+		include ./partials/toolbar.jade
+
+		div#version= version

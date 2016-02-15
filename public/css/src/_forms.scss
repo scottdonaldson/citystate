@@ -1,5 +1,64 @@
+// ----- Forms, inputs, buttons
+
 input {
+	border: 1px solid;
 	display: block;
-	margin-bottom: 0.5em;
-	width: 100%;
+	font-family: 'Open Sans', sans-serif;
+	padding: 3px;
+	margin-bottom: 5px;
+	
+	&:focus {
+		box-shadow: inset 0 0 6px $green;
+	}
+}
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button { 
+	-webkit-appearance: none; 
+	margin: 0; 
+}
+::-webkit-input-placeholder { color: #333; }
+:-moz-placeholder { color: #333;}
+
+.button {
+	background: $green;
+	border: 0 none;
+	border-radius: 0;
+	color: #fff;
+	display: inline-block;
+	font-size: 14px;
+	padding: 5px 10px;
+	text-align: center;
+	text-transform: uppercase;
+	white-space: normal;
+
+	a {
+		border-bottom: 0 none !important;
+		color: #fff;
+		&:active,
+		&:hover {
+			background: none transparent;
+			color: #fff;
+		}
+	}
+
+	&:active,
+	&:hover {
+		background: lighten($green, 10%);
+	}
+}
+a.button { 
+	border-bottom: 0 none !important;
+	color: #fff; 
+	&:active,
+	&:hover { color: #fff; }
+}
+div.button,
+span.button,
+li.button {
+	padding: 0;
+	a {
+		border-bottom: 0 none !important;
+		display: block;
+		padding: 5px 10px;
+	}
 }

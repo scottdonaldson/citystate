@@ -1,9 +1,13 @@
-var express = require('express');
-var router = express.Router();
+var _ = require('lodash'),
+	express = require('express'),
+	router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+function init(passport) {
+	
+	require('./world')(router);
+	require('./login')(router, passport);
 
-module.exports = router;
+	return router;
+}
+
+module.exports = init;
