@@ -1,0 +1,93 @@
+@import "layout";
+@import "forms";
+
+// ----- Colors
+
+$sand: #da7;
+$sea-blue: #4d5989; .sea-blue { color: $sea-blue; }
+$grey: #777; .grey { color: $grey; }
+$green: #7eb073; .green { color: $green; }
+$red: #e03840; .red { color: $red; }
+$yellow: lighten(gold, 15%); .yellow { color: $yellow; }
+
+// ----- General styles and structure
+
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	font-family: "Open Sans", sans-serif;
+	position: relative;
+}
+
+body {
+	overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 0;
+}
+
+::selection { background: $grey; }
+::-moz-selection { background: $grey; }
+
+.ocean {
+	background: #4d5989;
+}
+
+.map {
+	display: block;
+	height: 400px;
+	margin: 0 auto;
+	top: 150px;
+	width: 400px;
+
+	// position the neighbor where the map is,
+	// but absolutely (and reposition for individual cardinal directions)
+	&.neighbor {
+		opacity: 0.85;
+		margin-left: -200px;
+		left: 50%;
+		position: absolute;
+	}
+}
+	#nww, #nw, #n, #ne, #nee {
+		top: -250px;
+	}
+	#sww, #sw, #s, #se, #see {
+		margin-bottom: -80px;
+		top: 550px;
+	}
+	#nww, #sww, #ww {
+		margin-left: -1000px;
+	}
+	#nw, #sw, #w {
+		margin-left: -600px;
+	}
+	#nee, #see, #ee {
+		margin-left: 600px;
+	}
+	#ne, #se, #e {
+		margin-left: 200px;
+	}
+
+.tile {
+	cursor: pointer;
+
+	// Fills for various terrains.
+	// Class 'original' targets the original (not-neighbor) city
+	&.sand { fill: #dc8; .original &:hover { fill: darken(#dc8, 10%); } }
+	&.hills { fill: #ab9; .original &:hover { fill: darken(#ab9, 10%); } }
+	&.grass { fill: #8c7; .original &:hover { fill: darken(#8c7, 10%); } }
+	&.mountains { fill: #999; .original &:hover { fill: darken(#999, 10%); } }
+	&.forest { fill: #5a5; .original &:hover { fill: darken(#5a5, 10%); } }
+	&.water { fill: transparent; }
+
+}
+
+#version {
+	color: #fff;
+	position: fixed;
+	right: 10px;
+	top: 10px;
+}

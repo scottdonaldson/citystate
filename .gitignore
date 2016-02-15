@@ -1,4 +1,3 @@
-.sass-cache/
-.DS_Store
-images/templates/
-images/old/
+.*
+node_modules
+npm-debug.log
