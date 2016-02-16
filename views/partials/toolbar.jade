@@ -3,7 +3,7 @@ div#toolbar.clearfix
 		include ./breadcrumbs.jade
 
 		div.module
-			if !loggedIn
+			if !user
 				form(action="/login", method="POST")
 					input(name="username", placeholder="Username")
 					input(name="password", type="password", placeholder="Password")

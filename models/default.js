@@ -7,8 +7,6 @@ function defaultModel(req) {
 		user: req.user || null
 	};
 
-	output.loggedIn = req.user ? req.user.id : false;
-
 	return output;
 }
 

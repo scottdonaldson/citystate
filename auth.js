@@ -12,24 +12,14 @@ function init(passport, db) {
 	// will be set at `req.user` in route handlers after authentication.
 	passport.use(new LocalStrategy(
 	    function(username, attempt, cb) {
-	    	db.getItem({
-	    		Key: {
-	    			id: {
-	    				S: username
-	    			}
-	    		},
-	    		TableName: 'UsersDev'
-	    	}, function(err, data) {
-
-				if ( err ) { return cb(err); }
-	            if ( !data ) { return cb(null, false); }
-	            
-	            var password = decode(data).password;
+	    	db.getUser(username, function(data) {
+				
+				var password = data.password;
 	            attempt = btoa(attempt);
 	            
 	            if ( password !== attempt ) { return cb(null, false); }
-	            return cb(null, decode(data));
-	    	});
+	            return cb(null, data);
+	    	}, cb);
 	    })
 	);
 
@@ -46,24 +36,10 @@ function init(passport, db) {
 	});
 
 	passport.deserializeUser(function(id, cb) {
-
-		db.getItem({
-			Key: {
-				id: {
-					S: id
-				}
-			},
-			TableName: 'UsersDev'
-		}, function(err, data) {
-
-			if (err) { return cb(err); }
-
-			// only use ID and email
-			var user = decode(data);
+		db.getUser(id, function(user) {
 			delete user.password;
-
 			return cb(null, user);
-		});
+		}, cb);
 	});
 
 	return passport;
