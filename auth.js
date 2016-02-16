@@ -1,11 +1,8 @@
-var passport = require('passport'),
-	LocalStrategy = require('passport-local').Strategy;
+var LocalStrategy = require('passport-local').Strategy,
+	btoa = require('btoa'),
+	decode = require('./helpers/decode');
 
-var AWS = require('aws-sdk');
-AWS.config.update({ region: 'us-east-1' });
-var db = new AWS.DynamoDB();
-
-function init() {
+function init(passport, db) {
 
 	// Configure the local strategy for use by Passport.
 	//
@@ -14,7 +11,7 @@ function init() {
 	// that the password is correct and then invoke `cb` with a user object, which
 	// will be set at `req.user` in route handlers after authentication.
 	passport.use(new LocalStrategy(
-	    function(username, password, cb) {
+	    function(username, attempt, cb) {
 	    	db.getItem({
 	    		Key: {
 	    			id: {
@@ -22,11 +19,16 @@ function init() {
 	    			}
 	    		},
 	    		TableName: 'UsersDev'
-	    	}, function(err, user) {
+	    	}, function(err, data) {
+
 				if ( err ) { return cb(err); }
-	            if ( !user ) { return cb(null, false); }
-	            if ( user.password !== password ) { return cb(null, false); }
-	            return cb(null, user);
+	            if ( !data ) { return cb(null, false); }
+	            
+	            var password = decode(data).password;
+	            attempt = btoa(attempt);
+	            
+	            if ( password !== attempt ) { return cb(null, false); }
+	            return cb(null, decode(data));
 	    	});
 	    })
 	);
@@ -38,8 +40,9 @@ function init() {
 	// typical implementation of this is as simple as supplying the user ID when
 	// serializing, and querying the user record by ID from the database when
 	// deserializing.
-	passport.serializeUser(function(user, cb) {
-		cb(null, user.id);
+	passport.serializeUser(function(data, cb) {
+		var id = data.id;
+		cb(null, id);
 	});
 
 	passport.deserializeUser(function(id, cb) {
@@ -47,12 +50,18 @@ function init() {
 		db.getItem({
 			Key: {
 				id: {
-					S: username
+					S: id
 				}
 			},
 			TableName: 'UsersDev'
-		}, function(err, user) {
+		}, function(err, data) {
+
 			if (err) { return cb(err); }
+
+			// only use ID and email
+			var user = decode(data);
+			delete user.password;
+
 			return cb(null, user);
 		});
 	});

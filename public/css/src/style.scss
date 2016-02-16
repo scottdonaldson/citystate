@@ -1,4 +1,5 @@
 @import "vars";
+@import "normalize";
 @import "layout";
 @import "forms";
 
@@ -124,5 +125,48 @@ h1, h2, h3, h4, h5, h6 {
 	@media screen and (max-width: 960px) {
 		left: 10%;
 		width: 80%;
+	}
+}
+
+.module {
+
+	p {
+		margin: 0;
+	}
+
+	&.keys {
+		width: 240px;
+	}
+	.key {
+		border: 1px solid #333;
+		clear: left;
+		float: left;
+		height: 20px;
+		margin: 0 6px 4px 0;
+		width: 20px;
+
+		&.user-city {
+			background-color: #fff;
+		}
+		&.trade-partner {
+			background-color: $sea-blue;
+		}
+		&.scout {
+			background-color: $yellow;
+		}
+		.button {
+			float: left;
+			font-size: 12px;
+		}
+	}
+
+	@media screen and (max-width: 960px) {
+		background: none transparent;
+		border: 0 none;
+		margin: 15px 0;
+		max-width: 100%;
+		padding: 0;
+		top: 0;
+		width: 100%;
 	}
 }
