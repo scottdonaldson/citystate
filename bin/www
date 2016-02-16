@@ -3,8 +3,13 @@
 /**
  * Module dependencies.
  */
+var mode = 'DEV';
+process.argv.forEach(function(arg) {
+  if (arg === 'DEV') mode = 'DEV';
+  if (arg === 'PROD') mode = 'PROD';
+});
 
-var app = require('../app');
+var app = require('../app')(mode);
 var debug = require('debug')('citystate:server');
 var http = require('http');
 

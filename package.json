@@ -6,11 +6,13 @@
     "css": "node-sass --source-map public/css/dist --output-style compressed -o public/css/dist public/css/src/style.scss",
     "js": "browserify public/js/src/entry.js -o public/js/dist/script.js",
     "build:css": "npm run css",
-    "build:all": "npm run build:css",
+    "build:js": "npm run js",
+    "build:all": "npm run build:css && npm run build:js",
     "watch:css": "onchange 'public/css/src/**/*.scss' -- npm run build:css",
-    "watch:all": "parallelshell 'npm run watch:css'",
-    "dev": "npm run build:all && parallelshell 'npm run watch:all' 'node ./bin/www'",
-    "start": "node ./bin/www"
+    "watch:js": "onchange 'public/js/src/**/*.js' -- npm run build:js",
+    "watch:all": "parallelshell 'npm run watch:css' 'npm run watch:js'",
+    "dev": "npm run build:all && parallelshell 'npm run watch:all' 'node ./bin/www DEV'",
+    "start": "node ./bin/www PROD"
   },
   "dependencies": {
     "aws-sdk": "^2.2.35",

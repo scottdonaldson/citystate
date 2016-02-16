@@ -1,0 +1,6 @@
+extends layout
+
+block content
+	svg(width="600", height="600")
+		each tile in tiles
+			rect(x= tile.x, y= tile.y, width= tile.width, height= tile.height, fill="yellow")
