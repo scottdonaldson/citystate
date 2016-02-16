@@ -1,9 +1,13 @@
-var config = require('../config'),
-	decode = require('./decode');
+function wrapper(dynamo, mode) {
 
-function wrapper(dynamo) {
+	var config = require('../config')(mode),
+		decode = require('./decode');
 
-	function getOne(tablename) {
+	function table(name) {
+		return config.tables[name];
+	}
+
+	function getOne(name) {
 		return function(id, success, error) {
 			dynamo.getItem({
 				Key: {
@@ -11,7 +15,7 @@ function wrapper(dynamo) {
 						S: id
 					}
 				},
-				TableName: config.tables[tablename]
+				TableName: table(name)
 			}, function(err, data) {
 				if (err || !data.Item) return error(err);
 				if (data) return success(decode(data));
@@ -24,7 +28,7 @@ function wrapper(dynamo) {
 		getRegion = getOne('regions');
 
 	// TODO
-	function updateOne(tablename) {
+	function updateOne(name) {
 		return function(data, success, error) {
 			dynamo.updateItem({
 				Key: {
@@ -33,7 +37,7 @@ function wrapper(dynamo) {
 					}
 					// OTHER DATA???
 				},
-				TableName: config.tables[tablename]
+				TableName: table(name)
 			}, function(err, data) {
 				if (err || !data.Item) return error(err);
 				if (data) return success(decode(data));
@@ -41,10 +45,40 @@ function wrapper(dynamo) {
 		};
 	}
 
+	function scan(name) {
+		return function(data, success, error) {
+
+			var params = {
+				AttributesToGet: [],
+				TableName: table(name)
+			};
+
+			if ( typeof data === 'string' ) {
+				params.AttributesToGet = [data];
+			} else if ( data.length > 0 ) {
+				params.AttributesToGet = data;
+			}
+
+			dynamo.scan(params, function(err, data) {
+
+				if (err || !data.Items) return error(err);
+				if (data) return success(decode(data));
+			});
+		};
+	}
+
+	var scanUsers = scan('users'),
+		scanCities = scan('cities'),
+		scanRegions = scan('regions');
+
 	return {
+		_dynamo: dynamo,
 		getUser: getUser,
 		getCity: getCity,
-		getRegion: getRegion
+		getRegion: getRegion,
+		scanUsers: scanUsers,
+		scanCities: scanCities,
+		scanRegions: scanRegions
 	};
 }
 
