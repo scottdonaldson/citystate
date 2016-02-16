@@ -5,4 +5,4 @@ block content
 		each region in regions
 			g(class="region", data-id="" + region.id)
 				each tile in region.tiles
-					rect(x= tile.x, y= tile.y, width= tile.width, height= tile.height, fill="yellow")
+					rect(x= tile.x, y= tile.y, width= tile.width, height= tile.height, class= "tile " + tile.class)

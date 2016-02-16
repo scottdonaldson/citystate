@@ -4,7 +4,7 @@ var _ = require('lodash'),
 function init(router, passport) {
 
 	router.get('/login', function(req, res, next) {
-		res.render('index', _.assign(defaultModel(req), { alert: 'Bad login. Try again.', bodyClass: 'ocean' }));
+		res.render('login', _.assign(defaultModel(req)));
 	});
 
 	router.post(
@@ -13,7 +13,7 @@ function init(router, passport) {
 			failureRedirect: '/login'
 		}), 
 		function(req, res, next) {
-			res.render('index', _.assign(defaultModel(req), { 
+			res.render('login', _.assign(defaultModel(req), { 
 				alert: 'You are now logged in.'
 			}));
 		}

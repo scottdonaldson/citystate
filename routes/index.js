@@ -9,6 +9,8 @@ function init(passport, db) {
 	require('./user')(router, db);
 	require('./region')(router, db);
 
+	require('./admin')(router, db);
+
 	// API modules
 	require('./api/users')(router, db);
 	require('./api/regions')(router, db);

@@ -7,6 +7,8 @@ function defaultModel(req) {
 		user: req.user || null
 	};
 
+	if ( req.user && req.user.admin ) output.isAdmin = true;
+
 	return output;
 }
 

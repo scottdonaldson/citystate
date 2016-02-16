@@ -1,7 +1,9 @@
+var decode = require('./decode'),
+	encode = require('./encode');
+
 function wrapper(dynamo, mode) {
 
-	var config = require('../config')(mode),
-		decode = require('./decode');
+	var config = require('../config')(mode);
 
 	function table(name) {
 		return config.tables[name];
@@ -27,23 +29,61 @@ function wrapper(dynamo, mode) {
 		getCity = getOne('cities'),
 		getRegion = getOne('regions');
 
-	// TODO
 	function updateOne(name) {
 		return function(data, success, error) {
+
+			var params = {};
+
+			var id = data.id;
+			delete data.id;
+			
+			for ( var key in data ) {
+				params[key] = {
+					Value: encode(data[key])
+				};
+			}
+
 			dynamo.updateItem({
 				Key: {
 					id: {
-						S: data.id
+						S: id
 					}
-					// OTHER DATA???
 				},
-				TableName: table(name)
+				TableName: table(name),
+				AttributeUpdates: params
 			}, function(err, data) {
 				if (err || !data.Item) return error(err);
 				if (data) return success(decode(data));
 			});
 		};
 	}
+
+	var updateUser = updateOne('users'),
+		updateCity = updateOne('cities'),
+		updateRegion = updateOne('regions');
+
+	function add(name) {
+		return function(data, success, error) {
+			
+			var params = {};
+
+			for ( var key in data ) {
+				params[key] = encode(data[key]);
+			}
+
+			dynamo.putItem({
+				Item: params,
+				TableName: table(name),
+			}, function(err, data) {
+				if (err) return error(err);
+				if (data) return success(decode(data));
+			});
+		};
+	}
+
+	var addUser = add('users'),
+		addCity = add('cities'),
+		addRegion = add('regions');
 
 	function scan(name) {
 		return function(data, success, error) {
@@ -76,9 +116,15 @@ function wrapper(dynamo, mode) {
 		getUser: getUser,
 		getCity: getCity,
 		getRegion: getRegion,
+		addUser: addUser,
+		addCity: addCity,
+		addRegion: addRegion,
 		scanUsers: scanUsers,
 		scanCities: scanCities,
-		scanRegions: scanRegions
+		scanRegions: scanRegions,
+		updateCity: updateCity,
+		updateUser: updateUser,
+		updateRegion: updateRegion
 	};
 }
 

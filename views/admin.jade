@@ -1,0 +1,14 @@
+extends layout
+
+block content
+
+	div.content
+		if isAdmin
+			form(action="/admin", method="POST")
+				p Create a new region:
+				input(name="name", placeholder="Name")
+				input(name="x", placeholder="x")
+				input(name="y", placeholder="y")
+				input(type="submit", value="Create")
+		else
+			p You are not an admin

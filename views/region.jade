@@ -2,5 +2,14 @@ extends layout
 
 block content
 	svg(width="600", height="600")
+		if isAdmin
+			- var shadowX = 0, shadowY = 0;
+			while shadowX < 600
+				while shadowY < 600
+					rect(x= shadowX, y= shadowY, width="60", height="60", fill="#fff", fill-opacity="0.25", class="shadow")
+					- shadowY += 60
+				- shadowY = 0
+				- shadowX += 60
 		each tile in tiles
-			rect(x= tile.x, y= tile.y, width= tile.width, height= tile.height, fill="yellow")
+			if tile.type
+				rect(x= tile.x, y= tile.y, width= tile.width, height= tile.height, class= "tile " + tile.class)

@@ -3,6 +3,10 @@
 @import "layout";
 @import "forms";
 
+.selected {
+	fill-opacity: 0.75;
+}
+
 // ----- Colors
 
 .sand { color: $sand; }
@@ -11,6 +15,9 @@
 .green { color: $green; }
 .red { color: $red; }
 .yellow { color: $yellow; }
+
+.tile.sand { fill: $sand; }
+.tile.grass { fill: $green; }
 
 // ----- General styles and structure
 

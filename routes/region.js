@@ -12,6 +12,7 @@ function init(router, db) {
 				tile.y *= 60;
 				tile.width = 60;
 				tile.height = 60;
+				tile.class = tile.type;
 
 				return tile;
 			});

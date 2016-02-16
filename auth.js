@@ -11,13 +11,13 @@ function init(passport, db) {
 	// that the password is correct and then invoke `cb` with a user object, which
 	// will be set at `req.user` in route handlers after authentication.
 	passport.use(new LocalStrategy(
-	    function(username, attempt, cb) {
-	    	db.getUser(username, function(data) {
+	    function(id, attempt, cb) {
+	    	db.getUser(id, function(data) {
 				
 				var password = data.password;
 	            attempt = btoa(attempt);
 	            
-	            if ( password !== attempt ) { return cb(null, false); }
+	            if ( password != attempt ) { return cb(null, false); }
 	            return cb(null, data);
 	    	}, cb);
 	    })

@@ -14,8 +14,9 @@ function init(router, db) {
 					tile.width = 6;
 					tile.height = 6;
 
-					tile.x += region.x;
-					tile.y += region.y;
+					tile.x += 60 * region.x;
+					tile.y += 60 * region.y;
+					tile.class = tile.type;
 
 					return tile;
 				});
@@ -30,9 +31,7 @@ function init(router, db) {
 		}, function(err) {
 			res.render('error', _.assign(defaultModel(req), err));
 		});
-		
 	});
-
 }
 
 module.exports = init;
