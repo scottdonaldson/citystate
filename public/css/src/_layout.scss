@@ -5,6 +5,10 @@ $toolbar_width: 240px;
 	margin-bottom: 150px;
 }
 
+.content {
+	padding: 20px;
+}
+
 #toolbar {
 	background: #eee;
 	left: 0;
@@ -14,8 +18,9 @@ $toolbar_width: 240px;
 	position: fixed;
 	top: 0;
 	width: $toolbar_width;
-	.admin-bar & {
-		top: 28px;
+
+	a {
+		display: block;
 	}
 }
 

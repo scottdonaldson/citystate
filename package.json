@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "css": "node-sass --source-map public/css/dist --output-style compressed -o public/css/dist public/css/src/style.scss",
+    "js": "browserify public/js/src/entry.js -o public/js/dist/script.js",
     "build:css": "npm run css",
     "build:all": "npm run build:css",
     "watch:css": "onchange 'public/css/src/**/*.scss' -- npm run build:css",
@@ -20,7 +21,9 @@
     "express": "~4.13.1",
     "express-session": "^1.13.0",
     "jade": "~1.11.0",
+    "jquery": "^2.2.0",
     "lodash": "^4.3.0",
+    "mandrill-api": "^1.0.45",
     "morgan": "~1.6.1",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
@@ -28,6 +31,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^6.3.3",
+    "browserify": "^13.0.0",
     "node-sass": "^3.4.2",
     "onchange": "^2.0.0",
     "parallelshell": "^2.0.0",

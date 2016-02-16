@@ -6,10 +6,13 @@ function init(router, db) {
 	router.get('/user/:id', function(req, res, next) {
 
 		// query first to see if user exists
-		db.getUser(req.params.id, function(data) {
+		db.getUser(req.params.id, function(user) {
 
-			res.render('user', _.assign(defaultModel(req), {
-				viewUser: data
+			var model = defaultModel(req);
+
+			res.render('user', _.assign(model, {
+				viewUser: user,
+				isCurrentUser: model.user ? model.user.id === user.id : false
 			}));
 
 		}, function(err) {

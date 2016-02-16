@@ -1,10 +1,12 @@
 extends layout
 
 block content
-	h1= viewUser.id
 
 	div.content
+
+		h1= viewUser.id
+
 		p Cities:
 
-	if loggedIn
-		p You are logged in
+		if isCurrentUser
+			p This user is you!
