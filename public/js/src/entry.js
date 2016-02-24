@@ -1,6 +1,13 @@
 var $ = require('jquery'),
 	body = $('body');
 
+import React from 'react';
+import render from './helpers/render';
+import RegionEditor from './admin/region-editor';
+
+render(<RegionEditor />, 'region-editor');
+
+/* 
 body.on('click', '#alert', function() {
 	$(this).remove();
 });
@@ -63,3 +70,5 @@ submit.on('click', function(e) {
 		}
 	})
 })
+
+*/
